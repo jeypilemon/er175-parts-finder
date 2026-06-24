@@ -41,7 +41,7 @@ function displayParts(list){
     href="${part.link}"
     target="_blank">
     Buy on Shopee
-    <a/>
+    </a>
 
     </div>
 `;
@@ -57,12 +57,11 @@ document
     const keyword = 
     e.target.value.toLowerCase();
 
-    const filtered =
-    parts.filter(part=>
+    const filtered = parts.filter(part=>
 
-        part.name
-        .toLowerCase
-        .includes(keyword)
+    part.name.toLowerCase().includes(keyword) ||
+    part.category.toLowerCase().includes(keyword)
+
     );
 
 
