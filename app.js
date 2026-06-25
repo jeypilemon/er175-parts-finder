@@ -1,5 +1,4 @@
-console.log("APP JS LOADED");
-alert("APP JS LOADED");
+
 
 const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=0&single=true&output=csv";
 
@@ -63,5 +62,19 @@ document.getElementById("search").addEventListener("input", (e) => {
 
     
     displayParts(filtered);
+
+    function filterCategory(category) {
+
+    if (category === "All") {
+        displayParts(parts);
+        return;
+    }
+
+    const filtered = parts.filter(part =>
+        part['Parts Category'] === category
+    );
+
+    displayParts(filtered);
+}
 
 });
