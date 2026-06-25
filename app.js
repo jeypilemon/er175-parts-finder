@@ -1,70 +1,67 @@
-const parts= [
+console.log("APP JS LOADED");
+alert("APP JS LOADED");
 
-{
-    name:"Faito Knuckle Bearing",
-    category:"Bearing",
-    link:"https://s.shopee.ph/2LS5PeSS3R"
-},
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=0&single=true&output=csv";
 
-{
-    name:"Daytona Clutch Spring",
-    category:"CVT",
-    link:"https://s.shopee.ph/2qQ8Y6nVGC"
-},
-
-{
-    name:"Bendix Rear Brake Pads",
-    category:"Brake System",
-    link:"https://s.shopee.ph/AUmcWYYDwo"
-},
-
-];
+let parts = [];
 
 const products = document.getElementById("products");
 
-function displayParts(list){
-
+// DISPLAY PRODUCTS
+function displayParts(list) {
     products.innerHTML = "";
 
-    list.forEach(part=>{
+    list.forEach(part => {
+        products.innerHTML += `
+        <div class="card">
 
-        products.innerHTML +=`
-    
-    <div class="card">
+            <img src="${part['Image']}" style="width:100%; border-radius:8px; margin-bottom:10px;">
 
-    <h3>${part.name}</h3>
+            <h3>${part['Parts Name']}</h3>
 
-    <p>${part.category}</p>
+            <p><b>Category:</b> ${part['Parts Category']}</p>
+            <p><b>Brand:</b> ${part['Brand']}</p>
+            <p><b>Compatibility:</b> ${part['Compatibility']}</p>
+            <p><b>Specs:</b> ${part['Specs/Size']}</p>
 
-    <a
-    class="button"
-    href="${part.link}"
-    target="_blank">
-    Buy on Shopee
-    </a>
+            <a class="button" href="${part['Shopee']}" target="_blank">
+                Buy on Shopee
+            </a>
 
-    </div>
-`;
+        </div>
+        `;
     });
 }
 
-displayParts(parts);
+// LOAD GOOGLE SHEET
+function loadSheet() {
+    Papa.parse(sheetURL, {
+        download: true,
+        header: true,
+        complete: function(results) {
 
-document
-.getElementById("search")
-.addEventListener("input",(e)=>{
+            parts = results.data;
 
-    const keyword = 
-    e.target.value.toLowerCase();
+            displayParts(parts);
+        }
+    });
+}
 
-    const filtered = parts.filter(part=>
+loadSheet();
 
-    part.name.toLowerCase().includes(keyword) ||
-    part.category.toLowerCase().includes(keyword)
+// SEARCH FUNCTION
+document.getElementById("search").addEventListener("input", (e) => {
 
+    const keyword = e.target.value.toLowerCase();
+
+    const filtered = parts.filter(part =>
+        (part['Parts Name'] || '').toLowerCase().includes(keyword) ||
+        (part['Parts Category'] || '').toLowerCase().includes(keyword) ||
+        (part['Brand'] || '').toLowerCase().includes(keyword) ||
+        (part['Compatibility'] || '').toLowerCase().includes(keyword)
     );
 
-
+    
     displayParts(filtered);
 
 });
