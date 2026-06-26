@@ -52,7 +52,8 @@ function render() {
         ? aftermarketParts
         : oemParts;
 
-    const keyword = (document.getElementById("search")?.value || "").toLowerCase();
+    const rawKeyword = document.getElementById("search")?.value || "";
+    const keyword = normalizeText(rawKeyword);
 
     let filtered = data.filter(p => {
 
@@ -237,6 +238,7 @@ function renderChips() {
 function renderSuggestions(keyword) {
 
     const box = document.getElementById("suggestions");
+    
 
     if (!keyword) {
         box.innerHTML = "";
@@ -256,18 +258,22 @@ function renderSuggestions(keyword) {
 
     box.innerHTML = suggestions.map(p => `
     <div class="suggestion-item"
-        onclick="selectSuggestion('${p["Parts Name"]}')">
-        🔍 ${p["Parts Name"]}
-    </div>
+     data-name="${p["Parts Name"]}"
+     onclick="selectSuggestion(this.dataset.name)">
+    🔍 ${p["Parts Name"]}
+</div>
 `).join("");
 }
 
 /*Select suggestion*/
 function selectSuggestion(name) {
+    const input = document.getElementById("search");
 
-    document.getElementById("search").value = name;
+    input.value = name;
 
     document.getElementById("suggestions").innerHTML = "";
+
+    currentCategory = "All"; // 🔥 reset filter so results don’t get blocked
 
     render();
 }
