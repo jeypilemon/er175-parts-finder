@@ -348,27 +348,6 @@ input {
 }
 
 
-/*Floating Social Buttons*/
-.floating-social {
-    position: fixed;
-    right: 10px;
-    bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    z-index: 999;
-}
-
-.floating-social a {
-    background: #ff4d2d;
-    color: white;
-    padding: 8px;
-    border-radius: 50%;
-    text-align: center;
-    font-size: 12px;
-    text-decoration: none;
-}
-
 /*Feature Card Hover Effect*/
 .featured-card {
     cursor: pointer;
