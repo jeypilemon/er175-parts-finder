@@ -4,6 +4,13 @@ let aftermarketParts = [];
 let oemParts = [];
 let recentSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
 
+const synonymMap = {
+    "break": "brake",
+    "brakepad": "brake pad",
+    "brakepads": "brake pad",
+    "pads": "pad"
+};
+
 const products = document.getElementById("products");
 
 /* ---------------------------
@@ -14,7 +21,7 @@ function loadAftermarket(url) {
         download: true,
         header: true,
         complete: function(res) {
-            aftermarketParts = res.data;
+            aftermarketParts = res.data.filter(p => p["Parts Name"]);
             renderChips();
             render();
         }
@@ -29,7 +36,7 @@ function loadOEM(url) {
         download: true,
         header: true,
         complete: function(res) {
-            oemParts = res.data;
+            oemParts = res.data.filter(p => p["Parts Name"]);
             renderChips();
             render();
         }
@@ -49,9 +56,12 @@ function render() {
 
     let filtered = data.filter(p => {
 
+        const name = normalizeText(p["Parts Name"] || "");
+        const category = normalizeText(p["Parts Category"] || "");
+
         const matchSearch =
-            (p["Parts Name"] || "").toLowerCase().includes(keyword) ||
-            (p["Parts Category"] || "").toLowerCase().includes(keyword);
+            name.includes(keyword) ||
+            category.includes(keyword);
 
         const matchCategory =
             currentCategory === "All" ||
@@ -60,10 +70,8 @@ function render() {
         return matchSearch && matchCategory;
     });
 
-    
     products.innerHTML = "";
 
-    // empty state
     if (filtered.length === 0) {
         products.innerHTML = `
             <div class="empty-state">
@@ -73,47 +81,58 @@ function render() {
                 <button onclick="resetFilters()">Reset Filters</button>
             </div>
         `;
-    } else {
-
-        filtered.forEach(part => {
-
-            let extra = "";
-
-            if (currentTab === "aftermarket") {
-                extra = `
-                    <div class="meta">
-                        <span>🏷 Brand: ${part["Brand"] || "-"}</span>
-                        <span>🔧 Compatibility: ${part["Compatibility"] || "-"}</span>
-                        <span>📏 Specs/Size: ${part["Spec Size"] || "-"}</span>
-                    </div>
-                `;
-            }
-
-            if (currentTab === "oem") {
-                extra = `
-                    <div class="meta">
-                        <span>🎨 Color: ${part["Color"] || "-"}</span>
-                    </div>
-                `;
-            }
-
-            products.innerHTML += `
-                <div class="card">
-                    <img src="${part["Preview"] || ''}" loading="lazy">
-                    <h3>${part["Parts Name"]}</h3>
-                    <p><b>Category:</b> ${part["Parts Category"]}</p>
-                    ${extra}
-
-                    <a class="button"
-                       href="${part["Shopee"]}"
-                       target="_blank"
-                       onclick="trackClick('${part["Parts Name"]}')">
-                       Buy on Shopee
-                    </a>
-                </div>
-            `;
-        });
+        return;
     }
+
+    filtered.forEach(part => {
+
+        let extra = "";
+
+/* AFTERMARKET */
+if (currentTab === "aftermarket") {
+    extra += `
+        <div class="meta">
+            <span>🏷 Brand: ${part["Brand"] || "-"}</span>
+            <span>🔧 Compatibility: ${part["Compatibility"] || "-"}</span>
+            <span>📏 Specs/Size: ${part["Spec Size"] || "-"}</span>
+        </div>
+    `;
+}
+
+/* OEM FAIRINGS ONLY */
+const category = (part["Parts Category"] || "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+
+const isFairing = category.includes("fairing");
+const color = (part["Color"] || "").trim();
+
+if (currentTab === "oem" && category.includes("fairing")) {
+    extra += `
+        <div class="meta">
+            <span>🎨 Color: ${part["Color"] || "No color listed"}</span>
+        </div>
+    `;
+}
+
+
+        products.innerHTML += `
+            <div class="card">
+                <img src="${part["Preview"] || ''}" loading="lazy">
+                <h3>${part["Parts Name"] || ""}</h3>
+                <p><b>Category:</b> ${part["Parts Category"] || ""}</p>
+                ${extra}
+
+                <a class="button"
+                   href="${part["Shopee"] || "#"}"
+                   target="_blank"
+                   onclick="trackClick('${part["Parts Name"] || ""}')">
+                   Buy on Shopee
+                </a>
+            </div>
+        `;
+    });
 }
 
 
@@ -228,15 +247,16 @@ function renderSuggestions(keyword) {
         ? aftermarketParts
         : oemParts;
 
-    const matches = data
-        .filter(p =>
-            (p["Parts Name"] || "").toLowerCase().includes(keyword)
-        )
-        .slice(0, 5);
+    const suggestions = data
+    .filter(p => {
+        const name = normalizeText(p["Parts Name"]);
+        return name.includes(keyword);
+    })
+    .slice(0, 5);
 
-    box.innerHTML = matches.map(p => `
+    box.innerHTML = suggestions.map(p => `
     <div class="suggestion-item"
-         onclick="selectSuggestion('${p["Parts Name"]}')">
+        onclick="selectSuggestion('${p["Parts Name"]}')">
         🔍 ${p["Parts Name"]}
     </div>
 `).join("");
@@ -332,7 +352,30 @@ function closeBanner() {
     document.querySelector(".support-banner").style.display = "none";
 }
 
+function normalizeText(text) {
+    return applySynonyms((text || "")
+        .toLowerCase()
+        .replace(/\s+/g, "")
+        .trim());
+}
 
+
+function applySynonyms(text) {
+    let t = text;
+
+    Object.keys(synonymMap).forEach(key => {
+        const regex = new RegExp(key, "g");
+        t = t.replace(regex, synonymMap[key]);
+    });
+
+    return t;
+}
+
+/*helper show color for fairings*/
+function showColor(part) {
+    return currentTab === "aftermarket" ||
+           (currentTab === "oem" && (part["Parts Category"] || "").toLowerCase() === "fairings");
+}
 
 /*Loads Category Chips on page load*/
 
