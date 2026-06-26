@@ -1,32 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
+
+
 <head>
+
+    <footer class="footer">
+
+    <p>Follow & Support My Content</p>
+
+    <div class="social-icons">
+
+        <a href="https://www.youtube.com/@jpxcariman" target="_blank" class="social yt">
+            ▶ YouTube
+        </a>
+
+        <a href="https://www.tiktok.com/@jp.cariman" target="_blank" class="social tt">
+            🎵 TikTok
+        </a>
+
+        <a href="https://www.facebook.com/jpxcariman" target="_blank" class="social fb">
+            f Facebook
+        </a>
+
+    </div>
+
+</footer>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Motorstar ER175 Parts Finder</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
-
-<footer class="footer">
-    <p>Follow and Support my Content!</p>
-
-    <div class="socials">
-        <a href="https://www.youtube.com/@jpxcariman?sub_confirmation=1" target="_blank">
-            YouTube
-        </a>
-
-        <a href="https://www.tiktok.com/@jpcariman?is_from_webapp=1&sender_device=pc" target="_blank">
-            TikTok
-        </a>
-
-        <a href="https://www.facebook.com/jeypixc" target="_blank">
-            Facebook
-        </a>
-    </div>
-</footer>
-
 <body>
+
+    <div class="floating-social">
+    <a href="https://youtube.com/@jpxcariman" target="_blank">YT</a>
+    <a href="https://tiktok.com/@jp.cariman" target="_blank">TT</a>
+    <a href="https://facebook.com/jpxcariman" target="_blank">FB</a>
+    </div>
 
 <div class="container">
 
@@ -34,27 +46,46 @@
 
     <!-- TABS -->
     <div class="tabs">
-    <button id="tab-aftermarket" onclick="switchTab('aftermarket')">
-        Aftermarket
-    </button>
+        <button id="tab-aftermarket" onclick="switchTab('aftermarket')">Aftermarket</button>
+        <button id="tab-oem" onclick="switchTab('oem')">OEM</button>
+    </div>
 
-    <button id="tab-oem" onclick="switchTab('oem')">
-        OEM
-    </button>
-</div>
-
-<div class="chips" id="chips"></div>
+    <!-- CHIPS -->
+    <div class="chips" id="chips"></div>
 
     <!-- SEARCH -->
-    <input type="text" id="search" placeholder="Search parts...">
+<input type="text" id="search" placeholder="Search parts...">
 
-    <!-- PRODUCTS -->
-    <div id="products"></div>
-
+<!-- RESET BUTTON -->
+<div class="reset-container">
+    <button class="reset-btn" onclick="resetFilters()">
+        ↺ Reset Filters
+    </button>
 </div>
+
+<!-- PRODUCTS -->
+<div id="products"></div>
+
+<div id="suggestions"></div>
+
+<!-- FOOTER (MUST BE INSIDE BODY) -->
+
 
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="app.js"></script>
+
+
+<div class="support-banner">
+    <span>🔥 Support this project</span>
+
+    <div class="support-actions">
+        <a href="https://www.youtube.com/@jpxcariman?sub_confirmation=1" target="_blank">
+            👍 Like & Subscribe
+        </a>
+
+        <button onclick="closeBanner()">✖</button>
+    </div>
+</div>
 
 </body>
 

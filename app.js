@@ -2,6 +2,7 @@ let currentTab = "aftermarket";
 let currentCategory = "All";
 let aftermarketParts = [];
 let oemParts = [];
+let recentSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
 
 const products = document.getElementById("products");
 
@@ -44,7 +45,7 @@ function render() {
         ? aftermarketParts
         : oemParts;
 
-    const keyword = document.getElementById("search").value.toLowerCase();
+    const keyword = (document.getElementById("search")?.value || "").toLowerCase();
 
     let filtered = data.filter(p => {
 
@@ -59,73 +60,62 @@ function render() {
         return matchSearch && matchCategory;
     });
 
-/*NO RESULTS*/
+    
     products.innerHTML = "";
 
-if (filtered.length === 0) {
-
-    products.innerHTML = `
-        <div class="empty-state">
-
-            <div class="empty-icon">🔍</div>
-
-            <h3>No parts found</h3>
-
-            <p>We couldn't find anything for your search</p>
-
-            <div class="empty-actions">
-
+    // empty state
+    if (filtered.length === 0) {
+        products.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">🔍</div>
+                <h3>No parts found</h3>
+                <p>Try different keywords or category</p>
                 <button onclick="resetFilters()">Reset Filters</button>
-
             </div>
-
-        </div>
-    `;
-
-    return;
-}
-
-    filtered.forEach(part => {
-
-        let extra = "";
-
-        if (currentTab === "aftermarket") {
-            extra = `
-                <div class="meta">
-                    <span>🏷 Brand: ${part["Brand"] || "-"}</span>
-                    <span>🔧 Compatibility: ${part["Compatibility"] || "-"}</span>
-                    <span>📏 Specs/Size: ${part["Spec Size"] || "-"}</span>
-                </div>
-            `;
-        }
-
-        if (currentTab === "oem") {
-            extra = `
-                <div class="meta">
-                    <span>🎨 Color: ${part["Color"] || "-"}</span>
-                </div>
-            `;
-        }
-
-        products.innerHTML += `
-        <div class="card">
-
-            <img src="${part["Preview"] || ''}" loading="lazy">
-
-            <h3>${part["Parts Name"]}</h3>
-
-            <p><b>Category:</b> ${part["Parts Category"]}</p>
-
-            ${extra}
-
-            <a class="button" href="${part["Shopee"]}" target="_blank">
-                Buy on Shopee
-            </a>
-
-        </div>
         `;
-    });
+    } else {
+
+        filtered.forEach(part => {
+
+            let extra = "";
+
+            if (currentTab === "aftermarket") {
+                extra = `
+                    <div class="meta">
+                        <span>🏷 Brand: ${part["Brand"] || "-"}</span>
+                        <span>🔧 Compatibility: ${part["Compatibility"] || "-"}</span>
+                        <span>📏 Specs/Size: ${part["Spec Size"] || "-"}</span>
+                    </div>
+                `;
+            }
+
+            if (currentTab === "oem") {
+                extra = `
+                    <div class="meta">
+                        <span>🎨 Color: ${part["Color"] || "-"}</span>
+                    </div>
+                `;
+            }
+
+            products.innerHTML += `
+                <div class="card">
+                    <img src="${part["Preview"] || ''}" loading="lazy">
+                    <h3>${part["Parts Name"]}</h3>
+                    <p><b>Category:</b> ${part["Parts Category"]}</p>
+                    ${extra}
+
+                    <a class="button"
+                       href="${part["Shopee"]}"
+                       target="_blank"
+                       onclick="trackClick('${part["Parts Name"]}')">
+                       Buy on Shopee
+                    </a>
+                </div>
+            `;
+        });
+    }
 }
+
 
 /* tab logic */
 function updateTabUI() {
@@ -162,16 +152,21 @@ function switchTab(tab) {
 /* ---------------------------
 Search Listeners
 ----------------------------*/
-let searchTimeout;
-
 document.addEventListener("input", (e) => {
+
     if (e.target.id === "search") {
 
-        clearTimeout(searchTimeout);
+        clearTimeout(window.searchTimeout);
 
-        searchTimeout = setTimeout(() => {
+        window.searchTimeout = setTimeout(() => {
+
+            const keyword = (e.target.value || "").toLowerCase();
+
+            saveSearch(keyword);
+            renderSuggestions(keyword);
             render();
-        }, 200);
+
+        }, 150);
     }
 });
 
@@ -218,6 +213,45 @@ function renderChips() {
     });
 }
 
+
+/*Search suggestions*/
+function renderSuggestions(keyword) {
+
+    const box = document.getElementById("suggestions");
+
+    if (!keyword) {
+        box.innerHTML = "";
+        return;
+    }
+
+    const data = currentTab === "aftermarket"
+        ? aftermarketParts
+        : oemParts;
+
+    const matches = data
+        .filter(p =>
+            (p["Parts Name"] || "").toLowerCase().includes(keyword)
+        )
+        .slice(0, 5);
+
+    box.innerHTML = matches.map(p => `
+    <div class="suggestion-item"
+         onclick="selectSuggestion('${p["Parts Name"]}')">
+        🔍 ${p["Parts Name"]}
+    </div>
+`).join("");
+}
+
+/*Select suggestion*/
+function selectSuggestion(name) {
+
+    document.getElementById("search").value = name;
+
+    document.getElementById("suggestions").innerHTML = "";
+
+    render();
+}
+
 /*Reset filters*/
 
 function resetFilters() {
@@ -228,14 +262,88 @@ function resetFilters() {
     render();
 }
 
+/*FeaturedProducts Logic*/
+function renderFeatured() {
+
+    const data = currentTab === "aftermarket"
+        ? aftermarketParts
+        : oemParts;
+
+    if (!data || data.length === 0) return;
+
+    const featured = data.slice(0, 3);
+
+    document.getElementById("featured").innerHTML = `
+        <h3>🔥 Featured Parts</h3>
+        <div class="featured-grid">
+            ${featured.map(p => `
+                <div class="featured-card">
+                    <img src="${p["Preview"] || ''}">
+                    <p>${p["Parts Name"] || ''}</p>
+                </div>
+            `).join("")}
+        </div>
+    `;
+}
+
+/*Save recent searches to local storage*/
+
+function saveSearch(keyword) {
+
+    if (!keyword) return;
+
+    recentSearches.unshift(keyword);
+
+    recentSearches = [...new Set(recentSearches)].slice(0, 5);
+
+    localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+}
+
+
+/*Track clicks on Shopee links*/
+function trackClick(name) {
+
+    let clicks = JSON.parse(localStorage.getItem("clicks")) || {};
+
+    clicks[name] = (clicks[name] || 0) + 1;
+
+    localStorage.setItem("clicks", JSON.stringify(clicks));
+}
+
+/*Top Clicked Parts*/
+function getTopClicked() {
+
+    let clicks = JSON.parse(localStorage.getItem("clicks")) || {};
+
+    return Object.entries(clicks)
+        .sort((a,b) => b[1]-a[1])
+        .slice(0,3);
+}
+
+/*Open Featured Product in new tab and track clicks*/
+function openProduct(link, name) {
+    trackClick(name);
+    window.open(link, "_blank");
+}
+
+
+
+function closeBanner() {
+    document.querySelector(".support-banner").style.display = "none";
+}
+
+
+
+/*Loads Category Chips on page load*/
+
 window.addEventListener("load", () => {
-    renderChips();
+    updateTabUI();
+    render();
 });
 
 
-/* ---------------------------
-INIT
-----------------------------*/
+/* Database URLs */
+
 loadAftermarket("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=0&single=true&output=csv");
 
 loadOEM("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=1094479797&single=true&output=csv");
