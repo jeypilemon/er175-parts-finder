@@ -59,15 +59,29 @@ function render() {
         return matchSearch && matchCategory;
     });
 
+/*NO RESULTS*/
     products.innerHTML = "";
 
 if (filtered.length === 0) {
+
     products.innerHTML = `
         <div class="empty-state">
-            ❌ No results found
-            <p>Try different keywords or category</p>
+
+            <div class="empty-icon">🔍</div>
+
+            <h3>No parts found</h3>
+
+            <p>We couldn't find anything for your search</p>
+
+            <div class="empty-actions">
+
+                <button onclick="resetFilters()">Reset Filters</button>
+
+            </div>
+
         </div>
     `;
+
     return;
 }
 
@@ -146,11 +160,18 @@ function switchTab(tab) {
 }
 
 /* ---------------------------
-SEARCH
+Search Listeners
 ----------------------------*/
+let searchTimeout;
+
 document.addEventListener("input", (e) => {
     if (e.target.id === "search") {
-        render();
+
+        clearTimeout(searchTimeout);
+
+        searchTimeout = setTimeout(() => {
+            render();
+        }, 200);
     }
 });
 
@@ -197,6 +218,15 @@ function renderChips() {
     });
 }
 
+/*Reset filters*/
+
+function resetFilters() {
+    currentCategory = "All";
+    document.getElementById("search").value = "";
+
+    renderChips();
+    render();
+}
 
 window.addEventListener("load", () => {
     renderChips();

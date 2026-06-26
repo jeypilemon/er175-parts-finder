@@ -265,11 +265,30 @@ input {
 /*No Results Found*/
 .empty-state {
     text-align: center;
-    padding: 40px 20px;
-    color: #666;
+    padding: 50px 20px;
+    color: #555;
+}
+
+.empty-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.empty-state h3 {
+    margin: 5px 0;
 }
 
 .empty-state p {
     font-size: 13px;
-    margin-top: 5px;
+    color: #888;
+}
+
+.empty-actions button {
+    margin-top: 15px;
+    padding: 8px 14px;
+    border: none;
+    background: #ee4d2d;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
 }
