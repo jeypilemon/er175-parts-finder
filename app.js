@@ -14,6 +14,7 @@ function loadAftermarket(url) {
         header: true,
         complete: function(res) {
             aftermarketParts = res.data;
+            renderChips();
             render();
         }
     });
@@ -28,6 +29,7 @@ function loadOEM(url) {
         header: true,
         complete: function(res) {
             oemParts = res.data;
+            renderChips();
             render();
         }
     });
@@ -184,6 +186,12 @@ function renderChips() {
         `;
     });
 }
+
+
+window.addEventListener("load", () => {
+    renderChips();
+});
+
 
 /* ---------------------------
 INIT
