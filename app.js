@@ -62,7 +62,9 @@ function render() {
         return;
     }
 
-    const data = currentTab === "aftermarket" ? aftermarketParts : oemParts;
+    const data = currentTab === "aftermarket"
+        ? aftermarketParts
+        : oemParts;
 
     const keyword = globalKeyword;
 
@@ -76,22 +78,73 @@ function render() {
         );
     });
 
-    if (filtered.length === 0) {
-        container.innerHTML = `<div class="empty-state">No results</div>`;
-        return;
-    }
-
     filtered.forEach(part => {
-        container.innerHTML += `
-        <div class="card">
-            <img src="${part["Preview"] || ""}">
-            <h3>${part["Parts Name"]}</h3>
-            <p>${part["Parts Category"]}</p>
 
-            <a class="button" href="${part["Shopee"]}" target="_blank">
-                Buy on Shopee
-            </a>
-        </div>`;
+        let extraHTML = "";
+
+if (currentTab === "aftermarket") {
+
+    const brand = part["Brand"];
+    const compat = part["Compatibility"];
+    const size = part["Spec Size"];
+
+    extraHTML = `
+        <div class="meta">
+
+            ${brand ? `
+            <div class="meta-row">
+                <span class="meta-label"><span class="icon"></span> <b>Brand:</b></span>
+                <span class="meta-value">${brand}</span>
+            </div>` : ""}
+
+            ${compat ? `
+            <div class="meta-row">
+                <span class="meta-label"><span class="icon"></span><b>Compatibility:</b></span>
+                <span class="meta-value">${compat}</span>
+            </div>` : ""}
+
+            ${size ? `
+            <div class="meta-row">
+                <span class="meta-label"><span class="icon"></span> <b>Spec Size:</b></span>
+                <span class="meta-value">${size}</span>
+            </div>` : ""}
+
+        </div>
+    `;
+}
+
+        // OEM ONLY COLOR LOGIC
+        if (currentTab === "oem") {
+            const isFairing = (part["Parts Category"] || "")
+                .toLowerCase()
+                .includes("fairing");
+
+            if (isFairing && part["Color"]) {
+                extraHTML = `
+                    <div class="meta">
+                        <span>🎨 Color: ${part["Color"]}</span>
+                    </div>
+                `;
+            }
+        }
+
+        container.innerHTML += `
+            <div class="card ${currentTab === "oem" ? "oem-card" : ""}">
+
+                <img src="${part["Preview"] || ""}">
+
+                <h3>${part["Parts Name"]}</h3>
+
+                <p>${part["Parts Category"]}</p>
+
+                ${extraHTML}
+
+                <a class="button" href="${part["Shopee"]}" target="_blank">
+                    Buy on Shopee
+                </a>
+
+            </div>
+        `;
     });
 }
 
