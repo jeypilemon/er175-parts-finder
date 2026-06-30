@@ -282,14 +282,24 @@ CATEGORIES (FIXED - NO DUPLICATES)
 ========================= */
 
 function getCategories(data) {
-    return ["All", ...new Set(data.map(p => p["Parts Category"]).filter(Boolean))];
+    const categories = [...new Set(
+        data.map(p => p["Parts Category"]).filter(Boolean)
+    )].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
+
+    return ["All", ...categories];
 }
 
 function getTroubleCategories(data) {
-    const tags = data.flatMap(item =>
-        (item["Tags"] || "").split(",").map(t => t.trim())
-    );
-    return ["All", ...new Set(tags.filter(Boolean))];
+    const tags = [...new Set(
+        data.flatMap(item =>
+            (item["Tags"] || "")
+                .split(",")
+                .map(t => t.trim())
+                .filter(Boolean)
+        )
+    )].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
+
+    return ["All", ...tags];
 }
 
 function renderChips() {
