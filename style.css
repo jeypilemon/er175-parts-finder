@@ -955,3 +955,30 @@ MOBILE RESPONSIVE FIX
     background: #fafafa;
     border: 1px solid #e5e7eb;
 }
+
+.manual-card{
+    background:#fff;
+    border-radius:14px;
+    overflow:hidden;
+    border:1px solid #ececec;
+}
+
+.manual-row{
+    display:flex;
+    justify-content:space-between;
+    padding:14px 18px;
+    border-bottom:1px solid #f2f2f2;
+}
+
+.manual-row:last-child{
+    border-bottom:none;
+}
+
+.manual-spec{
+    font-weight:600;
+}
+
+.manual-value{
+    font-weight:700;
+    color:#666;
+}

@@ -2,12 +2,32 @@ let currentTab = "aftermarket";
 let currentCategory = "All";
 let globalKeyword = "";
 
+let manualData = [];
 let aftermarketParts = [];
 let oemParts = [];
 let troubleshootData = [];
 
 
 const products = document.getElementById("products");
+
+
+function loadManual(url){
+
+    Papa.parse(url,{
+        download:true,
+        header:true,
+
+        complete:(res)=>{
+
+            manualData = res.data.filter(x=>x["Category"]);
+
+            render();
+
+        }
+
+    });
+
+}
 
 /* =========================
 LOAD SHEETS
@@ -56,6 +76,12 @@ MAIN RENDER
 function render() {
     const container = document.getElementById("products");
     container.innerHTML = "";
+
+
+    if(currentTab==="manual"){
+    renderManual();
+    return;
+}
 
     if (currentTab === "troubleshoot") {
         renderTroubleshoot();
@@ -200,6 +226,100 @@ function renderTroubleshoot() {
     });
 }
 
+function renderManual(){
+
+    const container = document.getElementById("products");
+    container.innerHTML = "";
+
+    const filtered = manualData.filter(item => {
+
+        return (
+            normalizeText(item["Category"] || "").includes(globalKeyword) ||
+            normalizeText(item["Specification"] || "").includes(globalKeyword) ||
+            normalizeText(item["Value"] || "").includes(globalKeyword)
+        );
+
+    });
+
+    // Group by Category
+    const grouped = {};
+
+    filtered.forEach(item => {
+
+        const category = item["Category"] || "Other";
+
+        if (!grouped[category]) grouped[category] = [];
+
+        grouped[category].push(item);
+
+    });
+
+    let html = "";
+
+    Object.keys(grouped).forEach(category => {
+
+        html += `
+        <div class="manual-section">
+
+    <h2>
+        ${getCategoryIcon(category)}
+        ${category}
+    </h2>
+
+    <div class="manual-card">
+`;
+
+        grouped[category].forEach(item => {
+
+            html += `
+<div class="manual-row">
+
+    <div class="manual-spec">
+        ${highlight(item["Specification"])}
+    </div>
+
+    <div class="manual-value">
+        ${highlight(item["Value"])}
+    </div>
+
+</div>
+`;
+
+        });
+
+        html += `
+                </div>
+            </div>
+        `;
+
+    });
+
+    container.innerHTML = html;
+
+}
+
+
+function getCategoryIcon(category) {
+
+    const icons = {
+        "Quick Specs":"⭐",
+        "Specifications":"📏",
+        "Engine":"🏍",
+        "Transmission":"⚙",
+        "Electrical":"⚡",
+        "Lighting":"💡",
+        "Wheels":"🛞",
+        "Brakes":"🛑",
+        "Suspension":"🛠",
+        "Maintenance":"🔧",
+        "Torque":"🔩",
+        "Fluids":"🛢",
+        "Compatibility":"🔄"
+    };
+
+    return icons[category] || "📘";
+}
+
 /*safe renderButtons function to avoid errors if no links are found*/
 function renderButtons() {
     return "";
@@ -249,6 +369,16 @@ function linkifySolution(text) {
     );
 
     return formatted;
+}
+/*Helper function to highlight search keywords in the text*/
+
+function highlight(text){
+
+    if(!globalKeyword) return text;
+
+    const reg = new RegExp(`(${globalKeyword})`, "ig");
+
+    return text.replace(reg,"<mark>$1</mark>");
 }
 
 function toggleCard(index) {
@@ -303,27 +433,35 @@ function getTroubleCategories(data) {
 }
 
 function renderChips() {
+
     const chips = document.getElementById("chips");
 
     let categories = [];
 
+    if (currentTab === "manual") {
+        chips.innerHTML = "";
+        return;
+    }
+
     if (currentTab === "troubleshoot") {
         categories = getTroubleCategories(troubleshootData);
-    } else if (currentTab === "aftermarket") {
+    }
+    else if (currentTab === "aftermarket") {
         categories = getCategories(aftermarketParts);
-    } else {
+    }
+    else if (currentTab === "oem") {
         categories = getCategories(oemParts);
     }
 
     chips.innerHTML = categories.map(cat => `
-        <button class="${currentCategory === cat ? 'active' : ''}"
+        <button class="${currentCategory === cat ? "active" : ""}"
             onclick="setCategory('${cat}')">
             ${cat}
         </button>
     `).join("");
 }
 
-function setCategory(cat) {
+function setCategory(cat){
     currentCategory = cat;
     renderChips();
     render();
@@ -343,6 +481,7 @@ function updateTabUI() {
     document.getElementById("tab-aftermarket").classList.remove("active");
     document.getElementById("tab-oem").classList.remove("active");
     document.getElementById("tab-troubleshoot").classList.remove("active");
+    document.getElementById("tab-manual").classList.remove("active");
 
     document.getElementById(`tab-${currentTab}`).classList.add("active");
 }
@@ -356,3 +495,5 @@ loadAftermarket("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfH
 loadOEM("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=1094479797&single=true&output=csv");
 
 loadTroubleshoot("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=557855511&single=true&output=csv");
+
+loadManual("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=56637698&single=true&output=csv");
