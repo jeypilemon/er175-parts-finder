@@ -32,6 +32,24 @@ function loadManual(url){
 /* =========================
 LOAD SHEETS
 ========================= */
+function resetFilters() {
+
+    // Reset filter variables
+    globalKeyword = "";
+    currentCategory = "All";
+
+    // Clear search input
+    const search = document.getElementById("search");
+    if (search) {
+        search.value = "";
+    }
+
+    // Rebuild chips so "All" becomes active
+    renderChips();
+
+    // Render the current tab
+    render();
+}
 
 function loadAftermarket(url) {
     Papa.parse(url, {
