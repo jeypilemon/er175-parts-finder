@@ -38,13 +38,13 @@
 
 <div class="container" style="padding-top: 20px;">
 
-    <h1>Motorstar ER175 Parts Finder</h1>
+    <h1>Motorstar ER175Fi Technical Hub</h1>
 
     <!-- TABS -->
     <div class="tabs">
         <button id="tab-manual"
         onclick="switchTab('manual')">
-    Owners Manual
+    Owner's Manual
 </button>
         <button onclick="switchTab('troubleshoot')" id="tab-troubleshoot">Troubleshooting Guides</button>
         <button id="tab-aftermarket" onclick="switchTab('aftermarket')">Aftermarket Parts</button>
@@ -56,13 +56,14 @@
     <div class="chips" id="chips"></div>
 
     <!-- SEARCH -->
-    <input type="text" id="search" placeholder="Search parts...">
+    <div class="search-box">
+    <input id="search" placeholder="Search parts...">
+    </div>
 
     <!-- RESET BUTTON -->
     <div class="reset-container">
     <button class="reset-btn" onclick="resetFilters()">
-        ↺ Reset Filters
-    </button>
+    ↺ Reset Filters</button>
     </div>
 
     <!-- PRODUCTS -->
@@ -97,6 +98,7 @@
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="app.js"></script>
 
+<script src="https://unpkg.com/lucide@latest"></script>
 
 </body>
 

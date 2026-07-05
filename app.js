@@ -8,6 +8,9 @@ let oemParts = [];
 let troubleshootData = [];
 
 
+const ownersManualPDF =
+"https://drive.google.com/file/d/1xJyf7sNn1Nlo7X4r0a3X6W_R5pUabHbQ/view";
+
 const products = document.getElementById("products");
 
 
@@ -19,14 +22,13 @@ function loadManual(url){
 
         complete:(res)=>{
 
-            manualData = res.data.filter(x=>x["Category"]);
+            manualData = res.data.filter(x => x["Category"]);
 
-            render();
-
+            renderChips();   // IMPORTANT
+            render();        // IMPORTANT
         }
 
     });
-
 }
 
 /* =========================
@@ -93,6 +95,7 @@ MAIN RENDER
 
 function render() {
     const container = document.getElementById("products");
+    container.classList.remove("manual-mode");
     container.innerHTML = "";
 
 
@@ -166,7 +169,7 @@ if (currentTab === "aftermarket") {
             if (isFairing && part["Color"]) {
                 extraHTML = `
                     <div class="meta">
-                        <span>🎨 Color: ${part["Color"]}</span>
+                        <span> <b>Color:</b> ${part["Color"]}</span>
                     </div>
                 `;
             }
@@ -244,22 +247,27 @@ function renderTroubleshoot() {
     });
 }
 
-function renderManual(){
+function getCategoryIcon() {
+    return "";
+}
+
+function renderManual() {
 
     const container = document.getElementById("products");
+    container.classList.add("manual-mode");
     container.innerHTML = "";
 
-    const filtered = manualData.filter(item => {
+    const filtered = (manualData || []).filter(item => {
 
-        return (
-            normalizeText(item["Category"] || "").includes(globalKeyword) ||
-            normalizeText(item["Specification"] || "").includes(globalKeyword) ||
-            normalizeText(item["Value"] || "").includes(globalKeyword)
-        );
+    return (
+        normalizeText(item["Category"] || "").includes(globalKeyword) ||
+        normalizeText(item["Specification"] || "").includes(globalKeyword) ||
+        normalizeText(item["Value"] || "").includes(globalKeyword)
+    );
 
-    });
+});
 
-    // Group by Category
+    // Group categories
     const grouped = {};
 
     filtered.forEach(item => {
@@ -272,43 +280,78 @@ function renderManual(){
 
     });
 
-    let html = "";
+    let html = `
+    <div class="manual-download">
+        <a href="${ownersManualPDF}"
+           target="_blank"
+           class="manual-download-btn">
+
+            📄 Download Official Owner's Manual (PDF)
+
+        </a>
+    </div>
+    `;
 
     Object.keys(grouped).forEach(category => {
 
+        const open = category === "Quick Specs" ? "open" : "";
+
         html += `
-        <div class="manual-section">
 
-    <h2>
-        ${getCategoryIcon(category)}
-        ${category}
-    </h2>
+        <details class="manual-section" ${open}>
 
-    <div class="manual-card">
-`;
+            <summary>
+
+                <span>
+
+                    ${getCategoryIcon(category)}
+
+                    ${category}
+
+                </span>
+
+            </summary>
+
+            <div class="manual-card">
+        `;
 
         grouped[category].forEach(item => {
 
             html += `
-<div class="manual-row">
 
-    <div class="manual-spec">
-        ${highlight(item["Specification"])}
-    </div>
+            <div class="manual-row">
 
-    <div class="manual-value">
-        ${highlight(item["Value"])}
-    </div>
+                <div class="manual-spec">
 
-</div>
-`;
+                    ${highlight(item["Specification"])}
+
+                </div>
+
+                <div class="manual-value">
+
+                    ${highlight(item["Value"])}
+
+                </div>
+
+            </div>
+
+            `;
 
         });
 
         html += `
-                </div>
             </div>
+
+        </details>
         `;
+
+        if (Object.keys(grouped).length === 0) {
+    html += `
+        <div style="padding:20px;text-align:center;color:#777;">
+            No manual data found
+        </div>
+    `;
+}
 
     });
 
@@ -316,36 +359,10 @@ function renderManual(){
 
 }
 
-
-function getCategoryIcon(category) {
-
-    const icons = {
-        "Quick Specs":"⭐",
-        "Specifications":"📏",
-        "Engine":"🏍",
-        "Transmission":"⚙",
-        "Electrical":"⚡",
-        "Lighting":"💡",
-        "Wheels":"🛞",
-        "Brakes":"🛑",
-        "Suspension":"🛠",
-        "Maintenance":"🔧",
-        "Torque":"🔩",
-        "Fluids":"🛢",
-        "Compatibility":"🔄"
-    };
-
-    return icons[category] || "📘";
-}
-
-/*safe renderButtons function to avoid errors if no links are found*/
-function renderButtons() {
-    return "";
-}
-
 /* =========================
 LINK EXTRACTOR
 ========================= */
+
 
 function extractLinks(text, keyword) {
     if (!text) return [];
@@ -418,6 +435,7 @@ TABS
 function switchTab(tab) {
     currentTab = tab;
     currentCategory = "All";
+    
 
     updateTabUI();
 
