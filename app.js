@@ -294,7 +294,7 @@ function renderManual() {
 
     Object.keys(grouped).forEach(category => {
 
-        const open = category === "Quick Specs" ? "open" : "";
+        const open = category === "Quick Specifications" ? "open" : "";
 
         html += `
 
