@@ -970,3 +970,74 @@ body {
     max-width: 520px;
     margin: 0 auto;
 }
+
+
+.chips-wrapper {
+
+    position:sticky;
+
+    top:58px;
+
+    z-index:90;
+
+    background:#0b0f14;
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+
+.chips {
+
+    display:flex;
+
+    gap:8px;
+
+    overflow-x:auto;
+
+    flex:1;
+
+    padding:8px 40px 8px 10px;
+
+    scrollbar-width:none;
+
+}
+
+
+.chips::-webkit-scrollbar{
+    display:none;
+}
+
+
+
+.chips-next {
+
+    position:absolute;
+
+    right:8px;
+
+    width:32px;
+
+    height:32px;
+
+    border-radius:50%;
+
+    border:1px solid #243041;
+
+    background:#161f2b;
+
+    color:#e6edf3;
+
+    font-size:24px;
+
+    line-height:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}

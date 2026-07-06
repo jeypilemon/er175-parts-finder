@@ -67,6 +67,17 @@ function checkReady() {
 GLOBAL FUNCTIONS
 ========================= */
 
+function scrollChips(){
+
+    const chips = document.getElementById("chips");
+
+    chips.scrollBy({
+        left:150,
+        behavior:"smooth"
+    });
+
+}
+
 function getYouTubeId(url) {
     const match = url.match(
         /(?:youtube\.com\/.*v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{6,})/
