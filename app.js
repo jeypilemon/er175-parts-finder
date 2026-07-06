@@ -257,24 +257,29 @@ function render() {
     });
 
     if (!filtered.length) {
-        container.innerHTML = `<div class="empty-state">No results found</div>`;
+        container.innerHTML = `<div class="empty-state">${getEmptyStateMessage()}</div>`;
         return;
     }
 
     container.innerHTML = filtered.map(part => `
-        <div class="card">
-            <img src="${part["Preview"] || ""}" onerror="this.style.display='none'">
+    <div class="card">
+        <img src="${part["Preview"] || ""}" onerror="this.style.display='none'">
+
+        <div class="card-content">
             <h3>${part["Parts Name"]}</h3>
             <p>${part["Parts Category"]}</p>
-            <a class="button" href="${part["Shopee"]}" target="_blank">
-                Buy on Shopee
-            </a>
         </div>
-    `).join("");
+
+        <a class="button" href="${part["Shopee"]}" target="_blank">
+            Buy in Shopee
+        </a>
+    </div>
+`).join("");
 
     updateTabUI();
 }
 
+/*Linkyfy Text*/
 function linkifySolution(text) {
     if (!text) return "";
 
@@ -400,9 +405,73 @@ function renderManual() {
     updateTabUI();
 }
 
+/* Dictionary*/
+
+const suggestionMap = {
+    breakpads: "brake pads",
+    brakepad: "brake pads",
+    oilfilter: "oil filter",
+    sparkpluggs: "spark plug",
+    clutchshoe: "clutch shoe"
+};
+
+/*fuzzy suggestion*/
+
+function getSuggestion(query) {
+    const q = normalizeText(query);
+
+    return suggestionMap[q] || null;
+}
+
+/*suggestion UI*/
+
+function renderSuggestion() {
+    const suggestionBox = document.getElementById("suggestions");
+
+    const suggestion = getSuggestion(globalKeyword);
+
+    if (!globalKeyword || !suggestion) {
+        suggestionBox.innerHTML = "";
+        return;
+    }
+
+    suggestionBox.innerHTML = `
+        <div class="suggestion-item" onclick="applySuggestion('${suggestion}')">
+            💡 Do you mean: <b>${suggestion}</b>?
+        </div>
+    `;
+}
+
+/*Apply suggestion*/
+
+function applySuggestion(text) {
+    document.getElementById("search").value = text;
+    globalKeyword = normalizeText(text);
+    render();
+    renderSuggestion();
+}
+
 /* =========================
 ACTIONS
 ========================= */
+
+function getEmptyStateMessage() {
+    if (globalKeyword) {
+        return `No results found for "<b>${globalKeyword}</b>"`;
+    }
+    return "No items available";
+}
+
+function resetFilters() {
+    globalKeyword = "";
+    currentCategory = "All";
+
+    document.getElementById("search").value = "";
+
+    renderChips();
+    render();
+}
+
 function setCategory(cat) {
     currentCategory = cat;
     renderChips();
@@ -422,6 +491,7 @@ SEARCH
 document.getElementById("search").addEventListener("input", e => {
     globalKeyword = normalizeText(e.target.value);
     render();
+    renderSuggestion();
 });
 
 
