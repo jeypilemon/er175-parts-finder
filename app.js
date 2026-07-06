@@ -56,7 +56,7 @@ function openModal(url) {
     const modal = document.getElementById("linkModal");
     const frame = document.getElementById("modalFrame");
 
-    // YouTube embed ONLY
+    // YouTube embed
     const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
 
     if (ytMatch) {
@@ -66,22 +66,14 @@ function openModal(url) {
         return;
     }
 
-    // TikTok / Facebook → OPEN OUTSIDE (they block iframe)
-    if (
-        url.includes("tiktok.com") ||
-        url.includes("facebook.com") ||
-        url.includes("fb.watch")
-    ) {
-        window.open(url, "_blank");
-        return;
-    }
-
-    // fallback
+    // fallback external
     window.open(url, "_blank");
 }
 
 
 function closeModal() {
+    console.log("CLOSE CLICKED"); // 👈 test if click works
+
     const modal = document.getElementById("linkModal");
     const frame = document.getElementById("modalFrame");
 
