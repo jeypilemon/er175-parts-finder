@@ -52,6 +52,41 @@ function checkReady() {
 
 /* Global Functions*/
 
+/* =========================
+GLOBAL FUNCTIONS
+========================= */
+
+function getYouTubeId(url) {
+    const match = url.match(
+        /(?:youtube\.com\/.*v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{6,})/
+    );
+    return match ? match[1] : null;
+}
+
+function openModal(url) {
+    const modal = document.getElementById("linkModal");
+    const frame = document.getElementById("modalFrame");
+
+    const videoId = getYouTubeId(url);
+
+    if (videoId) {
+        frame.src = `https://www.youtube.com/embed/${videoId}`;
+        modal.classList.add("show");
+        return;
+    }
+
+    if (
+        url.includes("tiktok.com") ||
+        url.includes("facebook.com") ||
+        url.includes("fb.watch")
+    ) {
+        window.open(url, "_blank");
+        return;
+    }
+
+    window.open(url, "_blank");
+}
+
 function openModal(url) {
     const modal = document.getElementById("linkModal");
     const frame = document.getElementById("modalFrame");
