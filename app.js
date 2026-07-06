@@ -2,35 +2,26 @@ let currentTab = "aftermarket";
 let currentCategory = "All";
 let globalKeyword = "";
 
-/* =========================
-DATA STORAGE
-========================= */
 let manualData = [];
 let aftermarketParts = [];
 let oemParts = [];
 let troubleshootData = [];
 
-/* =========================
-DOM
-========================= */
+const ownersManualPDF =
+"https://drive.google.com/file/d/1xJyf7sNn1Nlo7X4r0a3X6W_R5pUabHbQ/view";
+
 const products = document.getElementById("products");
 
 /* =========================
-HELPERS
+LOAD DATA
 ========================= */
-function normalizeText(text) {
-    return (text || "").toLowerCase().replace(/\s+/g, "").trim();
-}
 
-/* =========================
-LOAD DATA (FAST + SAFE)
-========================= */
 function loadManual(url) {
     Papa.parse(url, {
         download: true,
         header: true,
         complete: (res) => {
-            manualData = (res.data || []).filter(x => x["Category"]);
+            manualData = res.data.filter(x => x["Category"]);
             renderChips();
             render();
         }
@@ -41,15 +32,8 @@ function loadAftermarket(url) {
     Papa.parse(url, {
         download: true,
         header: true,
-        complete: (res) => {
-            aftermarketParts = (res.data || [])
-                .filter(p => p["Parts Name"])
-                .map(p => ({
-                    ...p,
-                    _name: normalizeText(p["Parts Name"]),
-                    _cat: normalizeText(p["Parts Category"])
-                }));
-
+        complete: res => {
+            aftermarketParts = res.data.filter(p => p["Parts Name"]);
             renderChips();
             render();
         }
@@ -60,15 +44,8 @@ function loadOEM(url) {
     Papa.parse(url, {
         download: true,
         header: true,
-        complete: (res) => {
-            oemParts = (res.data || [])
-                .filter(p => p["Parts Name"])
-                .map(p => ({
-                    ...p,
-                    _name: normalizeText(p["Parts Name"]),
-                    _cat: normalizeText(p["Parts Category"])
-                }));
-
+        complete: res => {
+            oemParts = res.data.filter(p => p["Parts Name"]);
             renderChips();
             render();
         }
@@ -79,16 +56,8 @@ function loadTroubleshoot(url) {
     Papa.parse(url, {
         download: true,
         header: true,
-        complete: (res) => {
-            troubleshootData = (res.data || [])
-                .filter(p => p["Known Issue"])
-                .map(p => ({
-                    ...p,
-                    _issue: normalizeText(p["Known Issue"]),
-                    _solution: normalizeText(p["Possible Solution"] || ""),
-                    _tags: normalizeText(p["Tags"] || "")
-                }));
-
+        complete: res => {
+            troubleshootData = res.data.filter(p => p["Known Issue"]);
             renderChips();
             render();
         }
@@ -96,197 +65,243 @@ function loadTroubleshoot(url) {
 }
 
 /* =========================
-RESET
+UTILS
 ========================= */
-function resetFilters() {
-    globalKeyword = "";
-    currentCategory = "All";
 
-    const search = document.getElementById("search");
-    if (search) search.value = "";
+function normalizeText(text) {
+    return (text || "")
+        .toLowerCase()
+        .replace(/\s+/g, "")
+        .trim();
+}
 
-    renderChips();
-    render();
+function highlight(text) {
+    if (!globalKeyword) return text || "";
+    const reg = new RegExp(globalKeyword, "ig");
+    return (text || "").replace(reg, m => `<mark>${m}</mark>`);
+}
+
+/* =========================
+LINKIFY (FIXED BUTTONS)
+========================= */
+
+function linkifySolution(text) {
+    if (!text) return "";
+
+    let formatted = text.replace(/\n/g, "<br>");
+
+    // YouTube
+    formatted = formatted.replace(
+        /(https?:\/\/(www\.)?youtube\.com\/[^\s<]+)/g,
+        (url) => `
+            <div style="margin:6px 0;">
+                <span></span>
+                <a class="inline-link youtube" href="${url}" target="_blank">
+                    ▶ Watch YouTube
+                </a>
+            </div>
+        `
+    );
+
+    // TikTok
+    formatted = formatted.replace(
+        /(https?:\/\/(www\.)?tiktok\.com\/[^\s<]+)/g,
+        (url) => `
+            <div style="margin:6px 0;">
+                <a class="inline-link tiktok" href="${url}" target="_blank">
+                    🎵 Watch TikTok
+                </a>
+            </div>
+        `
+    );
+
+    // Facebook
+    formatted = formatted.replace(
+        /(https?:\/\/(www\.)?facebook\.com\/[^\s<]+)/g,
+        (url) => `
+            <div style="margin:6px 0;">
+                <a class="inline-link facebook" href="${url}" target="_blank">
+                    📘 View Facebook
+                </a>
+            </div>
+        `
+    );
+
+    return formatted;
+}
+
+/* =========================
+TOGGLE TROUBLESHOOT CARDS
+========================= */
+
+function toggleCard(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle("open");
 }
 
 /* =========================
 RENDER MAIN
 ========================= */
+
 function render() {
-    if (!products) return;
+    const container = document.getElementById("products");
+    container.classList.remove("manual-mode", "grid-layout");
 
-    products.innerHTML = "";
+    container.innerHTML = "";
 
-    if (currentTab === "troubleshoot") {
-        renderTroubleshoot();
-        return;
-    }
+if (currentTab === "aftermarket" || currentTab === "oem") {
+    container.classList.add("grid-layout");
+} else {
+    container.classList.remove("grid-layout");
+}    
 
     if (currentTab === "manual") {
         renderManual();
         return;
     }
 
-    const data = currentTab === "aftermarket" ? aftermarketParts : oemParts;
+    if (currentTab === "troubleshoot") {
+        renderTroubleshoot();
+        return;
+    }
+
+    const data = currentTab === "aftermarket"
+        ? aftermarketParts
+        : oemParts;
 
     const filtered = data.filter(p => {
+        const name = normalizeText(p["Parts Name"]);
+        const cat = normalizeText(p["Parts Category"]);
+
         return (
-            (p._name?.includes(globalKeyword) || p._cat?.includes(globalKeyword)) &&
+            (name.includes(globalKeyword) || cat.includes(globalKeyword)) &&
             (currentCategory === "All" || p["Parts Category"] === currentCategory)
         );
     });
 
-    let html = "";
+    container.innerHTML = filtered.map(part => {
 
-    for (const part of filtered) {
-
-        let extraHTML = "";
+        let meta = "";
 
         if (currentTab === "aftermarket") {
-            extraHTML = `
+            meta = `
                 <div class="meta">
                     ${part["Brand"] ? `<div><b>Brand:</b> ${part["Brand"]}</div>` : ""}
-                    ${part["Compatibility"] ? `<div><b>Compat:</b> ${part["Compatibility"]}</div>` : ""}
+                    ${part["Compatibility"] ? `<div><b>Fit:</b> ${part["Compatibility"]}</div>` : ""}
                     ${part["Spec Size"] ? `<div><b>Size:</b> ${part["Spec Size"]}</div>` : ""}
                 </div>
             `;
         }
 
-        if (currentTab === "oem") {
-            const isFairing = (part["Parts Category"] || "").toLowerCase().includes("fairing");
-            if (isFairing && part["Color"]) {
-                extraHTML = `<div class="meta"><b>Color:</b> ${part["Color"]}</div>`;
-            }
-        }
-
-        html += `
-            <div class="card ${currentTab === "oem" ? "oem-card" : ""}">
-                <img src="${part["Preview"] || ""}">
-                <h3>${part["Parts Name"]}</h3>
-                <p>${part["Parts Category"]}</p>
-                ${extraHTML}
-                <a class="button" href="${part["Shopee"]}" target="_blank">Buy on Shopee</a>
-            </div>
+        return `
+        <div class="card">
+            <img src="${part["Preview"] || ""}">
+            <h3>${part["Parts Name"]}</h3>
+            <p>${part["Parts Category"]}</p>
+            ${meta}
+            <a class="button" href="${part["Shopee"]}" target="_blank">
+                Buy on Shopee
+            </a>
+        </div>
         `;
-    }
-
-    products.innerHTML = html;
+    }).join("");
 }
 
 /* =========================
 TROUBLESHOOT (FIXED)
 ========================= */
+
 function renderTroubleshoot() {
-    let html = "";
+    const container = document.getElementById("products");
 
     const filtered = troubleshootData.filter(item => {
+        const issue = normalizeText(item["Known Issue"]);
+        const sol = normalizeText(item["Possible Solution"]);
+        const tags = (item["Tags"] || "").toLowerCase();
+
         return (
-            (item._issue?.includes(globalKeyword) || item._solution?.includes(globalKeyword)) &&
-            (currentCategory === "All" || item._tags?.includes(currentCategory.toLowerCase()))
+            (issue.includes(globalKeyword) || sol.includes(globalKeyword)) &&
+            (currentCategory === "All" || tags.includes(currentCategory.toLowerCase()))
         );
     });
 
-    filtered.forEach((item, index) => {
-        html += `
+    container.innerHTML = filtered.map((item, i) => {
+
+        const id = `card-${i}`;
+
+        return `
         <div class="help-card">
-            <div class="help-header" onclick="toggleCard(${index})">
+
+            <div class="help-header" onclick="toggleCard('${id}')">
                 ⚠️ ${item["Known Issue"]}
             </div>
 
-            <div class="help-body" id="card-${index}">
+            <div class="help-body" id="${id}">
                 <div class="help-solution">
-                    ${item["Possible Solution"] || ""}
+                    ${linkifySolution(item["Possible Solution"])}
                 </div>
             </div>
+
         </div>
         `;
-    });
-
-    products.innerHTML = html;
+    }).join("");
 }
 
 /* =========================
-MANUAL (SAFE)
+MANUAL (FIXED)
 ========================= */
+
 function renderManual() {
+    const container = document.getElementById("products");
 
-    let html = "";
-
-    const filtered = (manualData || []).filter(item => {
-        return (
-            normalizeText(item["Category"] || "").includes(globalKeyword) ||
-            normalizeText(item["Specification"] || "").includes(globalKeyword) ||
-            normalizeText(item["Value"] || "").includes(globalKeyword)
-        );
-    });
+    const filtered = (manualData || []).filter(item =>
+        normalizeText(item["Category"]).includes(globalKeyword) ||
+        normalizeText(item["Specification"]).includes(globalKeyword) ||
+        normalizeText(item["Value"]).includes(globalKeyword)
+    );
 
     const grouped = {};
 
-    for (const item of filtered) {
-        const cat = item["Category"] || "Other";
-        if (!grouped[cat]) grouped[cat] = [];
-        grouped[cat].push(item);
-    }
+    filtered.forEach(i => {
+        const c = i["Category"] || "Other";
+        if (!grouped[c]) grouped[c] = [];
+        grouped[c].push(i);
+    });
 
-    html += `
-        <div class="manual-download">
-            <a class="manual-download-btn" target="_blank" href="#">
-                📄 Download Manual
-            </a>
-        </div>
+    let html = `
+    <div class="manual-download">
+        <a class="manual-download-btn" href="${ownersManualPDF}" target="_blank">
+            📄 Download Owner's Manual
+        </a>
+    </div>
     `;
 
-    for (const cat in grouped) {
+    Object.keys(grouped).forEach(cat => {
+
         html += `
         <details class="manual-section">
             <summary>${cat}</summary>
             <div class="manual-card">
         `;
 
-        grouped[cat].forEach(item => {
+        grouped[cat].forEach(i => {
             html += `
-                <div class="manual-row">
-                    <div class="manual-spec">${item["Specification"]}</div>
-                    <div class="manual-value">${item["Value"]}</div>
-                </div>
+            <div class="manual-row">
+                <div class="manual-spec">${highlight(i["Specification"])}</div>
+                <div class="manual-value">${highlight(i["Value"])}</div>
+            </div>
             `;
         });
 
         html += `</div></details>`;
-    }
+    });
 
-    products.innerHTML = html;
+    container.innerHTML = html;
 }
 
 /* =========================
-CATEGORIES
+CHIPS + TABS
 ========================= */
-function getCategories(data) {
-    return ["All", ...new Set(data.map(p => p["Parts Category"]).filter(Boolean))];
-}
-
-function getTroubleCategories(data) {
-    return ["All", ...new Set(data.flatMap(i =>
-        (i["Tags"] || "").split(",").map(t => t.trim())
-    ).filter(Boolean))];
-}
-
-function renderChips() {
-    const chips = document.getElementById("chips");
-    if (!chips) return;
-
-    let categories = [];
-
-    if (currentTab === "aftermarket") categories = getCategories(aftermarketParts);
-    else if (currentTab === "oem") categories = getCategories(oemParts);
-    else if (currentTab === "troubleshoot") categories = getTroubleCategories(troubleshootData);
-    else return (chips.innerHTML = "");
-
-    chips.innerHTML = categories.map(cat => `
-        <button class="${currentCategory === cat ? "active" : ""}"
-        onclick="setCategory('${cat}')">${cat}</button>
-    `).join("");
-}
 
 function setCategory(cat) {
     currentCategory = cat;
@@ -294,37 +309,41 @@ function setCategory(cat) {
     render();
 }
 
-/* =========================
-TAB SWITCH
-========================= */
 function switchTab(tab) {
     currentTab = tab;
     currentCategory = "All";
-    updateTabUI();
     renderChips();
     render();
 }
 
-function updateTabUI() {
-    ["aftermarket", "oem", "troubleshoot", "manual"].forEach(t => {
-        const el = document.getElementById(`tab-${t}`);
-        if (el) el.classList.remove("active");
-    });
+function renderChips() {
+    const chips = document.getElementById("chips");
 
-    const active = document.getElementById(`tab-${currentTab}`);
-    if (active) active.classList.add("active");
+    let cats = [];
+
+    if (currentTab === "aftermarket") cats = [...new Set(aftermarketParts.map(p => p["Parts Category"]))];
+    else if (currentTab === "oem") cats = [...new Set(oemParts.map(p => p["Parts Category"]))];
+    else if (currentTab === "troubleshoot") cats = [...new Set(troubleshootData.flatMap(p => (p["Tags"] || "").split(",")))];
+    else return (chips.innerHTML = "");
+
+    cats = ["All", ...cats.filter(Boolean)];
+
+    chips.innerHTML = cats.map(c =>
+        `<button class="${c === currentCategory ? "active" : ""}" onclick="setCategory('${c}')">${c}</button>`
+    ).join("");
 }
 
 /* =========================
 SEARCH
 ========================= */
+
 document.getElementById("search").addEventListener("input", e => {
     globalKeyword = normalizeText(e.target.value);
     render();
 });
 
 /* =========================
-DATA URLS (PUT YOUR SHEETS HERE)
+INIT LOAD
 ========================= */
 
 loadAftermarket("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=0&single=true&output=csv");

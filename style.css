@@ -29,12 +29,20 @@ input#search:focus {
     border-color: #ff4d2d;
     box-shadow: 0 0 0 4px rgba(255,77,45,0.12);
 }
-
-/* GRID (IMPORTANT UPGRADE) */
+/*product grid*/
 #products {
+    display: block;
+}
+
+#products.grid-layout {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
+}
+
+.layout-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 }
 
 /* CARD */
@@ -522,36 +530,11 @@ input#search:focus {
     z-index: 9999;
 }
 
-.card {
-    background: #fff;
-    border-radius: 16px;
-    padding: 14px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-    transition: 0.2s ease;
-    border: 1px solid rgba(0,0,0,0.05);
-}
 
-.card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.10);
-}
 
 body {
     background: #f6f7fb;
     font-family: Inter, sans-serif;
-}
-
-.card {
-    background: #fff;
-    border-radius: 14px;
-    padding: 14px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-    transition: 0.2s;
-}
-
-.card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
 }
 
 #search {
@@ -750,17 +733,6 @@ MOBILE RESPONSIVE FIX
     }
 }
 
-
-/*stripe style troubleshooting guides*/
-.card {
-    background: white;
-    border: 1px solid #eee;
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 14px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-}
-
 .solution-text {
     font-size: 14px;
     color: #444;
@@ -944,22 +916,16 @@ MOBILE RESPONSIVE FIX
 .manual-row{
     display:flex;
     justify-content:space-between;
-    padding:14px 18px;
-    border-bottom:1px solid #f2f2f2;
+    align-items:center;
+    gap: 10px;
+    padding: 12px 16px;
 }
 
-.manual-row:last-child{
-    border-bottom:none;
+.manual-spec,
+.manual-value {
+    word-break: break-word;
 }
 
-.manual-spec{
-    font-weight:600;
-}
-
-.manual-value{
-    font-weight:700;
-    color:#666;
-}
 
 .search-box{
     display:flex;
