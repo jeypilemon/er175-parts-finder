@@ -1141,7 +1141,6 @@ MOBILE RESPONSIVE FIX
   to { opacity: 1; transform: translateY(0); }
 }
 
-
 .link-modal {
     position: fixed;
     inset: 0;
@@ -1157,7 +1156,6 @@ MOBILE RESPONSIVE FIX
     position: absolute;
     inset: 0;
     background: rgba(0,0,0,0.6);
-    z-index: 1;
 }
 
 .link-modal-content {
@@ -1165,42 +1163,32 @@ MOBILE RESPONSIVE FIX
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-
     width: 90%;
     height: 85%;
     background: white;
     border-radius: 12px;
     overflow: hidden;
-
-    display: flex;
-    flex-direction: column;
-
     z-index: 2;
 }
 
-/* 👇 THIS IS THE KEY FIX */
 #modalFrame {
     width: 100%;
     height: 100%;
     border: none;
-    pointer-events: auto;
 }
 
-/* 👇 FORCE BUTTON ALWAYS ON TOP */
 .close-modal {
     position: absolute;
     top: 10px;
     right: 10px;
-
-    z-index: 9999999;
+    z-index: 999999;
     background: black;
     color: white;
     border: none;
-    border-radius: 8px;
     padding: 6px 10px;
+    border-radius: 8px;
     cursor: pointer;
 }
-
 
 .link-modal-content iframe {
     pointer-events: none;

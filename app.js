@@ -56,31 +56,36 @@ function openModal(url) {
     const modal = document.getElementById("linkModal");
     const frame = document.getElementById("modalFrame");
 
-    // YouTube embed
-    const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+    const ytId = getYouTubeId(url);
 
-    if (ytMatch) {
-        const videoId = ytMatch[1];
-        frame.src = `https://www.youtube.com/embed/${videoId}`;
+    // ✅ YouTube ONLY inside modal
+    if (ytId) {
+        frame.src = `https://www.youtube.com/embed/${ytId}?autoplay=1`;
         modal.classList.add("show");
         return;
     }
 
-    // fallback external
+    // ❌ TikTok + Facebook CANNOT be embedded
+    if (
+        url.includes("tiktok.com") ||
+        url.includes("facebook.com") ||
+        url.includes("fb.watch")
+    ) {
+        window.open(url, "_blank");
+        return;
+    }
+
+    // fallback
     window.open(url, "_blank");
 }
 
-
 function closeModal() {
-    console.log("CLOSE CLICKED"); // 👈 test if click works
-
     const modal = document.getElementById("linkModal");
     const frame = document.getElementById("modalFrame");
 
     frame.src = "";
     modal.classList.remove("show");
 }
-
 
 /* =========================
 UTILS
