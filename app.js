@@ -2,63 +2,54 @@ let currentTab = "aftermarket";
 let currentCategory = "All";
 let globalKeyword = "";
 
+/* =========================
+DATA STORAGE
+========================= */
 let manualData = [];
 let aftermarketParts = [];
 let oemParts = [];
 let troubleshootData = [];
 
-
-const ownersManualPDF =
-"https://drive.google.com/file/d/1xJyf7sNn1Nlo7X4r0a3X6W_R5pUabHbQ/view";
-
+/* =========================
+DOM
+========================= */
 const products = document.getElementById("products");
 
-
-function loadManual(url){
-
-    Papa.parse(url,{
-        download:true,
-        header:true,
-
-        complete:(res)=>{
-
-            manualData = res.data.filter(x => x["Category"]);
-
-            renderChips();   // IMPORTANT
-            render();        // IMPORTANT
-        }
-
-    });
+/* =========================
+HELPERS
+========================= */
+function normalizeText(text) {
+    return (text || "").toLowerCase().replace(/\s+/g, "").trim();
 }
 
 /* =========================
-LOAD SHEETS
+LOAD DATA (FAST + SAFE)
 ========================= */
-function resetFilters() {
-
-    // Reset filter variables
-    globalKeyword = "";
-    currentCategory = "All";
-
-    // Clear search input
-    const search = document.getElementById("search");
-    if (search) {
-        search.value = "";
-    }
-
-    // Rebuild chips so "All" becomes active
-    renderChips();
-
-    // Render the current tab
-    render();
+function loadManual(url) {
+    Papa.parse(url, {
+        download: true,
+        header: true,
+        complete: (res) => {
+            manualData = (res.data || []).filter(x => x["Category"]);
+            renderChips();
+            render();
+        }
+    });
 }
 
 function loadAftermarket(url) {
     Papa.parse(url, {
         download: true,
         header: true,
-        complete: res => {
-            aftermarketParts = res.data.filter(p => p["Parts Name"]);
+        complete: (res) => {
+            aftermarketParts = (res.data || [])
+                .filter(p => p["Parts Name"])
+                .map(p => ({
+                    ...p,
+                    _name: normalizeText(p["Parts Name"]),
+                    _cat: normalizeText(p["Parts Category"])
+                }));
+
             renderChips();
             render();
         }
@@ -69,8 +60,15 @@ function loadOEM(url) {
     Papa.parse(url, {
         download: true,
         header: true,
-        complete: res => {
-            oemParts = res.data.filter(p => p["Parts Name"]);
+        complete: (res) => {
+            oemParts = (res.data || [])
+                .filter(p => p["Parts Name"])
+                .map(p => ({
+                    ...p,
+                    _name: normalizeText(p["Parts Name"]),
+                    _cat: normalizeText(p["Parts Category"])
+                }));
+
             renderChips();
             render();
         }
@@ -81,8 +79,16 @@ function loadTroubleshoot(url) {
     Papa.parse(url, {
         download: true,
         header: true,
-        complete: res => {
-            troubleshootData = res.data.filter(p => p["Known Issue"]);
+        complete: (res) => {
+            troubleshootData = (res.data || [])
+                .filter(p => p["Known Issue"])
+                .map(p => ({
+                    ...p,
+                    _issue: normalizeText(p["Known Issue"]),
+                    _solution: normalizeText(p["Possible Solution"] || ""),
+                    _tags: normalizeText(p["Tags"] || "")
+                }));
+
             renderChips();
             render();
         }
@@ -90,437 +96,232 @@ function loadTroubleshoot(url) {
 }
 
 /* =========================
-MAIN RENDER
+RESET
 ========================= */
+function resetFilters() {
+    globalKeyword = "";
+    currentCategory = "All";
 
-function render() {
-    const container = document.getElementById("products");
-    container.classList.remove("manual-mode");
-    container.innerHTML = "";
+    const search = document.getElementById("search");
+    if (search) search.value = "";
 
-
-    if(currentTab==="manual"){
-    renderManual();
-    return;
+    renderChips();
+    render();
 }
+
+/* =========================
+RENDER MAIN
+========================= */
+function render() {
+    if (!products) return;
+
+    products.innerHTML = "";
 
     if (currentTab === "troubleshoot") {
         renderTroubleshoot();
         return;
     }
 
-    const data = currentTab === "aftermarket"
-        ? aftermarketParts
-        : oemParts;
+    if (currentTab === "manual") {
+        renderManual();
+        return;
+    }
 
-    const keyword = globalKeyword;
+    const data = currentTab === "aftermarket" ? aftermarketParts : oemParts;
 
     const filtered = data.filter(p => {
-        const name = normalizeText(p["Parts Name"] || "");
-        const category = normalizeText(p["Parts Category"] || "");
-
         return (
-            (name.includes(keyword) || category.includes(keyword)) &&
+            (p._name?.includes(globalKeyword) || p._cat?.includes(globalKeyword)) &&
             (currentCategory === "All" || p["Parts Category"] === currentCategory)
         );
     });
 
-    filtered.forEach(part => {
+    let html = "";
+
+    for (const part of filtered) {
 
         let extraHTML = "";
 
-if (currentTab === "aftermarket") {
+        if (currentTab === "aftermarket") {
+            extraHTML = `
+                <div class="meta">
+                    ${part["Brand"] ? `<div><b>Brand:</b> ${part["Brand"]}</div>` : ""}
+                    ${part["Compatibility"] ? `<div><b>Compat:</b> ${part["Compatibility"]}</div>` : ""}
+                    ${part["Spec Size"] ? `<div><b>Size:</b> ${part["Spec Size"]}</div>` : ""}
+                </div>
+            `;
+        }
 
-    const brand = part["Brand"];
-    const compat = part["Compatibility"];
-    const size = part["Spec Size"];
-
-    extraHTML = `
-        <div class="meta">
-
-            ${brand ? `
-            <div class="meta-row">
-                <span class="meta-label"><span class="icon"></span> <b>Brand:</b></span>
-                <span class="meta-value">${brand}</span>
-            </div>` : ""}
-
-            ${compat ? `
-            <div class="meta-row">
-                <span class="meta-label"><span class="icon"></span><b>Compatibility:</b></span>
-                <span class="meta-value">${compat}</span>
-            </div>` : ""}
-
-            ${size ? `
-            <div class="meta-row">
-                <span class="meta-label"><span class="icon"></span> <b>Spec Size:</b></span>
-                <span class="meta-value">${size}</span>
-            </div>` : ""}
-
-        </div>
-    `;
-}
-
-        // OEM ONLY COLOR LOGIC
         if (currentTab === "oem") {
-            const isFairing = (part["Parts Category"] || "")
-                .toLowerCase()
-                .includes("fairing");
-
+            const isFairing = (part["Parts Category"] || "").toLowerCase().includes("fairing");
             if (isFairing && part["Color"]) {
-                extraHTML = `
-                    <div class="meta">
-                        <span> <b>Color:</b> ${part["Color"]}</span>
-                    </div>
-                `;
+                extraHTML = `<div class="meta"><b>Color:</b> ${part["Color"]}</div>`;
             }
         }
 
-        container.innerHTML += `
+        html += `
             <div class="card ${currentTab === "oem" ? "oem-card" : ""}">
-
                 <img src="${part["Preview"] || ""}">
-
                 <h3>${part["Parts Name"]}</h3>
-
                 <p>${part["Parts Category"]}</p>
-
                 ${extraHTML}
-
-                <a class="button" href="${part["Shopee"]}" target="_blank">
-                    Buy on Shopee
-                </a>
-
+                <a class="button" href="${part["Shopee"]}" target="_blank">Buy on Shopee</a>
             </div>
         `;
-    });
+    }
+
+    products.innerHTML = html;
 }
 
 /* =========================
-TROUBLESHOOT RENDER (FIXED)
+TROUBLESHOOT (FIXED)
 ========================= */
-
 function renderTroubleshoot() {
-    const container = document.getElementById("products");
-    container.innerHTML = "";
+    let html = "";
 
     const filtered = troubleshootData.filter(item => {
-        const issue = normalizeText(item["Known Issue"] || "");
-        const solution = normalizeText(item["Possible Solution"] || "");
-        const tags = (item["Tags"] || "").toLowerCase();
-
         return (
-            (issue.includes(globalKeyword) || solution.includes(globalKeyword)) &&
-            (currentCategory === "All" || tags.includes(currentCategory.toLowerCase()))
+            (item._issue?.includes(globalKeyword) || item._solution?.includes(globalKeyword)) &&
+            (currentCategory === "All" || item._tags?.includes(currentCategory.toLowerCase()))
         );
     });
 
     filtered.forEach((item, index) => {
-
-        const issue = item["Known Issue"] || "";
-        const solutionRaw = item["Possible Solution"] || "";
-
-        const youtubeLinks = extractLinks(solutionRaw, "youtube.com");
-        const tiktokLinks = extractLinks(solutionRaw, "tiktok.com");
-        const fbLinks = extractLinks(solutionRaw, "facebook.com");
-
-        const cleanText = linkifySolution(solutionRaw);
-
-        container.innerHTML += `
+        html += `
         <div class="help-card">
-
             <div class="help-header" onclick="toggleCard(${index})">
-                ⚠️ ${issue}
+                ⚠️ ${item["Known Issue"]}
             </div>
 
             <div class="help-body" id="card-${index}">
-
                 <div class="help-solution">
-                    ${cleanText}
+                    ${item["Possible Solution"] || ""}
                 </div>
-
-                ${renderButtons(youtubeLinks, "youtube")}
-                ${renderButtons(tiktokLinks, "tiktok")}
-                ${renderButtons(fbLinks, "facebook")}
-
             </div>
-        </div>`;
+        </div>
+        `;
     });
+
+    products.innerHTML = html;
 }
 
-function getCategoryIcon() {
-    return "";
-}
-
+/* =========================
+MANUAL (SAFE)
+========================= */
 function renderManual() {
 
-    const container = document.getElementById("products");
-    container.classList.add("manual-mode");
-    container.innerHTML = "";
+    let html = "";
 
     const filtered = (manualData || []).filter(item => {
-
-    return (
-        normalizeText(item["Category"] || "").includes(globalKeyword) ||
-        normalizeText(item["Specification"] || "").includes(globalKeyword) ||
-        normalizeText(item["Value"] || "").includes(globalKeyword)
-    );
-
-});
-
-    // Group categories
-    const grouped = {};
-
-    filtered.forEach(item => {
-
-        const category = item["Category"] || "Other";
-
-        if (!grouped[category]) grouped[category] = [];
-
-        grouped[category].push(item);
-
+        return (
+            normalizeText(item["Category"] || "").includes(globalKeyword) ||
+            normalizeText(item["Specification"] || "").includes(globalKeyword) ||
+            normalizeText(item["Value"] || "").includes(globalKeyword)
+        );
     });
 
-    let html = `
-    <div class="manual-download">
-        <a href="${ownersManualPDF}"
-           target="_blank"
-           class="manual-download-btn">
+    const grouped = {};
 
-            📄 Download Official Owner's Manual (PDF)
+    for (const item of filtered) {
+        const cat = item["Category"] || "Other";
+        if (!grouped[cat]) grouped[cat] = [];
+        grouped[cat].push(item);
+    }
 
-        </a>
-    </div>
+    html += `
+        <div class="manual-download">
+            <a class="manual-download-btn" target="_blank" href="#">
+                📄 Download Manual
+            </a>
+        </div>
     `;
 
-    Object.keys(grouped).forEach(category => {
-
-        const open = category === "Quick Specifications" ? "open" : "";
-
+    for (const cat in grouped) {
         html += `
-
-        <details class="manual-section" ${open}>
-
-            <summary>
-
-                <span>
-
-                    ${getCategoryIcon(category)}
-
-                    ${category}
-
-                </span>
-
-            </summary>
-
+        <details class="manual-section">
+            <summary>${cat}</summary>
             <div class="manual-card">
         `;
 
-        grouped[category].forEach(item => {
-
+        grouped[cat].forEach(item => {
             html += `
-
-            <div class="manual-row">
-
-                <div class="manual-spec">
-
-                    ${highlight(item["Specification"])}
-
+                <div class="manual-row">
+                    <div class="manual-spec">${item["Specification"]}</div>
+                    <div class="manual-value">${item["Value"]}</div>
                 </div>
-
-                <div class="manual-value">
-
-                    ${highlight(item["Value"])}
-
-                </div>
-
-            </div>
-
             `;
-
         });
 
-        html += `
-            </div>
+        html += `</div></details>`;
+    }
 
-        </details>
-        `;
-
-        if (Object.keys(grouped).length === 0) {
-    html += `
-        <div style="padding:20px;text-align:center;color:#777;">
-            No manual data found
-        </div>
-    `;
-}
-
-    });
-
-    container.innerHTML = html;
-
+    products.innerHTML = html;
 }
 
 /* =========================
-LINK EXTRACTOR
+CATEGORIES
 ========================= */
-
-
-function extractLinks(text, keyword) {
-    if (!text) return [];
-    return (text.match(/https?:\/\/[^\s]+/g) || [])
-        .filter(link => link.includes(keyword));
-}
-
-/* =========================
-UI HELPERS
-========================= */
-
-function linkifySolution(text) {
-    if (!text) return "";
-
-    let formatted = text.replace(/\n/g, "<br>");
-
-    // YouTube
-    formatted = formatted.replace(
-        /(https?:\/\/(www\.)?youtube\.com\/[^\s<]+)/g,
-        `<a class="inline-link youtube" href="$1" target="_blank" rel="noopener noreferrer">
-            ▶ Watch YouTube
-        </a>`
-    );
-
-    // TikTok
-    formatted = formatted.replace(
-        /(https?:\/\/(www\.)?tiktok\.com\/[^\s<]+)/g,
-        `<a class="inline-link tiktok" href="$1" target="_blank" rel="noopener noreferrer">
-            🎵 Watch TikTok
-        </a>`
-    );
-
-    // Facebook
-    formatted = formatted.replace(
-        /(https?:\/\/(www\.)?facebook\.com\/[^\s<]+)/g,
-        `<a class="inline-link facebook" href="$1" target="_blank" rel="noopener noreferrer">
-            📘 View in Facebook
-        </a>`
-    );
-
-    return formatted;
-}
-/*Helper function to highlight search keywords in the text*/
-
-function highlight(text){
-
-    if(!globalKeyword) return text;
-
-    const reg = new RegExp(`(${globalKeyword})`, "ig");
-
-    return text.replace(reg,"<mark>$1</mark>");
-}
-
-function toggleCard(index) {
-    const el = document.getElementById(`card-${index}`);
-    if (el) el.classList.toggle("open");
-}
-
-function normalizeText(text) {
-    return (text || "")
-        .toLowerCase()
-        .replace(/\s+/g, "")
-        .trim();
-}
-
-/* =========================
-TABS
-========================= */
-
-function switchTab(tab) {
-    currentTab = tab;
-    currentCategory = "All";
-    
-
-    updateTabUI();
-
-    renderChips();
-    render();
-}
-
-/* =========================
-CATEGORIES (FIXED - NO DUPLICATES)
-========================= */
-
 function getCategories(data) {
-    const categories = [...new Set(
-        data.map(p => p["Parts Category"]).filter(Boolean)
-    )].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
-
-    return ["All", ...categories];
+    return ["All", ...new Set(data.map(p => p["Parts Category"]).filter(Boolean))];
 }
 
 function getTroubleCategories(data) {
-    const tags = [...new Set(
-        data.flatMap(item =>
-            (item["Tags"] || "")
-                .split(",")
-                .map(t => t.trim())
-                .filter(Boolean)
-        )
-    )].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
-
-    return ["All", ...tags];
+    return ["All", ...new Set(data.flatMap(i =>
+        (i["Tags"] || "").split(",").map(t => t.trim())
+    ).filter(Boolean))];
 }
 
 function renderChips() {
-
     const chips = document.getElementById("chips");
+    if (!chips) return;
 
     let categories = [];
 
-    if (currentTab === "manual") {
-        chips.innerHTML = "";
-        return;
-    }
-
-    if (currentTab === "troubleshoot") {
-        categories = getTroubleCategories(troubleshootData);
-    }
-    else if (currentTab === "aftermarket") {
-        categories = getCategories(aftermarketParts);
-    }
-    else if (currentTab === "oem") {
-        categories = getCategories(oemParts);
-    }
+    if (currentTab === "aftermarket") categories = getCategories(aftermarketParts);
+    else if (currentTab === "oem") categories = getCategories(oemParts);
+    else if (currentTab === "troubleshoot") categories = getTroubleCategories(troubleshootData);
+    else return (chips.innerHTML = "");
 
     chips.innerHTML = categories.map(cat => `
         <button class="${currentCategory === cat ? "active" : ""}"
-            onclick="setCategory('${cat}')">
-            ${cat}
-        </button>
+        onclick="setCategory('${cat}')">${cat}</button>
     `).join("");
 }
 
-function setCategory(cat){
+function setCategory(cat) {
     currentCategory = cat;
     renderChips();
     render();
 }
 
 /* =========================
-INIT
+TAB SWITCH
 ========================= */
+function switchTab(tab) {
+    currentTab = tab;
+    currentCategory = "All";
+    updateTabUI();
+    renderChips();
+    render();
+}
 
-document.getElementById("search").addEventListener("input", (e) => {
+function updateTabUI() {
+    ["aftermarket", "oem", "troubleshoot", "manual"].forEach(t => {
+        const el = document.getElementById(`tab-${t}`);
+        if (el) el.classList.remove("active");
+    });
+
+    const active = document.getElementById(`tab-${currentTab}`);
+    if (active) active.classList.add("active");
+}
+
+/* =========================
+SEARCH
+========================= */
+document.getElementById("search").addEventListener("input", e => {
     globalKeyword = normalizeText(e.target.value);
     render();
 });
-
-
-function updateTabUI() {
-    document.getElementById("tab-aftermarket").classList.remove("active");
-    document.getElementById("tab-oem").classList.remove("active");
-    document.getElementById("tab-troubleshoot").classList.remove("active");
-    document.getElementById("tab-manual").classList.remove("active");
-
-    document.getElementById(`tab-${currentTab}`).classList.add("active");
-}
 
 /* =========================
 DATA URLS (PUT YOUR SHEETS HERE)
