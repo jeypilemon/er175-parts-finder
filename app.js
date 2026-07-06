@@ -56,16 +56,24 @@ function openModal(url) {
     const modal = document.getElementById("linkModal");
     const frame = document.getElementById("modalFrame");
 
-    frame.src = url;
+    let embedUrl = url;
+
+    // YouTube fix
+    const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+
+    if (ytMatch) {
+        const videoId = ytMatch[1];
+        embedUrl = `https://www.youtube.com/embed/${videoId}`;
+    }
+
+    // TikTok (optional fallback - often still limited)
+    const ttMatch = url.includes("tiktok.com");
+    if (ttMatch) {
+        embedUrl = url; // TikTok embed is inconsistent in iframe
+    }
+
+    frame.src = embedUrl;
     modal.classList.add("show");
-}
-
-function closeModal() {
-    const modal = document.getElementById("linkModal");
-    const frame = document.getElementById("modalFrame");
-
-    frame.src = "";
-    modal.classList.remove("show");
 }
 
 /* =========================
