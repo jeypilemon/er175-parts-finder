@@ -132,7 +132,6 @@ input#search:focus {
     color: white;
 }
 
-
 .home-grid {
     display: grid;
     gap: 15px;
