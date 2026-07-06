@@ -56,25 +56,39 @@ function openModal(url) {
     const modal = document.getElementById("linkModal");
     const frame = document.getElementById("modalFrame");
 
-    let embedUrl = url;
-
-    // YouTube fix
+    // YouTube embed ONLY
     const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
 
     if (ytMatch) {
         const videoId = ytMatch[1];
-        embedUrl = `https://www.youtube.com/embed/${videoId}`;
+        frame.src = `https://www.youtube.com/embed/${videoId}`;
+        modal.classList.add("show");
+        return;
     }
 
-    // TikTok (optional fallback - often still limited)
-    const ttMatch = url.includes("tiktok.com");
-    if (ttMatch) {
-        embedUrl = url; // TikTok embed is inconsistent in iframe
+    // TikTok / Facebook → OPEN OUTSIDE (they block iframe)
+    if (
+        url.includes("tiktok.com") ||
+        url.includes("facebook.com") ||
+        url.includes("fb.watch")
+    ) {
+        window.open(url, "_blank");
+        return;
     }
 
-    frame.src = embedUrl;
-    modal.classList.add("show");
+    // fallback
+    window.open(url, "_blank");
 }
+
+
+function closeModal() {
+    const modal = document.getElementById("linkModal");
+    const frame = document.getElementById("modalFrame");
+
+    frame.src = "";
+    modal.classList.remove("show");
+}
+
 
 /* =========================
 UTILS
