@@ -67,6 +67,28 @@ function checkReady() {
 GLOBAL FUNCTIONS
 ========================= */
 
+function hintChipScroll(){
+
+    const chips = document.getElementById("chips");
+
+    if(!chips) return;
+
+
+    // only animate if content is overflowing
+    if(chips.scrollWidth <= chips.clientWidth){
+        return;
+    }
+
+
+    chips.classList.add("hint-scroll");
+
+
+    setTimeout(()=>{
+        chips.classList.remove("hint-scroll");
+    },1800);
+
+}
+
 function scrollChips(){
 
     const chips = document.getElementById("chips");
@@ -232,6 +254,10 @@ function renderChips() {
         <button class="${c === currentCategory ? "active" : ""}"
         onclick="setCategory('${c}')">${c}</button>
     `).join("");
+
+
+    setTimeout(hintChipScroll,1500);
+
 }
 
 /* =========================
@@ -602,6 +628,13 @@ document.getElementById("search").addEventListener("input", e => {
     globalKeyword = normalizeText(e.target.value);
 
     render();
+
+});
+
+document.getElementById("chips").addEventListener("pointerdown",()=>{
+
+    chips.classList.remove("hint-scroll");
+
 
 });
 
