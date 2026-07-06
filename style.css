@@ -848,48 +848,87 @@ MOBILE RESPONSIVE FIX
 .inline-link {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+
     gap: 6px;
 
-    margin: 4px 0;
-    padding: 6px 10px;
+    margin: 6px 6px 0 0;
+    padding: 8px 12px;
 
     border-radius: 10px;
+
     font-size: 12px;
     font-weight: 600;
 
     text-decoration: none;
+
     transition: 0.2s ease;
 
     white-space: nowrap;
+
+    width: fit-content;
 }
 
-/* YouTube */
+/* COLORS */
 .inline-link.youtube {
     background: #ff0000;
     color: white;
 }
 
-/* TikTok */
 .inline-link.tiktok {
     background: #111;
     color: white;
 }
 
-/* Facebook */
 .inline-link.facebook {
     background: #1877f2;
     color: white;
 }
 
-/* hover effect */
+/* default fallback */
+.inline-link {
+    background: #333;
+    color: white;
+}
+
+/* hover */
+.inline-link:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}.inline-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s ease;
+    white-space: nowrap;
+    margin-top: 6px;
+    color: white;
+}
+
+/* default fallback */
+.inline-link {
+    background: #444;
+}
+
+/* platform colors */
+.inline-link.youtube { background: #ff0000; }
+.inline-link.tiktok { background: #111; }
+.inline-link.facebook { background: #1877f2; }
+
 .inline-link:hover {
     transform: translateY(-1px);
     opacity: 0.9;
 }
 
-/* mobile spacing fix */
-.help-solution br + .inline-link {
-    margin-top: 6px;
+.help-solution {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .meta {
@@ -955,7 +994,7 @@ MOBILE RESPONSIVE FIX
 }
 
 .manual-download-btn {
-    display: block;
+    display:block;
     width: 100%;
     box-sizing: border-box;
 
@@ -1049,3 +1088,109 @@ MOBILE RESPONSIVE FIX
 }
 
 
+/*Skeleton Load CSS*/
+.skeleton {
+    background: #e2e5e9;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150px;
+    height: 100%;
+    width: 150px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.6),
+        transparent
+    );
+    animation: loading 1.2s infinite;
+}
+
+@keyframes loading {
+    0% { left: -150px; }
+    100% { left: 100%; }
+}
+
+.skeleton.image {
+    height: 180px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.skeleton.text {
+    height: 12px;
+    margin: 6px 0;
+}
+
+.skeleton.text.short {
+    width: 60%;
+}
+
+.card {
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+.link-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    z-index: 99999;
+}
+
+.link-modal.show {
+    display: block;
+}
+
+.link-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+}
+
+.link-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    width: 90%;
+    height: 85%;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.link-modal-content iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    z-index: 2;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+}

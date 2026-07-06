@@ -7,83 +7,70 @@ let aftermarketParts = [];
 let oemParts = [];
 let troubleshootData = [];
 
-const ownersManualPDF =
-"https://drive.google.com/file/d/1xJyf7sNn1Nlo7X4r0a3X6W_R5pUabHbQ/view";
-
-const products = document.getElementById("products");
+let isLoading = true;
 
 /* =========================
-GLOBAL STATE (PUT HERE)
+DOM
 ========================= */
+const container = document.getElementById("products");
+const chips = document.getElementById("chips");
 
-const state = {
-    tab: "aftermarket",
-    category: "All",
-    keyword: "",
-    data: {
-        aftermarket: [],
-        oem: [],
-        troubleshoot: [],
-        manual: []
-    }
+/* =========================
+STATE TRACKER
+========================= */
+const loaded = {
+    aftermarket: false,
+    oem: false,
+    troubleshoot: false,
+    manual: false
 };
 
 /* =========================
-LOAD DATA
+SKELETON
 ========================= */
-
-function loadManual(url) {
-    Papa.parse(url, {
-        download: true,
-        header: true,
-        complete: (res) => {
-            manualData = res.data.filter(x => x["Category"]);
-            renderChips();
-            render();
-        }
-    });
+function renderSkeleton(count = 6) {
+    container.innerHTML = Array(count).fill(0).map(() => `
+        <div class="card skeleton-card">
+            <div class="skeleton image"></div>
+            <div class="skeleton text short"></div>
+            <div class="skeleton text"></div>
+            <div class="skeleton text"></div>
+        </div>
+    `).join("");
 }
 
-function loadAftermarket(url) {
-    Papa.parse(url, {
-        download: true,
-        header: true,
-        complete: res => {
-            aftermarketParts = res.data.filter(p => p["Parts Name"]);
-            renderChips();
-            render();
-        }
-    });
+/* =========================
+READY CHECK
+========================= */
+function checkReady() {
+    if (loaded.aftermarket && loaded.oem && loaded.troubleshoot && loaded.manual) {
+        isLoading = false;
+        render();
+        renderChips();
+    }
 }
 
-function loadOEM(url) {
-    Papa.parse(url, {
-        download: true,
-        header: true,
-        complete: res => {
-            oemParts = res.data.filter(p => p["Parts Name"]);
-            renderChips();
-            render();
-        }
-    });
+/* Global Functions*/
+
+function openModal(url) {
+    const modal = document.getElementById("linkModal");
+    const frame = document.getElementById("modalFrame");
+
+    frame.src = url;
+    modal.classList.add("show");
 }
 
-function loadTroubleshoot(url) {
-    Papa.parse(url, {
-        download: true,
-        header: true,
-        complete: res => {
-            troubleshootData = res.data.filter(p => p["Known Issue"]);
-            renderChips();
-            render();
-        }
-    });
+function closeModal() {
+    const modal = document.getElementById("linkModal");
+    const frame = document.getElementById("modalFrame");
+
+    frame.src = "";
+    modal.classList.remove("show");
 }
 
 /* =========================
 UTILS
 ========================= */
-
 function normalizeText(text) {
     return (text || "")
         .toLowerCase()
@@ -98,112 +85,125 @@ function highlight(text) {
 }
 
 /* =========================
-LINKIFY (FIXED BUTTONS)
+LOADERS
 ========================= */
+function loadAftermarket(url) {
+    Papa.parse(url, {
+        download: true,
+        header: true,
+        complete: res => {
+            aftermarketParts = res.data.filter(p => p["Parts Name"]);
+            loaded.aftermarket = true;
+            checkReady();
+        }
+    });
+}
 
-function linkifySolution(text) {
-    if (!text) return "";
+function loadOEM(url) {
+    Papa.parse(url, {
+        download: true,
+        header: true,
+        complete: res => {
+            oemParts = res.data.filter(p => p["Parts Name"]);
+            loaded.oem = true;
+            checkReady();
+        }
+    });
+}
 
-    let formatted = text.replace(/\n/g, "<br>");
+function loadTroubleshoot(url) {
+    Papa.parse(url, {
+        download: true,
+        header: true,
+        complete: res => {
+            troubleshootData = res.data.filter(p => p["Known Issue"]);
+            loaded.troubleshoot = true;
+            checkReady();
+        }
+    });
+}
 
-    // YouTube
-    formatted = formatted.replace(
-        /(https?:\/\/(www\.)?youtube\.com\/[^\s<]+)/g,
-        (url) => `
-            <div style="margin:6px 0;">
-                <span></span>
-                <a class="inline-link youtube" href="${url}" target="_blank">
-                    ▶ Watch YouTube
-                </a>
-            </div>
-        `
-    );
-
-    // TikTok
-    formatted = formatted.replace(
-        /(https?:\/\/(www\.)?tiktok\.com\/[^\s<]+)/g,
-        (url) => `
-            <div style="margin:6px 0;">
-                <a class="inline-link tiktok" href="${url}" target="_blank">
-                    🎵 Watch TikTok
-                </a>
-            </div>
-        `
-    );
-
-    // Facebook
-    formatted = formatted.replace(
-        /(https?:\/\/(www\.)?facebook\.com\/[^\s<]+)/g,
-        (url) => `
-            <div style="margin:6px 0;">
-                <a class="inline-link facebook" href="${url}" target="_blank">
-                    📘 View Facebook
-                </a>
-            </div>
-        `
-    );
-
-    return formatted;
+function loadManual(url) {
+    Papa.parse(url, {
+        download: true,
+        header: true,
+        complete: res => {
+            manualData = res.data.filter(x => x["Category"]);
+            loaded.manual = true;
+            checkReady();
+        }
+    });
 }
 
 /* =========================
-TOGGLE TROUBLESHOOT CARDS
+TAB UI
 ========================= */
-
-function toggleCard(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    const isOpen = el.classList.contains("open");
-
-    document.querySelectorAll(".help-body.open")
-        .forEach(x => x.classList.remove("open"));
-
-    if (!isOpen) {
-        el.classList.add("open");
-    }
-}
-
-
 function updateTabUI() {
     document.querySelectorAll(".tabs button")
         .forEach(btn => btn.classList.remove("active"));
 
-    const activeBtn = document.querySelector(
-        `.tabs button[data-tab="${currentTab}"]`
-    );
-
-    if (activeBtn) {
-        activeBtn.classList.add("active");
-    }
+    const activeBtn = document.querySelector(`[data-tab="${currentTab}"]`);
+    if (activeBtn) activeBtn.classList.add("active");
 }
 
+/* =========================
+TOGGLE TROUBLESHOOT
+========================= */
+function toggleCard(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
 
+    el.classList.toggle("open");
+}
 
 /* =========================
-RENDER MAIN
+CHIPS
 ========================= */
+function renderChips() {
+    let cats = [];
 
+    if (currentTab === "aftermarket") {
+        cats = [...new Set(aftermarketParts.map(p => p["Parts Category"]))];
+    } else if (currentTab === "oem") {
+        cats = [...new Set(oemParts.map(p => p["Parts Category"]))];
+    } else if (currentTab === "troubleshoot") {
+        cats = [...new Set(troubleshootData.flatMap(p => (p["Tags"] || "").split(",")))];
+    } else {
+        chips.innerHTML = "";
+        return;
+    }
+
+    cats = ["All", ...cats.filter(Boolean)];
+
+    chips.innerHTML = cats.map(c => `
+        <button class="${c === currentCategory ? "active" : ""}"
+        onclick="setCategory('${c}')">${c}</button>
+    `).join("");
+}
+
+/* =========================
+MAIN RENDER
+========================= */
 function render() {
-    const container = document.getElementById("products");
+
+    if (isLoading) {
+        renderSkeleton();
+        return;
+    }
+
     container.classList.remove("manual-mode", "grid-layout");
 
-    container.innerHTML = "";
-
-if (currentTab === "aftermarket" || currentTab === "oem") {
-    container.classList.add("grid-layout");
-} else {
-    container.classList.remove("grid-layout");
-}    
+    if (currentTab === "aftermarket" || currentTab === "oem") {
+        container.classList.add("grid-layout");
+    }
 
     if (currentTab === "manual") {
-        renderManual();
-        return;
+        container.classList.add("manual-mode");
+        return renderManual();
     }
 
     if (currentTab === "troubleshoot") {
-        renderTroubleshoot();
-        return;
+        return renderTroubleshoot();
     }
 
     const data = currentTab === "aftermarket"
@@ -220,42 +220,67 @@ if (currentTab === "aftermarket" || currentTab === "oem") {
         );
     });
 
-    container.innerHTML = filtered.map(part => {
+    if (!filtered.length) {
+        container.innerHTML = `<div class="empty-state">No results found</div>`;
+        return;
+    }
 
-        let meta = "";
-
-        if (currentTab === "aftermarket") {
-            meta = `
-                <div class="meta">
-                    ${part["Brand"] ? `<div><b>Brand:</b> ${part["Brand"]}</div>` : ""}
-                    ${part["Compatibility"] ? `<div><b>Fit:</b> ${part["Compatibility"]}</div>` : ""}
-                    ${part["Spec Size"] ? `<div><b>Size:</b> ${part["Spec Size"]}</div>` : ""}
-                </div>
-            `;
-        }
-
-        return `
+    container.innerHTML = filtered.map(part => `
         <div class="card">
-            <img src="${part["Preview"] || ""}">
+            <img src="${part["Preview"] || ""}" onerror="this.style.display='none'">
             <h3>${part["Parts Name"]}</h3>
             <p>${part["Parts Category"]}</p>
-            ${meta}
             <a class="button" href="${part["Shopee"]}" target="_blank">
                 Buy on Shopee
             </a>
         </div>
-        `;
-    }).join("");
+    `).join("");
 
-    syncUI();
+    updateTabUI();
 }
 
-/* =========================
-TROUBLESHOOT (FIXED)
-========================= */
+function linkifySolution(text) {
+    if (!text) return "";
 
+    const urlRegex = /(https?:\/\/[^\s<]+|www\.[^\s<]+)/g;
+
+    return text
+        .replace(/\n/g, "<br>")
+        .replace(urlRegex, (url) => {
+
+            const href = url.startsWith("www.") ? "https://" + url : url;
+
+            let label = "🔗 Open Link";
+
+            // 👇 PUT THE CODE HERE
+            let className = "inline-link";
+
+            if (/youtu\.?be|youtube\.com/.test(href)) {
+                className += " youtube";
+                label = "▶ Watch in YouTube";
+            }
+            else if (/tiktok\.com/.test(href)) {
+                className += " tiktok";
+                label = "🎵 Watch in TikTok";
+            }
+            else if (/facebook\.com|fb\.watch/.test(href)) {
+                className += " facebook";
+                label = "📘 View in Facebook";
+            }
+
+            return `
+                <div style="margin:6px 0;">
+                    <a class="${className}" href="javascript:void(0)" onclick="openModal('${href}')">
+                        ${label}
+                    </a>
+                </div>
+            `;
+        });
+}
+/* =========================
+TROUBLESHOOT
+========================= */
 function renderTroubleshoot() {
-    const container = document.getElementById("products");
 
     const filtered = troubleshootData.filter(item => {
         const issue = normalizeText(item["Known Issue"]);
@@ -268,37 +293,33 @@ function renderTroubleshoot() {
         );
     });
 
-    container.innerHTML = filtered.map((item, i) => {
+    if (!filtered.length) {
+        container.innerHTML = `<div class="empty-state">No results found</div>`;
+        return;
+    }
 
-        const id = `card-${i}`;
-
-        return `
+    container.innerHTML = filtered.map((item, i) => `
         <div class="help-card">
-
-            <div class="help-header" onclick="toggleCard('${id}')">
+            <div class="help-header" onclick="toggleCard('card-${i}')">
                 ⚠️ ${item["Known Issue"]}
             </div>
-
-            <div class="help-body" id="${id}">
+            <div class="help-body" id="card-${i}">
                 <div class="help-solution">
-                    ${linkifySolution(item["Possible Solution"])}
+                 ${linkifySolution(item["Possible Solution"])}
                 </div>
             </div>
-
         </div>
-        `;
-    }).join("");
+    `).join("");
 
+    updateTabUI();
 }
 
 /* =========================
-MANUAL (FIXED)
+MANUAL (FIXED + CSS SUPPORT)
 ========================= */
-
 function renderManual() {
-    const container = document.getElementById("products");
 
-    const filtered = (manualData || []).filter(item =>
+    const filtered = manualData.filter(item =>
         normalizeText(item["Category"]).includes(globalKeyword) ||
         normalizeText(item["Specification"]).includes(globalKeyword) ||
         normalizeText(item["Value"]).includes(globalKeyword)
@@ -313,15 +334,14 @@ function renderManual() {
     });
 
     let html = `
-    <div class="manual-download">
-        <a class="manual-download-btn" href="${ownersManualPDF}" target="_blank">
-            📄 Download ER175A Fi Owner's Manual (Official)
-        </a>
-    </div>
+        <div class="manual-download">
+            <a class="manual-download-btn" href="https://drive.google.com/file/d/1xJyf7sNn1Nlo7X4r0a3X6W_R5pUabHbQ/view" target="_blank">
+                📄 Owner's Manual (Download)
+            </a>
+        </div>
     `;
 
     Object.keys(grouped).forEach(cat => {
-
         html += `
         <details class="manual-section">
             <summary>${cat}</summary>
@@ -341,14 +361,12 @@ function renderManual() {
     });
 
     container.innerHTML = html;
-    
-    syncUI();
+    updateTabUI();
 }
 
 /* =========================
-CHIPS + TABS
+ACTIONS
 ========================= */
-
 function setCategory(cat) {
     currentCategory = cat;
     renderChips();
@@ -358,53 +376,22 @@ function setCategory(cat) {
 function switchTab(tab) {
     currentTab = tab;
     currentCategory = "All";
-
     renderChips();
     render();
-    syncUI();
-}
-
-function renderChips() {
-    const chips = document.getElementById("chips");
-
-    let cats = [];
-
-    if (currentTab === "aftermarket") {
-        cats = [...new Set(aftermarketParts.map(p => p["Parts Category"]))];
-    } else if (currentTab === "oem") {
-        cats = [...new Set(oemParts.map(p => p["Parts Category"]))];
-    } else if (currentTab === "troubleshoot") {
-        cats = [...new Set(troubleshootData.flatMap(p => (p["Tags"] || "").split(",")))];
-    } else {
-        chips.innerHTML = "";
-        return;
-    }
-
-    cats = ["All", ...cats.filter(Boolean)];
-
-    chips.innerHTML = cats.map(c =>
-        `<button class="${c === currentCategory ? "active" : ""}" onclick="setCategory('${c}')">${c}</button>`
-    ).join("");
-}
-
-
-/*Clean sync*/
-function syncUI() {
-    updateTabUI();
 }
 
 /* =========================
 SEARCH
 ========================= */
-
 document.getElementById("search").addEventListener("input", e => {
     globalKeyword = normalizeText(e.target.value);
     render();
 });
 
 /* =========================
-INIT LOAD
+INIT
 ========================= */
+renderSkeleton();
 
 loadAftermarket("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=0&single=true&output=csv");
 
