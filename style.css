@@ -17,9 +17,8 @@ body {
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 480px;   /* lock mobile width */
     margin: auto;
-    padding: 15px;
 }
 
 h1 {
@@ -203,16 +202,18 @@ input#search:focus {
 
 
 .tabs {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
-    margin: 10px 0;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 100;
+    padding: 6px;
+    border-bottom: 1px solid #eee;
 }
 
 /* buttons */
 .tabs button {
-    padding: 10px 6px;
-    font-size: 11px;
+    padding: 8px 4px;
+    font-size: 10px;
     font-weight: 600;
     border: none;
     border-radius: 10px;
@@ -714,7 +715,6 @@ input#search:focus {
 /*saas bar*/
 
 .saas-bar {
-    position: sticky;
     top: 0;
     z-index: 999;
 
