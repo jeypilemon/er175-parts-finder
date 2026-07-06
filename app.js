@@ -139,6 +139,20 @@ function toggleCard(id) {
     if (el) el.classList.toggle("open");
 }
 
+
+function updateTabUI() {
+    document.querySelectorAll(".tabs button")
+        .forEach(btn => btn.classList.remove("active"));
+
+    const activeBtn = document.querySelector(
+        `.tabs button[data-tab="${currentTab}"]`
+    );
+
+    if (activeBtn) {
+        activeBtn.classList.add("active");
+    }
+}
+
 /* =========================
 RENDER MAIN
 ========================= */
@@ -205,6 +219,8 @@ if (currentTab === "aftermarket" || currentTab === "oem") {
         </div>
         `;
     }).join("");
+
+    updateTabUI();
 }
 
 /* =========================
@@ -271,7 +287,7 @@ function renderManual() {
     let html = `
     <div class="manual-download">
         <a class="manual-download-btn" href="${ownersManualPDF}" target="_blank">
-            📄 Download Owner's Manual
+            📄 Download ER175A Fi Owner's Manual (Official)
         </a>
     </div>
     `;
@@ -312,8 +328,10 @@ function setCategory(cat) {
 function switchTab(tab) {
     currentTab = tab;
     currentCategory = "All";
+
     renderChips();
     render();
+    updateTabUI();
 }
 
 function renderChips() {

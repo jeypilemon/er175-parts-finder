@@ -132,29 +132,6 @@ input#search:focus {
     color: white;
 }
 
-/* TABS */
-.tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.tabs button {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    background: #eee;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.tabs button.active {
-    background: #ee4d2d;
-    color: white;
-    font-weight: bold;
-}
-
 
 .home-grid {
     display: grid;

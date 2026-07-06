@@ -42,15 +42,11 @@
 
     <!-- TABS -->
     <div class="tabs">
-        <button id="tab-manual"
-        onclick="switchTab('manual')">
-    Owner's Manual
-</button>
-        <button onclick="switchTab('troubleshoot')" id="tab-troubleshoot">Troubleshooting Guides</button>
-        <button id="tab-aftermarket" onclick="switchTab('aftermarket')">Aftermarket Parts</button>
-        <button id="tab-oem" onclick="switchTab('oem')">Genuine Parts / Fairings</button>
-       
-    </div>
+    <button data-tab="manual" onclick="switchTab('manual')">Owner's Manual</button>
+    <button data-tab="troubleshoot" onclick="switchTab('troubleshoot')">Troubleshooting Guides</button>
+    <button data-tab="aftermarket" onclick="switchTab('aftermarket')">Aftermarket Parts</button>
+    <button data-tab="oem" onclick="switchTab('oem')">Genuine Parts / Fairings</button>
+</div>
 
     <!-- CHIPS -->
     <div class="chips" id="chips"></div>
