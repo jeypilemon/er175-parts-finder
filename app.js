@@ -321,12 +321,12 @@ function render() {
             </span>
 
             ${
-                part["Spec Size"] 
-                ? `<div class="specs">
-                    ${part["Spec Size"]}
-                   </div>`
-                : ""
-            }
+    part["Spec Size"] 
+    ? `<div class="specs ${part["Spec Size"].toLowerCase().includes("plug") ? "plug-fit" : ""}">
+        ${part["Spec Size"]}
+       </div>`
+    : ""
+}
 
         </div>
 
