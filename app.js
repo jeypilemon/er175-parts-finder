@@ -306,16 +306,34 @@ function render() {
 
     container.innerHTML = filtered.map(part => `
     <div class="card">
-        <img src="${part["Preview"] || ""}" onerror="this.style.display='none'">
+
+        <img 
+            src="${part["Preview"] || ""}" 
+            onerror="this.style.display='none'"
+        >
 
         <div class="card-content">
+
             <h3>${part["Parts Name"]}</h3>
-            <p>${part["Parts Category"]}</p>
+
+            <span class="category">
+                ${part["Parts Category"] || ""}
+            </span>
+
+            ${
+                part["Spec Size"] 
+                ? `<div class="specs">
+                    ${part["Spec Size"]}
+                   </div>`
+                : ""
+            }
+
         </div>
 
         <a class="button" href="${part["Shopee"]}" target="_blank">
-            Buy in Shopee
+            View Product
         </a>
+
     </div>
 `).join("");
 
@@ -438,7 +456,7 @@ function renderManual() {
 
     let html = `
         <div class="manual-download">
-            <a class="manual-download-btn" href="#" target="_blank">
+            <a class="manual-download-btn" href="https://drive.google.com/file/d/1xJyf7sNn1Nlo7X4r0a3X6W_R5pUabHbQ/view" target="_blank">
                 📄 Download Owner's Manual PDF
             </a>
         </div>
