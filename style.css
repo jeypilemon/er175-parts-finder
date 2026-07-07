@@ -10,10 +10,6 @@
     --accent: #4da3ff;
 }
 
-* { box-sizing: border-box; }
-
-.card { overflow: hidden; }
-
 .card img {
     width: 100%;
     height: 180px;
@@ -506,90 +502,7 @@ input#search:focus {
     border: 1px solid #e5e7eb;
 }
 
-.manual-section {
 
-background:var(--surface);
-border:1px solid var(--border);
-
-border-radius:14px;
-
-margin-bottom:12px;
-
-overflow:hidden;
-
-}
-
-
-.manual-section-title {
-
-padding:14px 16px;
-
-font-size:15px;
-font-weight:700;
-
-color:var(--text);
-
-background:#151e29;
-
-border-bottom:1px solid var(--border);
-
-}
-
-
-
-.manual-card {
-
-background:var(--card);
-
-}
-
-
-.manual-row {
-
-display:flex;
-
-justify-content:space-between;
-
-gap:15px;
-
-padding:14px 16px;
-
-border-bottom:1px solid var(--border);
-
-}
-
-
-.manual-spec {
-
-color:var(--muted);
-
-font-size:14px;
-
-}
-
-
-.manual-value {
-
-color:var(--text);
-
-font-weight:600;
-
-text-align:right;
-
-}
-
-
-mark {
-
-background:rgba(77,163,255,.25);
-
-color:#fff;
-
-border-radius:4px;
-
-padding:2px 4px;
-
-}
 
 .search-box{
     display:flex;
@@ -631,138 +544,6 @@ padding:2px 4px;
 .manual-download-btn:hover {
     background: #0f349a;
     transform: translateY(-2px);
-}
-
-/* =========================
-MANUAL SECTION (CLEAN UI UPGRADE)
-========================= */
-.manual-header p {
-    font-size: 12px;
-    color: var(--text);
-    margin-top: 4px;
-}
-
-.manual-section {
-    margin-bottom: 10px;
-    border: 1px solid #e6e8ec;
-    border-radius: 12px;
-    overflow: hidden;
-    background: var(--bg);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-    transition: 0.2s ease;
-}
-
-/* subtle hover (feels modern app-like) */
-.manual-section:hover {
-    border-color: #d9dde3;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-}
-
-/* HEADER */
-.manual-section summary {
-    list-style: none;
-    cursor: pointer;
-    padding: 16px 18px;
-    font-size: 16px;
-    font-weight: 700;
-    user-select: none;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    background: var(--card);
-    color: var(--accent);
-}
-
-/* remove default arrow */
-.manual-section summary::-webkit-details-marker {
-    display: none;
-}
-
-/* plus/minus icon */
-.manual-section summary::after {
-    content: "+";
-    font-size: 20px;
-    color: var(--accent);
-    transition: 0.25s ease;
-}
-
-/* when open */
-.manual-section[open] .manual-card {
-    max-height: 1000px;
-    padding: 6px 0;
-}
-
-/* BODY */
-
-.manual-card {
-    border-top: 1px solid #eef0f3;
-
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.35s ease, padding 0.35s ease;
-    padding: 0 0;
-}
-
-/* ROW */
-
-/* smooth row entry */
-.manual-row {
-    opacity: 0;
-    transform: translateY(6px);
-    animation: fadeInRow 0.25s ease forwards;
-}
-
-@keyframes fadeInRow {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* soft hover */
-.manual-row:hover {
-    background: var(--surface);
-}
-
-/* SPEC LABEL */
-.manual-spec {
-    font-size: 13px;
-    color: var(--muted);
-}
-
-/* VALUE */
-.manual-value {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--accent);
-    text-align: right;
-}
-
-/* last row clean edge */
-.manual-row:last-child {
-    border-bottom: none;
-}
-
-/* MOBILE CLEAN STACK */
-@media (max-width: 600px) {
-    .manual-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-    }
-
-    .manual-value {
-        text-align: left;
-        font-weight: 700;
-        color: var(--text);
-    }
-
-    .manual-section summary {
-        font-size: 15px;
-        color: var(--text);
-    }
 }
 
 
@@ -1112,4 +893,156 @@ body {
 .plug-fit {
     color: var(--accent);
     font-weight: 700;
+}
+
+/* =========================
+   OWNER MANUAL CLEAN STYLE
+========================= */
+
+.manual-download {
+    margin-bottom:15px;
+}
+
+
+.manual-download-btn {
+
+    display:block;
+
+    background:var(--accent);
+    color:white;
+
+    padding:12px 16px;
+
+    border-radius:10px;
+
+    text-align:center;
+
+    font-weight:700;
+
+    text-decoration:none;
+
+}
+
+
+/* category */
+
+.manual-section {
+
+    margin-bottom:22px;
+
+    background:transparent;
+
+}
+
+
+/* Engine / Electrical / etc */
+
+.manual-section-title {
+
+    font-size:18px;
+
+    font-weight:800;
+
+    color:var(--text);
+
+    padding:12px 0;
+
+    border-bottom:1px solid var(--border);
+
+    margin-bottom:10px;
+
+}
+
+
+
+/* container */
+
+.manual-card {
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+}
+
+
+/* each row */
+
+.manual-row {
+
+    display:grid;
+
+    grid-template-columns: 1fr 1.2fr;
+
+    gap:15px;
+
+    padding:14px 16px;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+
+.manual-row:last-child {
+
+    border-bottom:none;
+
+}
+
+
+/* specification */
+
+.manual-spec {
+
+    color:var(--text);
+
+    font-weight:600;
+
+    font-size:14px;
+
+}
+
+
+/* value */
+
+.manual-value {
+
+    color:var(--accent);
+
+    font-weight:600;
+
+    font-size:14px;
+
+}
+
+
+/* verified status */
+
+.manual-note {
+
+    grid-column:1 / -1;
+
+    font-size:12px;
+
+    color:var(--muted);
+
+}
+
+
+/* highlight */
+
+mark {
+
+    background:#ffd54a;
+
+    color:#111;
+
+    padding:1px 3px;
+
+    border-radius:3px;
+
 }

@@ -149,14 +149,19 @@ function normalizeText(text) {
 }
 
 function safeHighlight(text) {
+
     if (!globalKeyword) return text || "";
 
     const escaped = globalKeyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-    const reg = new RegExp(`\\b${escaped}\\b`, "gi");
+    const reg = new RegExp(escaped, "gi");
 
-    return (text || "").replace(reg, m => `<mark>${m}</mark>`);
+    return (text || "").replace(
+        reg,
+        m => `<mark>${m}</mark>`
+    );
 }
+
 
 /* =========================
 LOADERS
@@ -423,90 +428,132 @@ function renderManual() {
 
     const filtered = manualData.filter(item => {
 
-        const spec = normalizeText(item["Specification"]);
-        const val = normalizeText(item["Value"]);
-        const cat = normalizeText(item["Category"]);
+        const searchText = normalizeText(
+    (item["Category"] || "") +
+" " +
+(item["Specification"] || "") +
+" " +
+(item["Value"] || "") +
+" " +
+(item["Notes"] || "")
+);
 
-        const q = globalKeyword;
-
-        return (
-            !q ||
-            spec.includes(q) ||
-            val.includes(q) ||
-            cat.includes(q)
-        );
+return searchText.includes(
+    normalizeText(globalKeyword)
+);
     });
+
 
     const grouped = {};
 
-    filtered.forEach(i => {
-        const c = i["Category"] || "Other";
-        if (!grouped[c]) grouped[c] = [];
-        grouped[c].push(i);
+    filtered.forEach(item => {
+
+        const category = item["Category"] || "Other";
+
+        if (!grouped[category]) {
+            grouped[category] = [];
+        }
+
+        grouped[category].push(item);
+
     });
 
-    if (Object.keys(grouped).length === 0) {
+
+    let html = `
+
+    <div class="manual-download">
+
+        <a class="manual-download-btn"
+        href="https://drive.google.com/file/d/1xJyf7sNn1Nlo7X4r0a3X6W_R5pUabHbQ/view"
+        target="_blank">
+
+        Download Owner's Manual PDF (Official)
+
+        </a>
+
+    </div>
+
+    `;
+
+
+    if(filtered.length === 0){
+
         container.innerHTML = `
-            <div class="empty-state">
-                No manual data found
-            </div>
+        <div class="empty-state">
+        No manual information found
+        </div>
         `;
+
         return;
     }
 
-    let html = `
-        <div class="manual-download">
-            <a class="manual-download-btn" href="https://drive.google.com/file/d/1xJyf7sNn1Nlo7X4r0a3X6W_R5pUabHbQ/view" target="_blank">
-                📄 Download Owner's Manual PDF
-            </a>
-        </div>
-    `;
 
-    Object.keys(grouped).forEach(cat => {
 
-        const open = globalKeyword ? "open" : "";
+    Object.keys(grouped).forEach(category => {
+
 
         html += `
-        <details class="manual-section" ${open}>
-            <summary>${cat}</summary>
+
+        <section class="manual-section">
+
+            <h3 class="manual-section-title">
+                ${category}
+            </h3>
+
+
             <div class="manual-card">
+
         `;
 
-        grouped[cat].forEach(i => {
+
+        grouped[category].forEach(item=>{
+
+
             html += `
+
             <div class="manual-row">
-                <div class="manual-spec">${safeHighlight(i["Specification"])}</div>
-                <div class="manual-value">${safeHighlight(i["Value"])}</div>
-            </div>
+
+<div>
+    <div class="manual-spec">
+        ${safeHighlight(item["Specification"])}
+    </div>
+
+    <div class="manual-note">
+        ${item["Notes"] || ""}
+    </div>
+</div>
+
+
+<div class="manual-value">
+    ${safeHighlight(item["Value"])}
+</div>
+
+</div>
+
             `;
+
+
         });
 
-        html += `</div></details>`;
+
+
+        html += `
+
+            </div>
+
+        </section>
+
+        `;
+
+
     });
+
+
 
     container.innerHTML = html;
+
     updateTabUI();
-}
 
-
-function openManualMatch(query) {
-
-    if (!query) return; // 🚫 DO NOT OPEN ALL
-
-    const q = normalizeText(query);
-
-    const sections = document.querySelectorAll(".manual-section");
-
-    sections.forEach(section => {
-
-        const text = normalizeText(section.innerText);
-
-        if (text.includes(q)) {
-            section.open = true;
-        } else {
-            section.open = false; // optional: collapse others
-        }
-    });
 }
 
 /* Dictionary*/
@@ -559,15 +606,6 @@ function applySuggestion(text) {
 ACTIONS
 ========================= */
 
-
-function normalizeText(text) {
-    return (text || "")
-        .toLowerCase()
-        .replace(/[^a-z0-9\s]/g, "") // remove symbols
-        .replace(/\s+/g, " ")
-        .trim();
-}
-
 function matchWords(text, query) {
     if (!query) return true;
 
@@ -604,31 +642,21 @@ function setCategory(cat) {
 }
 
 function switchTab(tab) {
+
     currentTab = tab;
     currentCategory = "All";
+
+    container.classList.remove("manual-mode");
+
     renderChips();
     render();
     updateSearchPlaceholder();
+
 }
 
 /* =========================
 SEARCH
 ========================= */
-
-function openManualMatch(query) {
-    const q = normalizeText(query);
-
-    const sections = document.querySelectorAll(".manual-section");
-
-    sections.forEach(section => {
-        const text = section.innerText.toLowerCase();
-
-        if (text.includes(q)) {
-            section.open = true; // auto expand
-            section.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-    });
-}
 
 function updateSearchPlaceholder() {
     const search = document.getElementById("search");
