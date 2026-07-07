@@ -97,12 +97,17 @@ input#search:focus {
 
 .card-content h3 {
     margin-bottom: 6px;
+    font-size: 16px;
+    line-height: 1.3;
+    font-weight: 700;
 }
 
-.card-content p {
-    margin: 0;
+.category {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 400;
     color: var(--muted);
-    font-size: 13px;
 }
 
 /* Technical information */
@@ -908,7 +913,7 @@ MANUAL SECTION (CLEAN UI UPGRADE)
 /*linkstyle*/
 
 .saas-right a {
-    font-size: 11px;
+    font-size: 10px;
     padding: 6px 8px;
     border-radius: 8px;
     text-decoration: none;
@@ -917,21 +922,21 @@ MANUAL SECTION (CLEAN UI UPGRADE)
 }
 
 .saas-right b{
-    font-size: 11px;
+    font-size: 10px;
     padding: 6px 8px;
     border-radius: 8px;
     text-decoration: none;
     color: rgb(255, 255, 255);
-    background: rgba(57, 57, 57, 0.674);
+    background: rgba(0, 0, 0, 0.674);
 }
 
 .saas-right c{
-    font-size: 11px;
+    font-size: 10px;
     padding: 6px 8px;
     border-radius: 8px;
     text-decoration: none;
     color: white;
-    background: rgba(8, 123, 238, 0.674);
+    background: rgba(0, 128, 255, 0.674);
 }
 
 .saas-right a:hover, b:hover, c:hover {
