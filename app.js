@@ -123,10 +123,16 @@ function scrollChips(){
 
     const chips = document.getElementById("chips");
 
-    chips.scrollBy({
-        left:150,
-        behavior:"smooth"
-    });
+    if(!chips){
+        console.log("chips not found");
+        return;
+    }
+
+
+    console.log("scrolling chips");
+
+
+    chips.scrollLeft += 200;
 
 }
 
@@ -312,6 +318,23 @@ function loadManualComponents(url) {
 /* =========================
 TAB UI
 ========================= */
+
+function updateChipArrow(){
+
+const chips=document.getElementById("chips");
+const arrow=document.querySelector(".chips-next");
+
+if(!chips || !arrow) return;
+
+
+arrow.style.display =
+chips.scrollWidth > chips.clientWidth
+? "block"
+: "none";
+
+}
+
+
 function updateTabUI() {
     document.querySelectorAll(".seg").forEach(btn => {
         btn.classList.remove("active");
@@ -319,6 +342,26 @@ function updateTabUI() {
 
     const activeBtn = document.querySelector(`[data-tab="${currentTab}"]`);
     if (activeBtn) activeBtn.classList.add("active");
+}
+
+function updateChipArrow(){
+
+    const chips = document.getElementById("chips");
+    const arrow = document.querySelector(".chips-next");
+
+    if(!chips || !arrow) return;
+
+
+    if(chips.scrollWidth > chips.clientWidth){
+
+        arrow.style.display="flex";
+
+    }else{
+
+        arrow.style.display="none";
+
+    }
+
 }
 
 /* =========================
@@ -358,6 +401,8 @@ function renderChips() {
 
     setTimeout(hintChipScroll,1500);
 
+
+    updateChipArrow();
 }
 
 function renderManualChips(){
@@ -387,6 +432,9 @@ ${item[1]}
 </button>
 
 `).join("");
+
+
+updateChipArrow();
 
 }
 
@@ -898,52 +946,6 @@ function renderManual() {
         </a>
 
     </div>
-
-
-    <div class="chips manual-chips">
-
-<button onclick="openManualSection('specs')">
-Specifications
-</button>
-
-
-<button onclick="openManualSection('components')">
-Component Guide
-</button>
-
-
-<button onclick="openManualSection('dashboard')">
-Dashboard
-</button>
-
-
-<button onclick="openManualSection('maintenance')">
-Maintenance
-</button>
-
-
-<button onclick="openManualSection('efi')">
-EFI
-</button>
-
-
-<button onclick="openManualSection('wiring')">
-Wiring
-</button>
-
-
-<button onclick="openManualSection('precautions')">
-Precautions
-</button>
-
-
-<button onclick="openManualSection('mistakes')">
-Mistakes
-</button>
-
-
-</div>
-
 
     <div id="manualContent">
 
@@ -1543,6 +1545,9 @@ function switchTab(tab) {
     render();
 
     updateSearchPlaceholder();
+
+    setTimeout(updateChipArrow,100);
+    
 
 }
 
