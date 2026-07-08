@@ -360,6 +360,37 @@ function renderChips() {
 
 }
 
+function renderManualChips(){
+
+const chips =
+document.getElementById("chips");
+
+
+const sections = [
+    ["specs","Specifications"],
+    ["components","Component Guide"],
+    ["dashboard","Dashboard"],
+    ["maintenance","Maintenance"],
+    ["efi","EFI"],
+    ["wiring","Wiring"],
+    ["precautions","Precautions"],
+    ["mistakes","Mistakes"]
+];
+
+
+chips.innerHTML = sections.map(item=>`
+
+<button onclick="openManualSection('${item[0]}')">
+
+${item[1]}
+
+</button>
+
+`).join("");
+
+}
+
+
 /* =========================
 MAIN RENDER
 ========================= */
@@ -869,50 +900,49 @@ function renderManual() {
     </div>
 
 
-    <div class="manual-menu">
+    <div class="chips manual-chips">
+
+<button onclick="openManualSection('specs')">
+Specifications
+</button>
 
 
-        <button onclick="openManualSection('specs')">
-            Specifications
-        </button>
+<button onclick="openManualSection('components')">
+Component Guide
+</button>
 
 
-        <button onclick="openManualSection('components')">
-            Component Guide
-        </button>
+<button onclick="openManualSection('dashboard')">
+Dashboard
+</button>
 
 
-        <button onclick="openManualSection('dashboard')">
-            Dashboard Guide
-        </button>
+<button onclick="openManualSection('maintenance')">
+Maintenance
+</button>
 
 
-        <button onclick="openManualSection('maintenance')">
-            Maintenance
-        </button>
+<button onclick="openManualSection('efi')">
+EFI
+</button>
 
 
-        <button onclick="openManualSection('efi')">
-            EFI Diagnostics
-        </button>
+<button onclick="openManualSection('wiring')">
+Wiring
+</button>
 
 
-        <button onclick="openManualSection('wiring')">
-            Wiring Reference
-        </button>
+<button onclick="openManualSection('precautions')">
+Precautions
+</button>
 
 
-        <button onclick="openManualSection('precautions')">
-            Precautions
-        </button>
+<button onclick="openManualSection('mistakes')">
+Mistakes
+</button>
 
 
-        <button onclick="openManualSection('mistakes')">
-            Common Owner Mistakes
-        </button>
-
-
-    </div>
+</div>
 
 
     <div id="manualContent">
@@ -1011,10 +1041,6 @@ return searchText.includes(
     <div class="manual-spec">
         ${safeHighlight(item["Specification"])}
     </div>
-
-    <div class="manual-note">
-        ${item["Notes"] || ""}
-    </div>
 </div>
 
 
@@ -1095,6 +1121,10 @@ return groups;
 
 content.innerHTML = `
 
+<p class="component-hint">
+Tap a component to view location diagram
+</p>
+
 <div class="component-list">
 
 
@@ -1118,34 +1148,24 @@ ${
 
 items.map(item=>`
 
-<div 
+<div
 class="component-item"
+id="component-${item["ID"]}"
 onclick="openComponentViewer('${item["ID"]}')"
 >
-
-
-<div class="component-number">
-
-${item["ID"]}
-
-</div>
 
 
 <div class="component-details">
 
 
-<h4>
-
+<h3>
 ${item["Component"]}
+</h3>
 
-</h4>
 
-
-<span>
-
-${item["Location"] || ""}
-
-</span>
+<p class="component-location">
+📍 ${item["Location"] || "Location not specified"}
+</p>
 
 
 </div>
@@ -1507,8 +1527,21 @@ function switchTab(tab) {
 
     container.classList.remove("manual-mode");
 
-    renderChips();
+
+    if(tab === "manual"){
+
+        renderManualChips();
+
+    }
+    else{
+
+        renderChips();
+
+    }
+
+
     render();
+
     updateSearchPlaceholder();
 
 }
