@@ -1273,3 +1273,14 @@ transition:.2s;
 transform:translateX(5px);
 
 }
+
+/*open component modal css*/
+
+.component-focus-image img{
+
+transform:scale(1.5);
+
+transform-origin:
+52% 52%;
+
+}

@@ -466,6 +466,130 @@ function linkifySolution(text) {
             `;
         });
 }
+
+
+/*open component modal*/
+
+function openComponentViewer(id){
+
+
+const item =
+manualComponents.find(
+x=>x["ID"] == id
+);
+
+
+
+if(!item){
+
+console.log("Missing component",id);
+
+return;
+
+}
+
+
+
+const modal =
+document.getElementById(
+"componentModal"
+);
+
+
+const image =
+document.getElementById(
+"componentViewerImage"
+);
+
+
+const marker =
+document.getElementById(
+"componentViewerMarker"
+);
+
+
+
+image.src =
+`assets/images/er175-sideview-${item["Image Side"].toLowerCase()}.png`;
+
+
+
+marker.style.left =
+item["X Position"]+"%";
+
+
+marker.style.top =
+item["Y Position"]+"%";
+
+
+
+document.getElementById(
+"componentViewerTitle"
+).innerHTML =
+item["Component"];
+
+
+
+document.getElementById(
+"componentViewerLocation"
+).innerHTML =
+`
+<strong>Location:</strong>
+${item["Location"]}
+`;
+
+
+
+document.getElementById(
+"componentViewerNotes"
+).innerHTML =
+item["Access / Notes"] || "";
+
+
+
+image.style.transformOrigin =
+`${item["X Position"]}% ${item["Y Position"]}%`;
+
+
+
+setTimeout(()=>{
+
+image.classList.add("zoom");
+
+
+},100);
+
+
+
+modal.classList.add("show");
+
+
+}
+
+function closeComponentViewer(){
+
+const modal =
+document.getElementById(
+"componentModal"
+);
+
+
+const image =
+document.getElementById(
+"componentViewerImage"
+);
+
+
+image.classList.remove("zoom");
+
+
+modal.classList.remove("show");
+
+
+}
+
+
+
 /* =========================
 TROUBLESHOOT
 ========================= */
@@ -707,7 +831,6 @@ return searchText.includes(
 
 function renderManualComponents(){
 
-
 const content = document.getElementById("manualContent");
 
 
@@ -724,89 +847,9 @@ if(!manualComponents || manualComponents.length === 0){
 }
 
 
-function drawImageSide(side){
 
+const grouped = manualComponents.reduce((groups,item)=>{
 
-const filtered = manualComponents.filter(item =>
-    (item["Image Side"] || "").toLowerCase() 
-    === side.toLowerCase()
-);
-
-
-
-return `
-
-
-<div class="component-viewer">
-
-
-<div class="image-switch">
-
-<button onclick="window.componentSide('Right')">
-Right Side
-</button>
-
-
-<button onclick="window.componentSide('Left')">
-Left Side
-</button>
-
-</div>
-
-
-
-<div class="component-image">
-
-
-<img src="
-assets/images/er175-sideview-${side.toLowerCase()}.png
-"
-alt="ER175 Component Guide">
-
-
-${
-
-filtered.map(item=>`
-
-<button
-
-class="component-marker"
-
-style="
-left:${item["X Position"]}%;
-top:${item["Y Position"]}%;
-"
-
-data-id="${item["ID"]}"
-
-id="marker-${item["ID"]}"
-
-title="${item["Component"]}"
-
->
-
-${item["ID"]}
-
-</button>
-
-`).join("")
-
-}
-
-
-</div>
-
-
-
-
-<div class="component-list">
-
-
-${
-
-Object.entries(
-
-filtered.reduce((groups,item)=>{
 
 const category = item["Category"] || "Other";
 
@@ -824,10 +867,18 @@ groups[category].push(item);
 return groups;
 
 
-},{})
+},{});
 
-)
 
+
+
+content.innerHTML = `
+
+<div class="component-list">
+
+
+${
+Object.entries(grouped)
 .map(([category,items])=>`
 
 
@@ -842,23 +893,13 @@ ${category}
 
 
 
-<div class="category-line"></div>
-
-
-
 ${
 
 items.map(item=>`
 
-
-<div
-
+<div 
 class="component-item"
-
-id="component-${item["ID"]}"
-
-onclick="focusComponent('${item["ID"]}')"
-
+onclick="openComponentViewer('${item["ID"]}')"
 >
 
 
@@ -869,92 +910,44 @@ ${item["ID"]}
 </div>
 
 
-
 <div class="component-details">
 
 
-<h3>
+<h4>
 
 ${item["Component"]}
 
-</h3>
+</h4>
 
 
-
-<p>
-
-<strong>Location:</strong>
+<span>
 
 ${item["Location"] || ""}
 
-</p>
-
-
-
-<div class="manual-note">
-
-${item["Access / Notes"] || ""}
-
-</div>
+</span>
 
 
 </div>
 
 
 </div>
-
 
 
 `).join("")
 
 }
-
 
 
 </section>
 
 
-
 `).join("")
-
 }
 
 
 </div>
-
-
-</div>
-
 
 `;
-
-}
-
-
-
-window.componentSide=function(side){
-
-    const content =
-    document.getElementById("manualContent");
-
-
-    currentComponentSide = side;
-
-
-    content.innerHTML =
-    drawImageSide(side);
-
-
-    attachComponentMarkers();
-
-};
-
-
-content.innerHTML = drawImageSide(currentComponentSide);
-
-
-attachComponentMarkers();
-
 
 }
 
