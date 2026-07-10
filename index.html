@@ -5,7 +5,7 @@
 
 
 
-<head>
+<header>
 
 
 <meta charset="UTF-8">
@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="style.css">
 
 
-</head>
+</header>
 
 <body>
 
@@ -30,13 +30,13 @@
             ▶ YouTube
         </a>
 
-        <b class="btn tt" href="https://www.tiktok.com/@jpcariman" target="_blank">
-            ♪ TikTok
-        </b>
+        <a class="btn tt" href="https://www.tiktok.com/@jpcariman" target="_blank">
+             ♪ TikTok
+        </a>
 
-        <c class="btn fb" href="https://www.facebook.com/jeypixc" target="_blank">
-            f Facebook
-        </c>
+        <a class="btn fb" href="https://www.facebook.com/jeypixc" target="_blank">
+             f Facebook
+        </a>
     </div>
 </div>
 
@@ -79,9 +79,97 @@
     <!-- PRODUCTS -->
     <div id="products"></div>
 
+    <!-- SUGGESTIONS -->
     <div id="suggestions"></div>
 
-    <div class="container"></div>
+    <!-- MANUAL CONTENT -->
+    <div id="manualContent"></div>
+
+    <!-- TROUBLESHOOT CONTENT -->
+    <div id="troubleshootContent"></div>
+
+
+
+<!-- MODALS -->
+ <div id="linkModal" class="link-modal">
+  <div class="link-modal-backdrop" onclick="closeModal()"></div>
+
+  <div class="link-modal-content">
+    <button class="close-modal" onclick="closeModal()">×</button>
+    <iframe id="modalFrame"></iframe>
+  </div>
+</div>
+
+<div id="componentModal" class="component-modal">
+<div class="component-modal-box">
+
+<button 
+class="component-close"
+onclick="closeComponentViewer()">
+×
+</button>
+
+<div class="component-view-image">
+
+<div class="viewer-stage">
+
+
+<img 
+id="componentViewerImage"
+src=""
+>
+
+
+
+<div 
+id="componentViewerMarker"
+class="viewer-marker">
+
+</div>
+
+
+</div>
+
+
+</div>
+
+<div class="viewer-controls">
+
+<button onclick="previousComponent()">
+← Previous Part
+</button>
+
+<button onclick="openNextComponent()">
+Next Part →
+</button>
+
+
+
+
+</div>
+
+
+<div class="component-info">
+
+
+<h3 id="componentViewerTitle"></h3>
+
+
+<p id="componentViewerLocation"></p>
+
+
+<p id="componentViewerNotes"></p>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
 
     <footer class="footer">
     <div class="footer-title">Motorstar ER175 Support Hub</div>
@@ -153,14 +241,9 @@ class="viewer-marker">
 ← Previous Part
 </button>
 
-<button onclick="resetViewerZoom()">
-Reset View
-</button>
-
 <button onclick="openNextComponent()">
 Next Part →
 </button>
-
 
 
 
@@ -190,9 +273,10 @@ Next Part →
 
 
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
 <script src="app.js"></script>
 
-<script src="https://unpkg.com/lucide@latest"></script>
+
 
 </body>
 

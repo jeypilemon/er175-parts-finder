@@ -2,10 +2,8 @@ let currentTab = "aftermarket";
 let currentCategory = "All";
 let globalKeyword = "";
 
-let currentComponentSide = "Right";
 let currentViewerComponent = null;
 let currentViewerIndex = 0;
-
 
 let manualSearch = "";
 let manualData = [];
@@ -41,6 +39,20 @@ const loaded = {
 
 };
 
+function closeOutsideModal(e){
+
+    const box =
+    document.querySelector(".component-modal-box");
+
+
+    if(!box.contains(e.target)){
+
+        closeComponentViewer();
+
+    }
+
+}
+
 function closeModal() {
     const modal = document.getElementById("linkModal");
     const frame = document.getElementById("modalFrame");
@@ -70,16 +82,16 @@ READY CHECK
 ========================= */
 function checkReady() {
 
-    console.log("LOAD STATUS:", loaded);
+
 
     if (
         loaded.aftermarket &&
         loaded.oem &&
         loaded.troubleshoot &&
-        loaded.manual
+        loaded.manual &&
+        loaded.components
     ) {
 
-        console.log("ALL DATA READY");
 
         isLoading = false;
 
@@ -121,18 +133,18 @@ function hintChipScroll(){
 
 function scrollChips(){
 
-    const chips = document.getElementById("chips");
+const chips = document.getElementById("chips");
 
-    if(!chips){
-        console.log("chips not found");
-        return;
-    }
+if(!chips) return;
 
 
-    console.log("scrolling chips");
+chips.scrollBy({
 
+left:250,
 
-    chips.scrollLeft += 200;
+behavior:"smooth"
+
+});
 
 }
 
@@ -260,20 +272,43 @@ function loadManualComponents(url) {
 
         complete: res => {
 
-            manualComponents =
-            res.data.filter(x=>x["Component"]);
+    manualComponents =
+    res.data.filter(x=>x["Component"]);
 
 
-            manualComponents.sort((a,b)=>
-            Number(a.ID)-Number(b.ID)
+    manualComponents.sort((a,b)=>
+    Number(a.ID)-Number(b.ID)
+    );
+
+
+    loaded.components = true;
+
+    checkReady();
+
+}
+
+    });
+
+}
+
+function loadManualDashboard(url){
+
+    Papa.parse(url,{
+        download:true,
+        header:true,
+
+        complete: res=>{
+
+            manualDashboard =
+            res.data.filter(
+                x=>x["Component"]
             );
 
 
             console.log(
-                "Components loaded:",
-                manualComponents.length
+                "Dashboard loaded:",
+                manualDashboard.length
             );
-
 
         }
 
@@ -281,58 +316,9 @@ function loadManualComponents(url) {
 
 }
 
-
-/*function loadManualSections(){
-
-    loadCSV("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=1017192042&single=true&output=csv", data=>{
-        manualComponents = data;
-    });
-
-    loadCSV("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=81321961&single=true&output=csv", data=>{
-        manualDashboard = data;
-    });
-
-    loadCSV("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=1981058519&single=true&output=csv", data=>{
-        manualMaintenance = data;
-    });
-
-    loadCSV("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=1991247179&single=true&output=csv", data=>{
-        manualEFI = data;
-    });
-
-    loadCSV("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=1373439743&single=true&output=csv", data=>{
-        manualWiring = data;
-    });
-
-    loadCSV("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=2052007273&single=true&output=csv", data=>{
-        manualPrecautions = data;
-    });
-
-    loadCSV("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=1708336835&single=true&output=csv", data=>{
-        manualMistakes = data;
-    });
-
-}
-*/
-
 /* =========================
 TAB UI
 ========================= */
-
-function updateChipArrow(){
-
-const chips=document.getElementById("chips");
-const arrow=document.querySelector(".chips-next");
-
-if(!chips || !arrow) return;
-
-
-arrow.style.display =
-chips.scrollWidth > chips.clientWidth
-? "block"
-: "none";
-
-}
 
 
 function updateTabUI() {
@@ -405,6 +391,7 @@ function renderChips() {
     updateChipArrow();
 }
 
+
 function renderManualChips(){
 
 const chips =
@@ -425,7 +412,9 @@ const sections = [
 
 chips.innerHTML = sections.map(item=>`
 
-<button onclick="openManualSection('${item[0]}')">
+<button 
+class="${currentCategory === item[0] ? "active" : ""}"
+onclick="openManualSection('${item[0]}')">
 
 ${item[1]}
 
@@ -437,6 +426,8 @@ ${item[1]}
 updateChipArrow();
 
 }
+
+
 
 
 /* =========================
@@ -559,93 +550,15 @@ function linkifySolution(text) {
         });
 }
 
-
-function switchViewerSide(side){
-
-if(!currentViewerComponent)
-return;
-
-
-currentViewerComponent["Image Side"] = side;
-
-
-
-const image =
-document.getElementById(
-"componentViewerImage"
-);
-
-
-const marker =
-document.getElementById(
-"componentViewerMarker"
-);
-
-
-
-if(image){
-
-image.classList.remove("zoom");
-
-
-image.src =
-`assets/images/er175-sideview-${side.toLowerCase()}.png`;
-
-
-}
-
-
-
-if(marker){
-
-marker.style.left =
-currentViewerComponent["X Position"]+"%";
-
-
-marker.style.top =
-currentViewerComponent["Y Position"]+"%";
-
-}
-
-
-
-setTimeout(()=>{
-
-image.classList.add("zoom");
-
-},500);
-
-
-
-}
-
-
-document.addEventListener(
-"click",
-function(e){
-
-
-if(e.target.id==="componentViewerImage"){
-
-
-resetViewerZoom();
-
-
-}
-
-
-});
-
 /*open component modal*/
 
 function openComponentViewer(id){
-
-console.log("OPEN COMPONENT", id);
 
 
 const item = manualComponents.find(
 x => x["ID"] == id
 );
+
 
 if(!item){
     console.log("Missing component", id);
@@ -653,20 +566,14 @@ if(!item){
 }
 
 
+
 currentViewerComponent = item;
+
 
 currentViewerIndex =
 manualComponents.findIndex(
-x=>x["ID"] == id
+x => x["ID"] == id
 );
-
-
-if(!item){
-
-console.log("Missing component", id);
-return;
-
-}
 
 
 
@@ -677,14 +584,19 @@ document.getElementById("componentModal");
 const image =
 document.getElementById("componentViewerImage");
 
+if(image){
+    image.style.display="block";
+}
 
 const marker =
 document.getElementById("componentViewerMarker");
 
 
-
 const title =
-document.getElementById("componentViewerTitle");
+document.getElementById(
+"componentViewerTitle"
+).innerHTML =
+item["Display / Indicator"] || item["Component"] || "Dashboard Indicator";
 
 
 const location =
@@ -696,24 +608,18 @@ document.getElementById("componentViewerNotes");
 
 
 
-// IMAGE LOAD
+// IMAGE
 
 if(image){
 
-    image.classList.remove("zoom");
-
-
     image.src =
     `assets/images/er175-sideview-${item["Image Side"].toLowerCase()}.png`;
-
-    image.style.transformOrigin =
-    `${item["X Position"]}% ${item["Y Position"]}%`;
 
 }
 
 
 
-// MARKER POSITION
+// MARKER
 
 if(marker){
 
@@ -733,7 +639,7 @@ if(marker){
 
 
 
-// TEXT INFO
+// TEXT
 
 if(title){
 
@@ -748,7 +654,7 @@ if(location){
     location.innerHTML =
     `
     <strong>Location:</strong>
-    ${item["Location"] || ""}
+    ${item["Location"] || "Not specified"}
     `;
 
 }
@@ -763,30 +669,16 @@ if(notes){
 
 
 
-// SHOW MODAL
+// OPEN MODAL
 
-modal.classList.add("show");
+if(modal){
 
-
-
-// ZOOM AFTER IMAGE LOAD
-
-setTimeout(()=>{
-
-
-    if(image){
-
-        image.classList.add("zoom");
-
-    }
-
-
-},500);
-
-
+    modal.classList.add("show");
 
 }
 
+
+}
 
 function previousComponent(){
 
@@ -829,22 +721,6 @@ openComponentViewer(next["ID"]);
 
 }
 
-function resetViewerZoom(){
-
-const image =
-document.getElementById(
-"componentViewerImage"
-);
-
-
-if(image){
-
-image.classList.remove("zoom");
-
-}
-
-
-}
 
 function closeComponentViewer(){
 
@@ -852,25 +728,15 @@ const modal =
 document.getElementById("componentModal");
 
 
-const image =
-document.getElementById("componentViewerImage");
-
-
 const marker =
 document.getElementById("componentViewerMarker");
-
-
-
-if(image){
-
-    image.classList.remove("zoom");
-
-}
 
 
 if(marker){
 
     marker.style.display="none";
+
+    marker.classList.remove("active");
 
 }
 
@@ -880,11 +746,6 @@ if(modal){
     modal.classList.remove("show");
 
 }
-
-if(marker){
-    marker.classList.remove("active");
-}
-
 
 }
 
@@ -1164,12 +1025,6 @@ onclick="openComponentViewer('${item["ID"]}')"
 ${item["Component"]}
 </h3>
 
-
-<p class="component-location">
-📍 ${item["Location"] || "Location not specified"}
-</p>
-
-
 </div>
 
 
@@ -1194,147 +1049,75 @@ ${item["Component"]}
 
 }
 
-function attachComponentMarkers(){
+function renderDashboard(){
 
-    document
-    .querySelectorAll(".component-marker")
-    .forEach(marker=>{
-
-
-        marker.onclick=function(){
-
-            focusComponent(this.dataset.id);
-
-        };
+const content =
+document.getElementById("manualContent");
 
 
-    });
+if(!manualDashboard || manualDashboard.length === 0){
 
-}
-
-function focusComponent(id){
-
-
-const component =
-manualComponents.find(item =>
-    item["ID"] == id
-);
-
-
-
-if(!component){
-
-    console.log("Component not found:", id);
+    content.innerHTML = `
+    <div class="empty-state">
+        Dashboard data loading...
+    </div>
+    `;
 
     return;
 
 }
 
 
-// check image side
+content.innerHTML = `
 
-const side = component["Image Side"];
-
-
-
-if(
-    side &&
-    side.toLowerCase() !== currentComponentSide.toLowerCase()
-){
-
-    window.componentSide(side);
+<div class="dashboard-guide">
 
 
-    // wait for image redraw
-
-    setTimeout(()=>{
-
-        focusComponent(id);
-
-    },300);
+<div class="dashboard-image-container">
 
 
-    return;
+<img 
+src="assets/images/er175-dash.png"
+class="dashboard-image"
+>
 
+
+${
+manualDashboard.map(item=>`
+
+<div
+class="dashboard-marker"
+
+style="
+left:${item["X Position"]}%;
+top:${item["Y Position"]}%;
+width:${(Number(item["Width"]) / 1177) * 100}%;
+height:${(Number(item["Height"]) / 785) * 100}%;
+"
+
+onclick="openDashboardInfo('${item["ID"]}')">
+
+</div>
+
+
+`).join("")
 }
 
 
+</div>
 
 
-const image =
-document.querySelector(".component-image");
+<p class="component-hint">
+Tap the indicator number to view information
+</p>
 
 
+</div>
 
-if(image){
-
-    image.classList.add("show");
-
-}
-
-
-
-
-const marker =
-document.querySelector(
-`.component-marker[data-id="${id}"]`
-);
-
-
-
-const card =
-document.getElementById(
-`component-${id}`
-);
-
-
-
-if(card){
-
-
-card.scrollIntoView({
-
-    behavior:"smooth",
-
-    block:"center"
-
-});
-
-
-card.classList.add("highlight");
-
-
-setTimeout(()=>{
-
-    card.classList.remove("highlight");
-
-},2000);
-
+`;
 
 }
 
-
-
-if(marker){
-
-
-marker.classList.add("marker-focus");
-
-
-setTimeout(()=>{
-
-
-marker.classList.remove("marker-focus");
-
-
-},2000);
-
-
-}
-
-
-
-}
 
 /* Dictionary*/
 
@@ -1386,7 +1169,64 @@ function applySuggestion(text) {
 ACTIONS
 ========================= */
 
+function openDashboardInfo(id){
+
+
+const item =
+manualDashboard.find(
+x=>x["ID"] == id
+);
+
+
+if(!item)return;
+
+
+
+document.getElementById(
+"componentViewerTitle"
+).innerHTML =
+item["Component"];
+
+
+
+document.getElementById(
+"componentViewerLocation"
+).innerHTML =
+item["Meaning"];
+
+
+
+document.getElementById(
+"componentViewerNotes"
+).innerHTML =
+item["Notes"] || "";
+
+
+
+const image =
+document.getElementById(
+"componentViewerImage"
+);
+
+
+// hide motorcycle image
+if(image){
+    image.style.display = "none";
+}
+
+
+document.getElementById(
+"componentModal"
+).classList.add("show");
+
+
+}
+
 function openManualSection(section){
+
+    currentCategory = section;
+
+    renderManualChips();
 
     const content = document.getElementById("manualContent");
 
@@ -1413,6 +1253,10 @@ function openManualSection(section){
 
 
         case "dashboard":
+
+    renderDashboard();
+
+break;
 
             content.innerHTML = `
                 <div class="empty-state">
@@ -1589,9 +1433,30 @@ window.openModal = openModal;
 window.openComponentViewer = openComponentViewer;
 window.closeComponentViewer = closeComponentViewer;
 
+window.openManualSection = openManualSection;
+window.switchTab = switchTab;
+window.setCategory = setCategory;
+window.resetFilters = resetFilters;
+
 window.previousComponent = previousComponent;
 window.openNextComponent = openNextComponent;
-window.resetViewerZoom = resetViewerZoom;
+
+window.addEventListener("resize",()=>{
+
+updateChipArrow();
+
+});
+
+
+document.addEventListener("keydown", function(e){
+
+    if(e.key === "Escape"){
+
+        closeComponentViewer();
+
+    }
+
+});
 
 /* =========================
 INIT
@@ -1607,3 +1472,5 @@ loadTroubleshoot("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFf
 loadManual("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=56637698&single=true&output=csv");
 
 loadManualComponents("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=1017192042&single=true&output=csv");
+
+loadManualDashboard("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=81321961&single=true&output=csv");
