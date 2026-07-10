@@ -5,6 +5,11 @@ let globalKeyword = "";
 let currentViewerComponent = null;
 let currentViewerIndex = 0;
 
+let currentComponentIndex = 0;
+let currentDashboardIndex = 0;
+
+let currentViewerMode = "";
+
 let manualSearch = "";
 let manualData = [];
 let manualComponents = [];
@@ -554,6 +559,7 @@ function linkifySolution(text) {
 
 function openComponentViewer(id){
 
+currentViewerMode = "component";
 
 const item = manualComponents.find(
 x => x["ID"] == id
@@ -682,42 +688,82 @@ if(modal){
 
 function previousComponent(){
 
+if(currentViewerMode === "component"){
 
-currentViewerIndex--;
+    currentViewerIndex--;
 
+    if(currentViewerIndex < 0){
+        currentViewerIndex =
+        manualComponents.length - 1;
+    }
 
-if(currentViewerIndex < 0){
-
-    currentViewerIndex =
-    manualComponents.length - 1;
+    openComponentViewer(
+        manualComponents[currentViewerIndex]["ID"]
+    );
 
 }
 
-const previous =
-manualComponents[currentViewerIndex];
+
+else if(currentViewerMode === "dashboard"){
 
 
-openComponentViewer(previous["ID"]);
+    currentDashboardIndex--;
+
+    if(currentDashboardIndex < 0){
+        currentDashboardIndex =
+        manualDashboard.length - 1;
+    }
+
+
+    openDashboardInfo(
+        manualDashboard[currentDashboardIndex]["ID"]
+    );
+
+}
 
 
 }
 
 function openNextComponent(){
 
+
+if(currentViewerMode === "component"){
+
+
     currentViewerIndex++;
 
-if(currentViewerIndex >= manualComponents.length){
 
-    currentViewerIndex = 0;
+    if(currentViewerIndex >= manualComponents.length){
+        currentViewerIndex = 0;
+    }
+
+
+    openComponentViewer(
+        manualComponents[currentViewerIndex]["ID"]
+    );
+
 
 }
 
 
-const next =
-manualComponents[currentViewerIndex];
+else if(currentViewerMode === "dashboard"){
 
 
-openComponentViewer(next["ID"]);
+    currentDashboardIndex++;
+
+
+    if(currentDashboardIndex >= manualDashboard.length){
+        currentDashboardIndex = 0;
+    }
+
+
+    openDashboardInfo(
+        manualDashboard[currentDashboardIndex]["ID"]
+    );
+
+
+}
+
 
 }
 
@@ -984,9 +1030,9 @@ return groups;
 
 content.innerHTML = `
 
-<p class="component-hint">
-Tap a component to view location diagram
-</p>
+<div class="dashboard-hint">
+    👆 Tap the highlighted area to view information
+</div>
 
 <div class="component-list">
 
@@ -1075,33 +1121,32 @@ content.innerHTML = `
 
 <div class="dashboard-image-container">
 
-
 <img 
 src="assets/images/er175-dash.png"
 class="dashboard-image"
 >
 
 
-${
-manualDashboard.map(item=>`
+<div class="dashboard-hint">
+👆 Tap the highlighted area to view information
+</div>
+
+
+${manualDashboard.map(item=>`
 
 <div
 class="dashboard-marker"
-
 style="
 left:${item["X Position"]}%;
 top:${item["Y Position"]}%;
-width:${(Number(item["Width"]) / 1177) * 100}%;
-height:${(Number(item["Height"]) / 785) * 100}%;
+width:${item["Width"] || 45}px;
+height:${item["Height"] || 35}px;
 "
-
 onclick="openDashboardInfo('${item["ID"]}')">
 
 </div>
 
-
-`).join("")
-}
+`).join("")}
 
 
 </div>
@@ -1171,6 +1216,8 @@ ACTIONS
 
 function openDashboardInfo(id){
 
+currentViewerMode = "dashboard";
+
 
 const item =
 manualDashboard.find(
@@ -1181,6 +1228,12 @@ x=>x["ID"] == id
 if(!item)return;
 
 
+currentDashboardIndex =
+manualDashboard.findIndex(
+x=>x["ID"] == id
+);
+
+
 
 document.getElementById(
 "componentViewerTitle"
@@ -1188,12 +1241,10 @@ document.getElementById(
 item["Component"];
 
 
-
 document.getElementById(
 "componentViewerLocation"
 ).innerHTML =
 item["Meaning"];
-
 
 
 document.getElementById(
@@ -1203,16 +1254,26 @@ item["Notes"] || "";
 
 
 
-const image =
+const zoomImage =
 document.getElementById(
-"componentViewerImage"
+"componentViewerZoom"
 );
 
 
-// hide motorcycle image
-if(image){
-    image.style.display = "none";
+
+if(zoomImage){
+
+zoomImage.src =
+item["Zoom Image"] || "";
+
+
+zoomImage.style.display =
+item["Zoom Image"]
+? "block"
+: "none";
+
 }
+
 
 
 document.getElementById(
