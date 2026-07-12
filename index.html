@@ -1,211 +1,219 @@
 <!DOCTYPE html>
-
-
 <html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motorstar ER175 Support Hub</title>
 
-
-<header>
-
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Motorstar ER175 Parts Finder</title>
-<link rel="stylesheet" href="style.css">
-
-
-</header>
+    <link rel="stylesheet" href="style.css">
+</head>
 
 <body>
 
-<!-- SAAS BAR (TOP HEADER) -->
-<div id="supportBar" class="saas-bar">
-    <div class="saas-left">
-        <span class="dot"></span>
-        <strong>Support this project by following me!</strong>
+    <!-- SUPPORT BAR -->
+    <div id="supportBar" class="saas-bar">
+        <div class="saas-left">
+            <span class="dot"></span>
+            <strong>Support this project by following me!</strong>
+        </div>
+
+        <div class="saas-right">
+            <a class="btn yt" href="https://www.youtube.com/@jpxcariman" target="_blank">
+                ▶ YouTube
+            </a>
+
+            <a class="btn tt" href="https://www.tiktok.com/@jpcariman" target="_blank">
+                ♪ TikTok
+            </a>
+
+            <a class="btn fb" href="https://www.facebook.com/jeypixc" target="_blank">
+                f Facebook
+            </a>
+        </div>
     </div>
 
-    <div class="saas-right">
-        <a class="btn yt" href="https://www.youtube.com/@jpxcariman" target="_blank">
-            ▶ YouTube
-        </a>
-
-        <a class="btn tt" href="https://www.tiktok.com/@jpcariman" target="_blank">
-             ♪ TikTok
-        </a>
-
-        <a class="btn fb" href="https://www.facebook.com/jeypixc" target="_blank">
-             f Facebook
-        </a>
-    </div>
-</div>
-
+    <!-- HERO -->
     <header class="hero">
-    <div class="hero-title">Motorstar ER175 Support Hub</div>
-    <div class="hero-subtitle">
-        Genuine and Aftermarket Parts, Manual and Troubleshooting Guides
-    </div>
-</header>
+        <div class="hero-title">
+            Motorstar ER175 Support Hub
+        </div>
 
+        <div class="hero-subtitle">
+            Genuine & Aftermarket Parts, Manual and Troubleshooting Guides
+        </div>
+    </header>
+
+    <!-- TABS -->
     <div class="segmented">
-    <button class="seg active" data-tab="manual" onclick="switchTab('manual')">Manual</button>
-    <button class="seg" data-tab="troubleshoot" onclick="switchTab('troubleshoot')">Troubleshoot</button>
-    <button class="seg" data-tab="aftermarket" onclick="switchTab('aftermarket')">Parts</button>
-    <button class="seg" data-tab="oem" onclick="switchTab('oem')">Genuine Parts</button>
-</div>
+        <button class="seg active" data-tab="manual" onclick="switchTab('manual')">
+            Manual
+        </button>
 
-    <!-- CHIPS WRAPPER-->
-     <div class="chips-wrapper">
+        <button class="seg" data-tab="troubleshoot" onclick="switchTab('troubleshoot')">
+            Troubleshoot
+        </button>
 
-    <div class="chips" id="chips"></div>
+        <button class="seg" data-tab="aftermarket" onclick="switchTab('aftermarket')">
+            Parts
+        </button>
 
-    <button class="chips-next" onclick="scrollChips()">
-        ›
-    </button>
+        <button class="seg" data-tab="oem" onclick="switchTab('oem')">
+            Genuine Parts
+        </button>
+    </div>
 
-</div>
+    <!-- CATEGORY CHIPS -->
+    <div class="chips-wrapper">
+
+        <div id="chips" class="chips"></div>
+
+        <button class="chips-next" onclick="scrollChips()">
+            ›
+        </button>
+
+    </div>
 
     <!-- SEARCH -->
     <div class="search-box">
-    <input id="search" placeholder="Search parts...">
+        <input id="search" placeholder="Search...">
     </div>
 
-    <!-- RESET BUTTON -->
+    <!-- RESET -->
     <div class="reset-container">
-    <button class="reset-btn" onclick="resetFilters()">
-    ↺ Reset Filters</button>
+        <button class="reset-btn" onclick="resetFilters()">
+            ↺ Reset Filters
+        </button>
     </div>
 
-    <!-- PRODUCTS -->
+    <!-- MAIN CONTENT -->
     <div id="products"></div>
 
-    <!-- SUGGESTIONS -->
+    <!-- SEARCH SUGGESTIONS -->
     <div id="suggestions"></div>
 
-    <!-- MANUAL CONTENT -->
-    <div id="manualContent"></div>
+    <!-- LINK MODAL -->
+    <div id="linkModal" class="link-modal">
 
-    <!-- TROUBLESHOOT CONTENT -->
-    <div id="troubleshootContent"></div>
+        <div class="link-modal-backdrop" onclick="closeModal()"></div>
 
+        <div class="link-modal-content">
 
+            <button class="close-modal" onclick="closeModal()">
+                ×
+            </button>
 
-<!-- MODALS -->
- <div id="linkModal" class="link-modal">
-  <div class="link-modal-backdrop" onclick="closeModal()"></div>
+            <iframe id="modalFrame"></iframe>
 
-  <div class="link-modal-content">
-    <button class="close-modal" onclick="closeModal()">×</button>
-    <iframe id="modalFrame"></iframe>
-  </div>
-</div>
+        </div>
 
-<div id="componentModal" class="component-modal">
-<div class="component-modal-box">
+    </div>
 
-<button 
-class="component-close"
-onclick="closeComponentViewer()">
-×
-</button>
+    <!-- COMPONENT VIEWER -->
+    <div id="componentModal" class="component-modal">
 
-<div class="component-view-image">
+        <div class="component-modal-box">
 
-<div class="viewer-stage">
+            <button class="component-close" onclick="closeComponentViewer()">
+                ×
+            </button>
 
+            <div class="component-view-image">
 
-<img 
-id="componentViewerImage"
-src=""
->
+                <div class="viewer-stage">
 
+                    <img id="componentViewerImage">
 
+                    <div id="componentViewerMarker"
+                        class="viewer-marker">
+                    </div>
 
-<div 
-id="componentViewerMarker"
-class="viewer-marker">
+                </div>
 
-</div>
+            </div>
 
+            <div class="viewer-controls">
 
-</div>
+                <button onclick="previousComponent()">
+                    ← Previous Part
+                </button>
 
+                <button onclick="openNextComponent()">
+                    Next Part →
+                </button>
 
-</div>
+            </div>
 
-<div class="viewer-controls">
+            <div class="component-info">
 
-<button onclick="previousComponent()">
-← Previous Part
-</button>
+                <h3 id="componentViewerTitle"></h3>
 
-<button onclick="openNextComponent()">
-Next Part →
-</button>
+                <img id="componentViewerZoom"
+                    class="component-viewer-zoom">
 
+                <p id="componentViewerLocation"></p>
 
+                <p id="componentViewerNotes"></p>
 
+            </div>
 
-</div>
+        </div>
 
+    </div>
 
-<div class="component-info">
-
-
-<h3 id="componentViewerTitle"></h3>
-
-<img 
-id="componentViewerZoom"
-class="component-viewer-zoom"
->
-
-<p id="componentViewerLocation"></p>
-
-
-<p id="componentViewerNotes"></p>
-
-
-</div>
-
-
-
-</div>
-
-
-</div>
-
-
+    <!-- FOOTER -->
     <footer class="footer">
-    <div class="footer-title">Motorstar ER175 Support Hub</div>
 
-    <div class="footer-links">
-        <a href="https://www.youtube.com/@jpxcariman" target="_blank">YouTube</a>
-        <a href="https://www.tiktok.com/@jpcariman" target="_blank">TikTok</a>
-        <a href="https://www.facebook.com/jeypixc" target="_blank">Facebook</a>
-    </div>
+        <div class="footer-title">
+            Motorstar ER175 Support Hub
+        </div>
 
-    <div class="footer-note">
-        Built for ER175 owners, mechanics, and DIY Repairs.
-    </div>
-</footer>
+        <div class="footer-links">
 
-<!-- MODALS -->
- <div id="linkModal" class="link-modal">
-  <div class="link-modal-backdrop" onclick="closeModal()"></div>
+            <a href="https://www.youtube.com/@jpxcariman" target="_blank">
+                YouTube
+            </a>
 
-  <div class="link-modal-content">
-    <button class="close-modal" onclick="closeModal()">×</button>
-    <iframe id="modalFrame"></iframe>
-  </div>
-</div>
+            <a href="https://www.tiktok.com/@jpcariman" target="_blank">
+                TikTok
+            </a>
 
+            <a href="https://www.facebook.com/jeypixc" target="_blank">
+                Facebook
+            </a>
 
+        </div>
 
+        <div class="footer-note">
+            Built for ER175 owners, mechanics and DIY enthusiasts.
+        </div>
+
+    </footer>
+<!-- LIBRARIES -->
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
+<!-- CORE -->
+<script src="state.js"></script>
+<script src="utils.js"></script>
+<script src="modal.js"></script>
+<script src="viewer.js"></script>
+<script src="chips.js"></script>
+<script src="ui.js"></script>
+<script src="loaders.js"></script>
+
+<!-- MANUAL -->
+<!-- Remove this line for now because the file doesn't exist -->
+<!-- <script src="manual/components.js"></script> -->
+
+<script src="manual/dashboard.js"></script>
+<script src="manual/maintenance.js"></script>
+<script src="manual/efi.js"></script>
+
+<!-- MAIN -->
 <script src="app.js"></script>
 
-
+<!-- EVENTS (LAST) -->
+<script src="events.js"></script>
 
 </body>
 
