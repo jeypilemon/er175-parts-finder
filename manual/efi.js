@@ -109,7 +109,62 @@ Diagnose →
 
 </div>
 
+<div class="efi-guide-grid">
+
+    <div class="efi-guide-card"
+         onclick="openGuideImage(
+             'MIL Flash Example',
+             'assets/images/component/mil-flash-example.png'
+         )">
+
+        <img src="assets/images/component/mil-flash-example.png">
+
+        <h3>MIL Flash Example</h3>
+
+        <p>Understand long and short MIL flashes.</p>
+
+    </div>
+
+    <div class="efi-guide-card"
+         onclick="openGuideImage(
+             'Manual OBD Query & Clearing',
+             'assets/images/component/obd-manual-ecu-clearing.png'
+         )">
+
+        <img src="assets/images/component/obd-manual-ecu-clearing.png">
+
+        <h3>Manual OBD Query & Clearing</h3>
+
+        <p>Read and erase EFI fault codes manually.</p>
+
+    </div>
+
+</div>
+
 `;
+
+}
+
+function openGuideImage(title, image){
+
+    const modal = document.getElementById("componentModal");
+
+    document.getElementById("componentViewerTitle").innerHTML = title;
+
+    document.getElementById("componentViewerLocation").innerHTML = "";
+
+    document.getElementById("componentViewerNotes").innerHTML = "";
+
+    document.getElementById("componentViewerMarker").style.display = "none";
+
+    document.getElementById("componentViewerImage").style.display = "none";
+
+    const zoom = document.getElementById("componentViewerZoom");
+
+    zoom.src = image;
+    zoom.style.display = "block";
+
+    modal.classList.add("show");
 
 }
 
@@ -184,10 +239,34 @@ Next ▶
 </div>
 
 `;
+const zoomImg = currentEFIProblem["Zoom Image"]?.trim();
 
-    document.getElementById("componentViewerImage").style.display="none";
-    document.getElementById("componentViewerMarker").style.display="none";
-    document.getElementById("componentViewerZoom").style.display="none";
+const image = document.getElementById("componentViewerImage");
+const marker = document.getElementById("componentViewerMarker");
+const zoom = document.getElementById("componentViewerZoom");
+
+// Hide marker (EFI doesn't use map markers)
+marker.style.display = "none";
+
+if (zoomImg) {
+
+    image.style.display = "none";
+
+    zoom.src = zoomImg;
+    zoom.style.display = "block";
+
+    zoom.onclick = () => {
+        window.open(zoomImg, "_blank");
+    };
+
+} else {
+
+    zoom.src = "";
+    zoom.style.display = "none";
+
+    image.style.display = "none";
+
+}
 
     modal.classList.add("show");
 
