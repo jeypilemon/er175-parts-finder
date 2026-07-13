@@ -1,112 +1,94 @@
-function renderMistakes(){
+function renderMistakes() {
+    const content = document.getElementById("manualContent");
+    if (!content) return;
 
-    const content =
-    document.getElementById("manualContent");
+    const dataset = window.manualMistakes || manualMistakes || [];
 
-    if(!manualMistakes.length){
+    // ==========================================
+    // 1. PERSISTENT LAYOUT WRAPPER ENGINE
+    // ==========================================
+    let gridContainer = content.querySelector(".mistake-grid");
+    if (!gridContainer) {
+        content.innerHTML = `
+        <div class="manual-tip">
+            🚫 Learn from common servicing mistakes to avoid costly repairs.
+        </div>
+        <div class="mistake-grid"></div>
+        `;
+        gridContainer = content.querySelector(".mistake-grid");
+    }
 
-        content.innerHTML=`
-        <div class="empty-state">
+    // ==========================================
+    // 2. DATA FILTERING
+    // ==========================================
+    if (!dataset || !dataset.length) {
+        gridContainer.innerHTML = `
+        <div class="empty-state" style="grid-column: 1 / -1;">
             Common mistakes loading...
         </div>
         `;
-
         return;
-
     }
 
-    const filtered =
-    manualMistakes.filter(item=>{
+    const filtered = dataset.filter(item => {
+        if (!searchQuery) return true;
 
-        if(!searchQuery) return true;
+        const text = typeof normalizeText === 'function' ? normalizeText(
+            `${item["Category"] || ""} ${item["Mistake"] || ""} ${item["Why It Happens"] || ""} ${item["Possible Result"] || ""} ${item["Recommendation"] || ""}`
+        ) : `${item["Category"] || ""} ${item["Mistake"] || ""} ${item["Why It Happens"] || ""} ${item["Possible Result"] || ""} ${item["Recommendation"] || ""}`.toLowerCase();
 
-        const text = normalizeText(
-
-        (item["Category"] || "") + " " +
-        (item["Mistake"] || "") + " " +
-        (item["Why It Happens"] || "") + " " +
-        (item["Possible Result"] || "") + " " +
-        (item["Recommendation"] || "")
-
-);
         return text.includes(searchQuery);
-
     });
 
-    if(!filtered.length){
-
-        content.innerHTML=`
-        <div class="empty-state">
-            No common mistakes found.
+    if (!filtered.length) {
+        gridContainer.innerHTML = `
+        <div class="empty-state" style="grid-column: 1 / -1;">
+            No common mistakes found matching "${searchQuery}".
         </div>
         `;
-
         return;
-
     }
 
-    content.innerHTML=`
+    // ==========================================
+    // 3. TARGETED DOM PLACEMENT (SMOOTH UX)
+    // ==========================================
+    gridContainer.innerHTML = filtered.map(item => {
+        const category = item["Category"] || "General";
+        const mistake = item["Mistake"] || "Improper Procedure";
+        const why = item["Why It Happens"] || "";
+        const result = item["Possible Result"] || "";
+        const recommendation = item["Recommendation"] || "";
 
-<div class="manual-tip">
+        return `
+        <div class="mistake-card">
+            <!-- Header Container -->
+            <div class="mistake-header">
+                <span class="mistake-category">${category}</span>
+                <span class="mistake-badge">⚠️ Risk Warning</span>
+            </div>
+            
+            <!-- Card Body / Core Content Stack -->
+            <div class="mistake-body">
+                <div class="mistake-box">
+                    <strong>❌ ${typeof safeHighlight === 'function' ? safeHighlight(mistake) : mistake}</strong>
+                    ${why ? `<p>${typeof safeHighlight === 'function' ? safeHighlight(why) : why}</p>` : ""}
+                </div>
 
-🚫 Learn from common servicing mistakes to avoid costly repairs.
+                ${result ? `
+                <div class="cause-box">
+                    <span class="box-label">⚠️ Possible Result:</span>
+                    <p>${typeof safeHighlight === 'function' ? safeHighlight(result) : result}</p>
+                </div>
+                ` : ""}
 
-</div>
-
-<div class="mistake-grid">
-
-${filtered.map(item=>`
-
-<div class="mistake-card">
-
-<span class="mistake-category">
-
-${item["Category"]}
-
-</span>
-
-<div class="mistake-box">
-
-❌ <strong>${safeHighlight(item["Mistake"])}</strong>
-
-<p>
-
-${safeHighlight(item["Why It Happens"])}
-
-</p>
-
-</div>
-
-<div class="cause-box">
-
-⚠️ <strong>Possible Result</strong>
-
-<p>
-
-${safeHighlight(item["Possible Result"])}
-
-</p>
-
-</div>
-
-<div class="correct-box">
-
-✅ <strong>Recommendation</strong>
-
-<p>
-
-${safeHighlight(item["Recommendation"])}
-
-</p>
-
-</div>
-
-</div>
-
-`).join("")}
-
-</div>
-
-`;
-
+                ${recommendation ? `
+                <div class="correct-box">
+                    <span class="box-label">✅ Recommendation:</span>
+                    <p>${typeof safeHighlight === 'function' ? safeHighlight(recommendation) : recommendation}</p>
+                </div>
+                ` : ""}
+            </div>
+        </div>
+        `;
+    }).join("");
 }

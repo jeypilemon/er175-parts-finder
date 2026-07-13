@@ -1,13 +1,13 @@
-:root {
-    --bg: #121214;
-    --surface: #121821;
-    --card: #161f2b;
-    --border: #243041;
+:root{
+    --bg:#0b0f14;
+    --surface:#121821;
+    --card:#161f2b;
+    --border:#243041;
 
-    --text: #e6edf3;
-    --muted: #8b98a5;
+    --text:#e6edf3;
+    --muted:#8b98a5;
 
-    --accent: #4da3ff;
+    --accent:#4da3ff;
 }
 
 .card img {
@@ -927,117 +927,6 @@ flex:none;
 }
 
 
-/* category */
-
-.manual-section {
-
-    margin-bottom:22px;
-
-    background:transparent;
-
-}
-
-
-/* Engine / Electrical / etc */
-
-.manual-section-title {
-
-    font-size:18px;
-
-    font-weight:800;
-
-    color:var(--text);
-
-    padding:12px 0;
-
-    border-bottom:1px solid var(--border);
-
-    margin-bottom:10px;
-
-}
-
-
-
-/* container */
-.manual-card{
-
-    background:var(--card);
-
-    border:1px solid var(--border);
-
-    border-radius:18px;
-
-    padding:22px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:16px;
-
-    transition:.25s;
-
-}
-
-.manual-card:hover{
-
-    transform:translateY(-4px);
-
-    border-color:var(--accent);
-
-    box-shadow:
-    0 14px 30px rgba(0,0,0,.35);
-
-}
-
-/* each row */
-
-.manual-row {
-
-    display:grid;
-
-    grid-template-columns: 1fr 1.2fr;
-
-    gap:15px;
-
-    padding:14px 16px;
-
-    border-bottom:1px solid var(--border);
-
-}
-
-
-.manual-row:last-child {
-
-    border-bottom:none;
-
-}
-
-
-/* specification */
-
-.manual-spec {
-
-    color:var(--text);
-
-    font-weight:600;
-
-    font-size:14px;
-
-}
-
-
-/* value */
-
-.manual-value {
-
-    color:var(--accent);
-
-    font-weight:600;
-
-    font-size:14px;
-
-}
 
 
 /* highlight */
@@ -1056,168 +945,135 @@ mark {
 
 
 /*component css*/
+/* ==========================================================================
+   COMPONENT VIEWER - HIGH-DENSITY COMPACT LAYOUT
+   ========================================================================== */
 
-.component-viewer{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:20px;
-
+/* Main Container */
+.component-viewer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Tightened from 20px */
 }
 
-
-.image-switch{
-
-    display:flex;
-
-    gap:10px;
-
+/* Category Sections */
+.component-category {
+    margin-bottom: 16px; /* Reduced from 30px */
 }
 
-
-.image-switch button{
-
-    padding:8px 14px;
-
-    border-radius:8px;
-
-    border:none;
-
-    cursor:pointer;
-
+.component-category-title {
+    font-size: 0.75rem; /* Standardized small uppercase label format */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted, #71717a);
+    margin: 0 0 6px 4px;
 }
 
-
-.component-image{
-
-    position:relative;
-
-    width:100%;
-
-    display:none;
-
+.category-line {
+    height: 1px;
+    background: var(--border, #26262b);
+    margin-bottom: 10px; /* Reduced from 15px */
 }
 
-
-.component-image.show{
-
-    display:block;
-
+/* Image Toggle Controls */
+.image-switch {
+    display: flex;
+    gap: 6px; /* Tightened from 10px */
 }
 
-
-.component-image img{
-
-    width:100%;
-
-    height:auto;
-
-    display:block;
-
+.image-switch button {
+    padding: 5px 12px; /* Standardized to match system button spacing */
+    border-radius: 4px; /* System standard flat edge */
+    border: 1px solid var(--border, #26262b);
+    background: var(--card, #121214);
+    color: var(--text, #e4e4e7);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
 }
 
-
-.component-marker{
-
-position:absolute;
-
-transform:translate(-50%,-50%);
-
-width:34px;
-height:34px;
-
-border-radius:50%;
-
-background:#ff6a00;
-
-color:white;
-
-font-weight:700;
-
-font-size:13px;
-
-border:2px solid white;
-
-cursor:pointer;
-
-display:flex;
-
-align-items:center;
-justify-content:center;
-
-box-shadow:0 2px 6px rgba(0,0,0,.3);
-
+.image-switch button:hover {
+    background: var(--surface, #1a1a1e);
+    border-color: var(--accent);
 }
 
-
-.component-item.highlight{
-
-    outline:2px solid var(--accent);
-
+.image-switch button.active {
+    background: var(--accent, #0ea5e9);
+    color: #000000;
+    border-color: var(--accent);
 }
 
-.component-category{
-
-margin-bottom:30px;
-
+/* Image Display Box */
+.component-view-image,
+.component-image {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 6px; /* System structural bounding radius */
+    border: 1px solid var(--border, #26262b);
+    background: var(--surface, #1a1a1e);
+    display: none;
 }
 
-
-.component-category-title{
-
-font-size:18px;
-
-font-weight:700;
-
-text-transform:uppercase;
-
-margin-bottom:5px;
-
+.component-view-image.show,
+.component-image.show {
+    display: block;
 }
 
-
-.category-line{
-
-height:1px;
-
-background:var(--muted);
-
-opacity:.3;
-
-margin-bottom:15px;
-
+.component-view-image img,
+.component-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/*marker animation*/
-
-.component-marker.marker-focus{
-
-
-transform:
-translate(-50%,-50%) scale(1.5);
-
-
-box-shadow:
-0 0 20px var(--accent);
-
-
-z-index:10;
-
-
+/* Map Location Hotspot Markers */
+.component-marker {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 24px; /* Reduced from 34px for finer map placement accuracy */
+    height: 24px;
+    border-radius: 50%; /* Kept circular for target accuracy */
+    background: var(--accent, #0ea5e9); /* Swapped heavy orange to electric accent blue */
+    color: #000000;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-weight: 700;
+    font-size: 11px;
+    border: 2px solid #ffffff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background-color 0.15s ease;
 }
 
-
-.component-view-image{
-    position:relative;
-    overflow:hidden;
+.component-marker:hover {
+    background: #ffffff;
+    color: var(--accent, #0ea5e9);
+    transform: translate(-50%, -50%) scale(1.15);
 }
 
+/* Dynamic Active Target Marker Focus */
+.component-marker.marker-focus {
+    transform: translate(-50%, -50%) scale(1.3);
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.3), 0 0 20px var(--accent, #0ea5e9);
+    background: #ffffff;
+    color: #000000;
+    border-color: var(--accent, #0ea5e9);
+    z-index: 10;
+}
 
-.component-view-image img{
-    width:100%;
-    transition:transform .5s ease;
+/* List Item Highlight Coupling */
+.component-item.highlight {
+    outline: 1px solid var(--accent, #0ea5e9); /* Refined down from thick 2px */
+    background: rgba(14, 165, 233, 0.04);
+    border-radius: 4px;
 }
 
 
@@ -1976,723 +1832,552 @@ opacity:.65;
     max-width:100%;
     margin:auto;
 }
+/* ==========================================================================
+   EFI COMPACT DIAGNOSTICS ARCHITECTURE (NIGHT MODE)
+   ========================================================================== */
 
-
-/* ==========================================
-   EFI HEADER
-========================================== */
-
-.efi-header{
-
-    margin-bottom:28px;
-
+/* Outer Headers & Info Cards */
+.efi-header {
+    margin-bottom: 14px;
 }
 
-.efi-header h2{
-
-    font-size:28px;
-
-    font-weight:700;
-
-    margin-bottom:10px;
-
-    color:var(--text);
-
+.efi-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    color: var(--text);
 }
 
-.efi-header p{
-
-    color:var(--muted);
-
-    line-height:1.7;
-
-    max-width:720px;
-
+.efi-tip {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin: 10px 0 14px 0;
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: #1b2433;
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-left: 3px solid #3b82f6;
+    color: #d9e3f0;
+    font-size: 0.775rem;
+    line-height: 1.4;
 }
 
-
-/* ==========================================
-   EFI TOOLTIP
-========================================== */
-
-.efi-tip{
-
-    display:flex;
-
-    align-items:flex-start;
-
-    gap:12px;
-
-    margin:22px 0;
-
-    padding:16px 20px;
-
-    background:rgba(77,163,255,.08);
-
-    border:1px solid rgba(77,163,255,.15);
-
-    border-left:4px solid var(--accent);
-
-    border-radius:14px;
-
-    color:var(--text);
-
-    line-height:1.7;
-
+/* Reference Card Grid */
+.efi-guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
 }
 
-
-/* ==========================================
-   EFI GRID
-========================================== */
-
-.efi-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
-
-    gap:22px;
-
+.efi-guide-card {
+    background: var(--card, #121214);
+    border: 1px solid var(--border, #26262b);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-
-/* ==========================================
-   EFI CARD
-========================================== */
-
-.efi-card{
-
-    background:var(--card);
-
-    border:1px solid var(--border);
-
-    border-radius:18px;
-
-    padding:22px;
-
-    transition:.25s;
-
+.efi-guide-card:hover {
+    border-color: var(--accent);
+    background: var(--surface);
 }
 
-.efi-card:hover{
-
-    transform:translateY(-5px);
-
-    border-color:var(--accent);
-
-    box-shadow:
-
-        0 16px 30px rgba(0,0,0,.35);
-
+.efi-guide-card img {
+    width: 54px;
+    height: 54px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    background: var(--surface);
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
 }
 
-
-.efi-card-top{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:flex-start;
-
-    gap:16px;
-
+.efi-guide-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-.efi-card h3{
-
-    margin:0;
-
-    font-size:18px;
-
-    color:var(--text);
-
+.efi-guide-card h3 {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
 }
 
-.efi-card p{
-
-    margin-top:8px;
-
-    color:var(--muted);
-
-    font-size:14px;
-
+.efi-guide-card p {
+    margin: 0;
+    font-size: 0.7rem;
+    color: var(--muted);
+    line-height: 1.3;
 }
 
-.efi-card-bottom{
-
-    margin-top:20px;
-
-    padding-top:18px;
-
-    border-top:1px solid var(--border);
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:15px;
-
+/* Diagnostic Items Grid layout */
+.efi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
 }
 
-.efi-card-bottom span{
-
-    color:var(--muted);
-
-    font-size:14px;
-
+/* Component Symptom Cards */
+.efi-card {
+    background: var(--card, #121214);
+    border: 1px solid var(--border, #26262b);
+    border-radius: 6px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-
-/* ==========================================
-   BUTTONS
-========================================== */
-
-.efi-card button{
-
-    border:none;
-
-    border-radius:10px;
-
-    background:var(--accent);
-
-    color:var(--bg);
-
-    padding:11px 20px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:.2s;
-
+.efi-card:hover {
+    border-color: var(--accent);
+    background: var(--surface);
 }
 
-.efi-card button:hover{
-
-    filter:brightness(1.08);
-
+.efi-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
 }
 
-
-/* ==========================================
-   DIFFICULTY BADGES
-========================================== */
-
-.efi-difficulty{
-
-    padding:6px 12px;
-
-    border-radius:999px;
-
-    font-size:12px;
-
-    font-weight:700;
-
+.efi-card-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.efi-difficulty.success{
-
-    background:rgba(46,204,113,.15);
-
-    color:#80e5ad;
-
+.efi-card h3 {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
 }
 
-.efi-difficulty.warning{
-
-    background:rgba(255,193,7,.15);
-
-    color:#ffd86a;
-
+.efi-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.725rem;
 }
 
-.efi-difficulty.danger{
-
-    background:rgba(255,77,79,.15);
-
-    color:#ff9797;
-
+.efi-card-bottom {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(36, 48, 65, 0.4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
 }
 
-
-/* ==========================================
-   MODAL
-========================================== */
-
-.efi-progress{
-
-    color:var(--accent);
-
-    font-weight:700;
-
-    margin-bottom:18px;
-
+.efi-step-counter {
+    color: var(--muted);
+    font-size: 0.7rem;
+    font-family: ui-monospace, monospace;
 }
 
-.efi-step-box{
-
-    background:var(--surface);
-
-    border:1px solid var(--border);
-
-    border-left:4px solid var(--accent);
-
-    border-radius:14px;
-
-    padding:22px;
-
-    line-height:1.8;
-
-    color:var(--text);
-
-    margin-bottom:24px;
-
+/* Action Execution Buttons */
+.efi-btn {
+    border: none;
+    border-radius: 4px;
+    background: var(--accent, #0ea5e9);
+    color: #000000;
+    padding: 4px 10px;
+    font-size: 0.725rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: filter 0.1s ease;
 }
 
-.efi-nav{
-
-    display:flex;
-
-    gap:14px;
-
+.efi-btn:hover {
+    filter: brightness(1.1);
 }
 
-.efi-nav button{
-
-    flex:1;
-
-    border:none;
-
-    border-radius:10px;
-
-    padding:13px;
-
-    background:var(--accent);
-
-    color:var(--bg);
-
-    cursor:pointer;
-
-    font-weight:700;
-
+/* Micro Difficulty Tags */
+.efi-difficulty {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
 }
 
-.efi-nav button:hover{
+.efi-difficulty.success { background: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.2); color: #86efac; }
+.efi-difficulty.warning { background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.2); color: #fde047; }
+.efi-difficulty.danger  { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.2); color: #fca5a5; }
 
-    filter:brightness(1.08);
+/* ==========================================================================
+   EFI TROUBLESHOOTING STEP MODAL VIEWER
+   ========================================================================== */
 
+.efi-progress {
+    color: var(--accent);
+    font-family: ui-monospace, monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-transform: uppercase;
 }
 
-.efi-nav button:disabled{
-
-    opacity:.35;
-
-    cursor:not-allowed;
-
+.efi-step-box {
+    background: var(--surface, #1a1a1e);
+    border: 1px solid var(--border, #26262b);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    box-sizing: border-box;
 }
 
-
-/* ==========================================
-   COMPONENT IMAGE
-========================================== */
-
-#componentViewerZoom{
-
-    display:block;
-
-    width:100%;
-
-    max-width:420px;
-
-    margin:22px auto;
-
-    background:var(--surface);
-
-    border:1px solid var(--border);
-
-    border-radius:14px;
-
-    padding:12px;
-
-    object-fit:contain;
-
-    cursor:pointer;
-
-    transition:.25s;
-
+.efi-step-box p {
+    margin: 0;
+    line-height: 1.45;
+    color: var(--text-body, #e4e4e7);
+    font-size: 0.825rem;
 }
 
-#componentViewerZoom:hover{
-
-    transform:scale(1.03);
-
+.efi-nav {
+    display: flex;
+    gap: 8px;
 }
 
-
-/* ==========================================
-   EFI GUIDES
-========================================== */
-
-.efi-guides{
-
-    margin-top:42px;
-
+.efi-nav-btn {
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px;
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.775rem;
+    transition: background-color 0.1s ease, color 0.1s ease;
 }
 
-.efi-guide-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-
-    gap:22px;
-
+.efi-nav-btn:hover:not(:disabled) {
+    background: var(--accent);
+    color: #000000;
+    border-color: var(--accent);
 }
 
-.efi-guide-card{
-
-    background:var(--card);
-
-    border:1px solid var(--border);
-
-    border-radius:18px;
-
-    overflow:hidden;
-
-    cursor:pointer;
-
-    transition:.25s;
-
+.efi-nav-btn:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
 }
 
-.efi-guide-card:hover{
-
-    transform:translateY(-5px);
-
-    border-color:var(--accent);
-
-    box-shadow:
-
-        0 16px 30px rgba(0,0,0,.35);
-
+/* Dedicated Secondary Media Viewer Components */
+#componentViewerZoom {
+    display: block;
+    width: 100%;
+    max-width: 340px;
+    margin: 12px auto 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px;
+    object-fit: contain;
+    cursor: zoom-in;
+    transition: transform 0.15s ease;
 }
 
-.efi-guide-card img{
-
-    width:100%;
-
-    aspect-ratio:16/9;
-
-    object-fit:contain;
-
-    background:var(--surface);
-
-    padding:14px;
-
+#componentViewerZoom:hover {
+    transform: scale(1.015);
 }
 
-.efi-guide-card h3{
-
-    padding:18px 18px 8px;
-
-    color:var(--text);
-
+/* Fullscreen Img Modal Lightbox */
+.image-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.94);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
 }
 
-.efi-guide-card p{
-
-    padding:0 18px 20px;
-
-    color:var(--muted);
-
-    line-height:1.6;
-
+.image-modal.show { display: flex; }
+.image-modal-content {
+    position: relative;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/*zoom view mil flash and obd clearing*/
-
-.image-modal{
-
-    display:none;
-
-    position:fixed;
-
-    inset:0;
-
-    background:rgba(0,0,0,.92);
-
-    z-index:9999;
-
-    justify-content:center;
-
-    align-items:center;
-
+#imageModalImg {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
 }
 
-.image-modal.show{
-
-    display:flex;
-
+.image-close, .image-download {
+    position: absolute;
+    top: 10px;
+    border: none;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 6px 12px;
+    line-height: 1.2;
 }
 
-.image-modal-content{
-
-    position:relative;
-
-    width:95%;
-
-    height:95%;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-}
-
-#imageModalImg{
-
-    max-width:100%;
-
-    max-height:100%;
-
-    object-fit:contain;
-
-}
-
-.image-close{
-
-    position:absolute;
-
-    top:15px;
-
-    right:15px;
-
-    font-size:28px;
-
-    background:#d32f2f;
-
-    color:#fff;
-
-    border:none;
-
-    width:42px;
-
-    height:42px;
-
-    border-radius:50%;
-
-    cursor:pointer;
-
-}
-
-.image-download{
-
-    position:absolute;
-
-    top:15px;
-
-    left:15px;
-
-    padding:10px 18px;
-
-    border:none;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-    background:#1976d2;
-
-    color:white;
-
-}
-
-
-
-/*diagnos info tooltip*/
-
-.efi-tip{
-
-    display:flex;
-    gap:12px;
-    align-items:flex-start;
-
-    margin:16px 0 20px;
-
-    padding:14px 16px;
-
-    border-radius:12px;
-
-    background:#1b2433;
-
-    border-left:4px solid #3b82f6;
-
-    color:#d9e3f0;
-
-}
-
-.efi-tip-icon{
-
-    font-size:22px;
-
-    line-height:1;
-
-}
+.image-close { right: 10px; background: #ef4444; color: #fff; }
+.image-download { left: 10px; background: #2563eb; color: #fff; }
 
 /*mistake and precaution css*/
+/* ==========================================================================
+   Compact Dark-Mode Precaution Cards
+   ========================================================================== */
 
-.precaution-grid{
-    display:grid;
-    gap:24px;
-    margin-top:24px;
-    
-}
-.precaution-card{
-
-    background:var(--card);
-
-    border:1px solid var(--border);
-
-    border-left:5px solid #38d27a;
-
-    border-radius:18px;
-
-    padding:22px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:16px;
-
+/* 1. Grid Container (Dense packing using layout reference) */
+.precaution-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+    padding-bottom: 20px;
+    box-sizing: border-box;
+    margin-top: 16px;
 }
 
-.precaution-card.danger{
-
-    border-left-color:#ff6565;
-
+/* 2. The Individual Precaution Card */
+.precaution-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.1s ease;
 }
 
-.precaution-category{
-
-    color:var(--accent);
-
-    font-size:12px;
-
-    font-weight:700;
-
-    text-transform:uppercase;
-
+/* Interactive States */
+.precaution-card:hover {
+    border-color: var(--accent);
+    background: var(--surface);
+    transform: translateY(-1px);
 }
 
-.precaution-badge{
-
-    width:fit-content;
-
-    padding:5px 12px;
-
-    border-radius:999px;
-
-    font-size:12px;
-
-    font-weight:600;
-
+.precaution-card:active {
+    transform: translateY(0);
 }
 
-.precaution-card.success
-.precaution-badge{
-
-    background:rgba(56,210,122,.12);
-
-    color:#7de4ac;
-
+/* 3. Card Header Structure */
+.precaution-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(36, 48, 65, 0.4);
+    padding-bottom: 6px;
 }
 
-.precaution-card.danger
-.precaution-badge{
-
-    background:rgba(255,101,101,.12);
-
-    color:#ff8d8d;
-
+.precaution-category {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 8px;
 }
 
-.precaution-notes{
+/* Tactile pin style replacement for massive badges */
+.precaution-badge {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
 
-    padding-top:12px;
+/* Success State Colors */
+.precaution-card.success .precaution-badge {
+    background: rgba(56, 210, 122, 0.1);
+    border-color: rgba(56, 210, 122, 0.25);
+    color: #7de4ac;
+}
 
-    border-top:1px dashed var(--border);
+/* Danger State Colors */
+.precaution-card.danger .precaution-badge {
+    background: rgba(255, 101, 101, 0.1);
+    border-color: rgba(255, 101, 101, 0.25);
+    color: #ff8d8d;
+}
 
-    color:var(--muted);
+/* 4. Card Body & Typography Wrapping */
+.precaution-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
 
+.precaution-body h3 {
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.precaution-body p {
+    color: var(--text-body);
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* 5. Notes Container (Clean dashed transition) */
+.precaution-notes {
+    padding-top: 6px;
+    border-top: 1px dashed var(--border);
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.4;
 }
 
 /*mistakes css*/
-.mistake-grid{
-    display:grid;
-    gap:24px;
-    margin-top:24px;
-    
+/* ==========================================================================
+   Compact Dark-Mode Mistake Cards
+   ========================================================================== */
+
+/* 1. Grid Layout Container */
+.mistake-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    padding-bottom: 20px;
+    box-sizing: border-box;
+    margin-top: 16px;
 }
 
-.mistake-card{
-
-    background:var(--card);
-
-    border:1px solid var(--border);
-
-    border-radius:18px;
-
-    padding:20px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:16px;
-
+/* 2. The Individual Mistake Card Base */
+.mistake-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.1s ease;
 }
 
-.mistake-box{
-
-    background:rgba(255,80,80,.08);
-
-    border-left:4px solid #ff6b6b;
-
-    padding:14px;
-
-    border-radius:10px;
-
+/* Interactive States matching Wiring Layout */
+.mistake-card:hover {
+    border-color: var(--accent);
+    background: var(--surface);
+    transform: translateY(-1px);
 }
 
-.cause-box{
-
-    background:rgba(210, 115, 56, 0.174);
-
-    border-left:4px solid #cf801f;
-
-    padding:14px;
-
-    border-radius:10px;
-
+.mistake-card:active {
+    transform: translateY(0);
 }
 
-.correct-box{
+/* 3. Card Header Structure */
+.mistake-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(36, 48, 65, 0.4);
+    padding-bottom: 6px;
+}
 
-    background:rgba(56,210,122,.08);
+.mistake-category {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 8px;
+}
 
-    border-left:4px solid #38d27a;
+.mistake-badge {
+    background: var(--bg);
+    color: #ff8d8d;
+    border: 1px solid var(--border);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
 
-    padding:14px;
+/* 4. Internal Structural Content Boxes */
+.mistake-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
-    border-radius:10px;
+.mistake-box,
+.cause-box,
+.correct-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
 
+/* Custom Highlight Flags */
+.mistake-box { border-left: 3px solid #ff6565; }
+.cause-box { border-left: 3px solid #facc15; }
+.correct-box { border-left: 3px solid #38d27a; }
+
+/* Internal Typography Controls */
+.box-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.mistake-body strong {
+    display: block;
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 4px;
+}
+
+.mistake-body p {
+    color: var(--text-body);
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin: 0;
+    word-break: break-word;
 }
 
 
@@ -2704,7 +2389,6 @@ opacity:.65;
 .manual-tip {
     background: rgba(77, 163, 255, 0.08);
     border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
     padding: 10px 14px;
     border-radius: 6px;
     color: var(--text);
@@ -2829,34 +2513,41 @@ opacity:.65;
 }
 
 
-/* ==========================================
+/* ==========================================================================
    MAINTENANCE COMPACT GRID LAYOUT (NIGHT MODE)
-   ========================================== */
+   ========================================================================== */
 
 /* Outer grid container */
 .maintenance-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 16px;
-    padding: 12px 0 24px 0;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    padding: 0 0 20px 0;
+    box-sizing: border-box;
+    margin-top: 16px;
 }
 
 /* Deep Obsidian Dark Card */
 .maintenance-card {
-    background: #121214; 
-    border: 1px solid #26262b;
-    border-radius: 8px;
-    padding: 16px;
+    background: var(--card); 
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    box-sizing: border-box;
+    transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .maintenance-card:hover {
-    border-color: #3b3b42;
-    transform: translateY(-2px);
+    border-color: var(--accent);
+    background: var(--surface);
+    transform: translateY(-1px);
+}
+
+.maintenance-card:active {
+    transform: translateY(0);
 }
 
 /* Card Header */
@@ -2864,70 +2555,72 @@ opacity:.65;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
+    gap: 10px;
+    border-bottom: 1px solid rgba(36, 48, 65, 0.4);
+    padding-bottom: 6px;
+    margin-bottom: 10px;
 }
 
 /* Interval / Time Badge */
 .maintenance-interval-badge {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: #a1a1aa; /* Crisp muted silver */
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--muted);
     white-space: nowrap;
-    background: #1f1f23;
-    padding: 3px 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 2px 6px;
     border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, monospace;
 }
 
-/* Card Body Typography (FIXED OVERLAPPING) */
+/* Card Body Typography */
 .maintenance-card-body h3 {
-    font-size: 1.05rem;
-    font-weight: 700;
-    margin: 0 0 12px 0;
-    color: #ffffff; /* pure stark white */
-    line-height: 1.4; /* Added breathing room to prevent overlaps */
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: var(--text);
+    line-height: 1.3;
 }
 
 /* Procedure and Note Interior Spec Boxes */
 .maintenance-spec-box, 
 .maintenance-notes-box {
-    background: #1a1a1e; /* Solid dark background to prevent muddy blend */
-    border: 1px solid #26262b;
+    background: var(--surface);
+    border: 1px solid var(--border);
     padding: 10px 12px;
     border-radius: 6px;
-    margin-top: 10px;
+    margin-top: 8px;
+    box-sizing: border-box;
 }
 
 .spec-label {
     display: block;
     font-size: 0.65rem;
     font-weight: 700;
-    color: #71717a; /* Clean contrast label */
-    margin-bottom: 6px;
+    color: var(--muted);
+    margin-bottom: 4px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.02em;
 }
 
-/* Fixed spacing to prevent overlapping */
 .maintenance-spec-box p,
 .maintenance-notes-box p {
     margin: 0;
     font-size: 0.8rem;
-    line-height: 1.5; /* Clean layout tracking wrapper */
-    color: #e4e4e7; /* Highly legible light gray text */
-    word-break: break-word; /* Prevents long continuous text from overflowing */
+    line-height: 1.4;
+    color: var(--text-body);
+    word-break: break-word;
 }
 
 .maintenance-notes-box {
-    border-left: 3px solid #3f3f46; /* Subtle accent block border for notes */
+    border-left: 3px solid #3f3f46;
 }
 
-
-/* ==========================================
+/* ==========================================================================
    VIBRANT NIGHT-MODE BADGE COLORS (via data-cat)
-   ========================================== */
+   ========================================================================== */
 
-/* Base badge structural rules */
 .maintenance-category {
     display: inline-flex;
     align-items: center;
@@ -2935,47 +2628,546 @@ opacity:.65;
     font-size: 0.65rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 3px 8px;
+    letter-spacing: 0.03em;
+    padding: 2px 6px;
     border-radius: 4px;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
 }
 
 /* 1. Default / General Category (Neon Silver Accent) */
 .maintenance-category,
 .maintenance-category[data-cat="General"] {
     background: rgba(161, 161, 170, 0.1);
-    border: 1px solid rgba(161, 161, 170, 0.3);
+    border: 1px solid rgba(161, 161, 170, 0.25);
     color: #f4f4f5;
 }
 
 /* 2. Engine Maintenance (Pastel Cyber Pink Accent) */
 .maintenance-category[data-cat="Engine Maintenance"],
 .maintenance-category[data-cat="Engine"] {
-    background: rgba(244, 63, 94, 0.15);
-    border: 1px solid rgba(244, 63, 94, 0.4);
+    background: rgba(244, 63, 94, 0.12);
+    border: 1px solid rgba(244, 63, 94, 0.3);
     color: #fda4af;
 }
 
 /* 3. Hydraulics / Pneumatics (Electric Cyber Blue Accent) */
 .maintenance-category[data-cat="Hydraulics"],
 .maintenance-category[data-cat="Pneumatics"] {
-    background: rgba(14, 165, 233, 0.15);
-    border: 1px solid rgba(14, 165, 233, 0.4);
+    background: rgba(14, 165, 233, 0.12);
+    border: 1px solid rgba(14, 165, 233, 0.3);
     color: #7dd3fc;
 }
 
 /* 4. Electrical / Electronics (Matrix Emerald Green Accent) */
 .maintenance-category[data-cat="Electrical"],
 .maintenance-category[data-cat="Electronics"] {
-    background: rgba(34, 197, 94, 0.15);
-    border: 1px solid rgba(34, 197, 94, 0.4);
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.3);
     color: #86efac;
 }
 
 /* 5. Safety / Emergency (Vibrant Amber/Orange Accent) */
 .maintenance-category[data-cat="Safety"] {
-    background: rgba(245, 158, 11, 0.15);
-    border: 1px solid rgba(245, 158, 11, 0.4);
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.3);
     color: #fde047;
+}
+
+
+
+/* ==========================================================================
+   MANUAL SPECIFICATIONS COMPACT LAYOUT (NIGHT MODE)
+   ========================================================================== */
+
+/* Structural Sections */
+.manual-section {
+    margin-bottom: 14px;
+    box-sizing: border-box;
+}
+
+.manual-section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted, #71717a);
+    margin: 0 0 6px 4px;
+}
+
+/* Rounded, unified outer parameters container card */
+.manual-card {
+    background: var(--card, #121214);
+    border: 1px solid var(--border, #26262b);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Compact Key-Value Rows */
+.manual-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border, #1a1a1e);
+    transition: background-color 0.1s ease;
+}
+
+/* Remove bottom line on the final parameter entry */
+.manual-row:last-child {
+    border-bottom: none;
+}
+
+.manual-row:hover {
+    background: var(--surface, #1a1a1e);
+}
+
+/* Left side alignment column */
+.manual-spec-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+/* Parameter Name Key */
+.manual-spec {
+    font-size: 0.825rem;
+    font-weight: 500;
+    color: var(--text-body, #e4e4e7);
+    line-height: 1.3;
+}
+
+/* Inline Muted Supporting Note Text */
+.manual-spec-notes {
+    font-size: 0.7rem;
+    color: var(--muted, #71717a);
+    line-height: 1.2;
+}
+
+/* Right side Tech Value Target */
+.manual-value {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent, #7dd3fc); /* High-contrast crisp accent output */
+    text-align: right;
+    white-space: nowrap;
+    background: rgba(14, 165, 233, 0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(14, 165, 233, 0.15);
+    line-height: 1.2;
+    align-self: center;
+}
+
+
+/* ==========================================================================
+   EFI COMPACT DIAGNOSTICS ARCHITECTURE (NIGHT MODE)
+   ========================================================================== */
+
+/* Outer Headers & Info Cards */
+.efi-header {
+    margin-bottom: 14px;
+}
+
+.efi-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    color: var(--text);
+}
+
+.efi-tip {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin: 10px 0 14px 0;
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: #1b2433;
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-left: 3px solid #3b82f6;
+    color: #d9e3f0;
+    font-size: 0.775rem;
+    line-height: 1.4;
+}
+
+/* Reference Card Grid */
+.efi-guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.efi-guide-card {
+    background: var(--card, #121214);
+    border: 1px solid var(--border, #26262b);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.efi-guide-card:hover {
+    border-color: var(--accent);
+    background: var(--surface);
+}
+
+.efi-guide-card img {
+    width: 54px;
+    height: 54px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    background: var(--surface);
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.efi-guide-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.efi-guide-card h3 {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.efi-guide-card p {
+    margin: 0;
+    font-size: 0.7rem;
+    color: var(--muted);
+    line-height: 1.3;
+}
+
+/* Diagnostic Items Grid layout */
+.efi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+}
+
+/* Component Symptom Cards */
+.efi-card {
+    background: var(--card, #121214);
+    border: 1px solid var(--border, #26262b);
+    border-radius: 6px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.efi-card:hover {
+    border-color: var(--accent);
+    background: var(--surface);
+}
+
+.efi-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.efi-card-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.efi-card h3 {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+}
+
+.efi-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.725rem;
+}
+
+.efi-card-bottom {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(36, 48, 65, 0.4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.efi-step-counter {
+    color: var(--muted);
+    font-size: 0.7rem;
+    font-family: ui-monospace, monospace;
+}
+
+/* Action Execution Buttons */
+.efi-btn {
+    border: none;
+    border-radius: 4px;
+    background: var(--accent, #0ea5e9);
+    color: #000000;
+    padding: 4px 10px;
+    font-size: 0.725rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: filter 0.1s ease;
+}
+
+.efi-btn:hover {
+    filter: brightness(1.1);
+}
+
+/* Micro Difficulty Tags */
+.efi-difficulty {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.efi-difficulty.success { background: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.2); color: #86efac; }
+.efi-difficulty.warning { background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.2); color: #fde047; }
+.efi-difficulty.danger  { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.2); color: #fca5a5; }
+
+
+/* Dedicated Secondary Media Viewer Components */
+#componentViewerZoom {
+    display: block;
+    width: 100%;
+    max-width: 340px;
+    margin: 12px auto 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px;
+    object-fit: contain;
+    cursor: zoom-in;
+    transition: transform 0.15s ease;
+}
+
+#componentViewerZoom:hover {
+    transform: scale(1.015);
+}
+
+/* Fullscreen Img Modal Lightbox */
+.image-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.94);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-modal.show { display: flex; }
+.image-modal-content {
+    position: relative;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#imageModalImg {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.image-close, .image-download {
+    position: absolute;
+    top: 10px;
+    border: none;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 6px 12px;
+    line-height: 1.2;
+}
+
+.image-close { right: 10px; background: #ef4444; color: #fff; }
+.image-download { left: 10px; background: #2563eb; color: #fff; }
+
+
+
+.search-results{
+
+display:grid;
+
+gap:14px;
+
+margin-top:20px;
+
+}
+
+.search-card{
+
+background:var(--card);
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+padding:16px;
+
+cursor:pointer;
+
+transition:.2s;
+
+}
+
+.search-card:hover{
+
+border-color:var(--accent);
+
+transform:translateY(-2px);
+
+}
+
+.search-section{
+
+display:inline-block;
+
+font-size:11px;
+
+font-weight:700;
+
+padding:4px 10px;
+
+border-radius:999px;
+
+background:rgba(77,163,255,.12);
+
+color:var(--accent);
+
+margin-bottom:10px;
+
+}
+
+.search-card h3{
+
+margin:0 0 8px;
+
+font-size:17px;
+
+color:var(--text);
+
+}
+
+.search-card p{
+
+margin:0;
+
+font-size:14px;
+
+color:var(--muted);
+
+line-height:1.6;
+
+}
+
+
+/* ==========================================================================
+   EFI TROUBLESHOOTING NAVIGATION
+   ========================================================================== */
+
+.efi-nav{
+    display:flex;
+    gap:12px;
+    margin-top:18px;
+}
+
+.efi-nav-btn{
+    flex:1;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    height:44px;
+
+    background:var(--card);
+    color:var(--text);
+
+    border:1px solid var(--border);
+    border-radius:10px;
+
+    font-size:.875rem;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:
+        background .18s ease,
+        border-color .18s ease,
+        color .18s ease,
+        transform .15s ease,
+        box-shadow .18s ease;
+}
+
+/* Hover */
+
+.efi-nav-btn:hover:not(:disabled){
+
+    background:var(--surface);
+    border-color:var(--accent);
+    color:var(--accent);
+
+    transform:translateY(-1px);
+
+    box-shadow:0 0 0 3px rgba(77,163,255,.12);
+
+}
+
+/* Press */
+
+.efi-nav-btn:active:not(:disabled){
+
+    transform:translateY(0);
+
+}
+
+/* Disabled */
+
+.efi-nav-btn:disabled{
+
+    opacity:.4;
+    cursor:not-allowed;
+
+    background:var(--surface);
+    color:var(--muted);
+    border-color:var(--border);
+
+    box-shadow:none;
+    transform:none;
+
 }

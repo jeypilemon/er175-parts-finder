@@ -253,10 +253,8 @@ function checkReady() {
 
 
         isLoading = false;
-
-        render();
-
-        renderChips();
+        switchTab("aftermarket");
+        
 
     }
 

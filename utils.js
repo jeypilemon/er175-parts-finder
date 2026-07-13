@@ -85,67 +85,38 @@ const suggestionMap = {
     clutchshoe: "clutch shoe"
 };
 
-
 function handleGlobalSearch(value){
 
     searchQuery = normalizeText(value);
 
+    renderSuggestion();
+
     if(currentTab === "manual"){
 
-        switch(currentManualSection){
+        if(searchQuery){
 
-            case "maintenance":
-                renderMaintenance();
-                break;
+            renderManualSearch();
 
-            case "dashboard":
-                renderDashboard();
-                break;
+        }else{
 
-            case "components":
-                renderManualComponents();
-                break;
-
-            case "efi":
-                renderEFI();
-                break;
-
-            case "wiring":
-                renderWiring();
-                break;
-
-            case "precautions":
-                renderPrecautions();
-                break;
-
-            case "mistakes":
-                renderMistakes();
-                break;
-
-            default:
-                renderManual();
-                break;
+            openManualSection(currentManualSection);
 
         }
 
         return;
+
     }
 
     if(
-        currentTab === "aftermarket" ||
-        currentTab === "oem"
+        currentTab === "troubleshoot" ||
+        currentTab === "diagnostics"
     ){
 
         render();
-
         return;
 
     }
 
-    if(currentTab === "troubleshoot"){
-
-        renderTroubleshoot();
-
-    }
+    render();
 
 }

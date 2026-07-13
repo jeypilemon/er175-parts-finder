@@ -40,10 +40,6 @@ function openManualSection(section){
             renderMaintenance();
             break;
 
-        case "efi":
-            renderEFI();
-            break;
-
         case "wiring":
             renderWiring();
             break;
@@ -61,31 +57,82 @@ function openManualSection(section){
 }
 
 function renderChips() {
+
     let cats = [];
 
     if (currentTab === "aftermarket") {
-        cats = [...new Set(aftermarketParts.map(p => p["Parts Category"]))];
-    } else if (currentTab === "oem") {
-        cats = [...new Set(oemParts.map(p => p["Parts Category"]))];
-    } else if (currentTab === "troubleshoot") {
-        cats = [...new Set(troubleshootData.flatMap(p => (p["Tags"] || "").split(",")))];
-    } else {
+
+        cats = [...new Set(
+            aftermarketParts.map(p => p["Parts Category"])
+        )];
+
+    }
+
+    else if (currentTab === "oem") {
+
+        cats = [...new Set(
+            oemParts.map(p => p["Parts Category"])
+        )];
+
+    }
+
+    else if (currentTab === "troubleshoot") {
+
+        cats = [...new Set(
+            troubleshootData.flatMap(p =>
+                (p["Tags"] || "").split(",")
+            )
+        )];
+
+    }
+
+    // Diagnostics doesn't use category chips
+    else if (currentTab === "diagnostics") {
+
         chips.innerHTML = "";
         return;
+
+    }
+
+    else {
+
+        chips.innerHTML = "";
+        return;
+
     }
 
     cats = ["All", ...cats.filter(Boolean)];
 
     chips.innerHTML = cats.map(c => `
-        <button class="${c === currentCategory ? "active" : ""}"
-        onclick="setCategory('${c}')">${c}</button>
-    `).join("");
 
+        <button
+            class="${c === currentCategory ? "active" : ""}"
+            onclick="setCategory('${c}')">
+
+            ${c}
+
+        </button>
+
+    `).join("");
 
     setTimeout(hintChipScroll,1500);
 
-
     updateChipArrow();
+
+}
+
+function renderTroubleshootTabs(){
+
+    container.innerHTML = `
+<div id="troubleshootContent"></div>
+`;
+
+    if(currentTroubleshootSection==="common"){
+
+        renderChips();
+
+    }
+
 }
 
 function renderManualChips(){
@@ -99,7 +146,6 @@ const sections = [
     ["components","ER Component Guide"],
     ["dashboard","Digital Panel"],
     ["maintenance","Maintenance Schedule"],
-    ["efi","EFI Diagnostics"],
     ["wiring","Wiring"],
     ["precautions","Precautions"],
     ["mistakes","Mistakes"]

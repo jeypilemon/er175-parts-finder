@@ -6,6 +6,7 @@ let searchQuery = "";
 let currentViewerComponent = null;
 let currentViewerIndex = 0;
 
+
 let currentViewerMode = "";
 let currentComponentIndex = 0;
 let currentDashboardIndex = 0;

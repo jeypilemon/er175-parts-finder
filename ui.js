@@ -32,6 +32,10 @@ function render() {
         return renderTroubleshoot();
     }
 
+    if (currentTab === "diagnostics") {
+        return renderDiagnostics();
+    }   
+
     const data = currentTab === "aftermarket"
         ? aftermarketParts
         : oemParts;
@@ -87,39 +91,97 @@ function render() {
     updateTabUI();
 }
 
-function renderTroubleshoot() {
+function renderTroubleshoot(){
+
+    renderTroubleshootCards();
+
+}
+
+
+function renderDiagnostics(){
+
+    container.innerHTML = `
+
+        <div id="diagnosticsContent"></div>
+
+    `;
+
+    renderEFI();
+
+}
+
+function renderTroubleshootCards() {
 
     const filtered = troubleshootData.filter(item => {
+
         const issue = normalizeText(item["Known Issue"]);
         const sol = normalizeText(item["Possible Solution"]);
-        const tags = (item["Tags"] || "").toLowerCase();
+        const tags = normalizeText(item["Tags"] || "");
 
         return (
-            (issue.includes(searchQuery) || sol.includes(searchQuery)) &&
-            (currentCategory === "All" || tags.includes(currentCategory.toLowerCase()))
+
+            (
+                issue.includes(searchQuery) ||
+                sol.includes(searchQuery) ||
+                tags.includes(searchQuery)
+            )
+
+            &&
+
+            (
+                currentCategory === "All" ||
+                tags.includes(currentCategory.toLowerCase())
+            )
+
         );
+
     });
 
     if (!filtered.length) {
-        container.innerHTML = `<div class="empty-state">No results found</div>`;
+
+        container.innerHTML = `
+            <div class="empty-state">
+                No results found
+            </div>
+        `;
+
         return;
+
     }
 
     container.innerHTML = filtered.map((item, i) => `
-        <div class="help-card">
-            <div class="help-header" onclick="toggleCard('card-${i}')">
-                ⚠️ ${item["Known Issue"]}
-            </div>
-            <div class="help-body" id="card-${i}">
-                <div class="help-solution">
-                 ${linkifySolution(item["Possible Solution"])}
-                </div>
-            </div>
+
+<div class="help-card">
+
+    <div
+        class="help-header"
+        onclick="toggleCard('card-${i}')">
+
+        ⚠️ ${item["Known Issue"]}
+
+    </div>
+
+    <div
+        class="help-body"
+        id="card-${i}">
+
+        <div class="help-solution">
+
+            ${linkifySolution(item["Possible Solution"])}
+
         </div>
-    `).join("");
+
+    </div>
+
+</div>
+
+`).join("");
 
     updateTabUI();
+
 }
+
+
 
 function renderManual() {
 
@@ -154,117 +216,85 @@ function renderManual() {
 }
 
 function renderManualSpecs() {
+    const content = document.getElementById("manualContent");
+    if (!content) return;
 
-    const filtered = manualData.filter(item => {
+    // 1. Safe normalization fallback check
+    const cleanSearch = typeof normalizeText === 'function' ? normalizeText(searchQuery || "") : (searchQuery || "").toLowerCase();
 
-    const searchText = normalizeText(
-    (item["Category"] || "") +
-" " +
-(item["Specification"] || "") +
-" " +
-(item["Value"] || "") +
-" " +
-(item["Notes"] || "")
-);
+    // 2. Data Filtering
+    const filtered = (window.manualData || manualData || []).filter(item => {
+        const cat = item["Category"] || "";
+        const spec = item["Specification"] || "";
+        const val = item["Value"] || "";
+        const notes = item["Notes"] || "";
+        
+        const searchText = typeof normalizeText === 'function' 
+            ? normalizeText(`${cat} ${spec} ${val} ${notes}`) 
+            : `${cat} ${spec} ${val} ${notes}`.toLowerCase();
 
-return searchText.includes(
-    normalizeText(searchQuery)
-);
+        return searchText.includes(cleanSearch);
     });
 
-
-    const grouped = {};
-
-    filtered.forEach(item => {
-
-        const category = item["Category"] || "Other";
-
-        if (!grouped[category]) {
-            grouped[category] = [];
-        }
-
-        grouped[category].push(item);
-
-    });
-
-
-    let html = "";
-
-
-    if(filtered.length === 0){
-
-        document.getElementById("manualContent").innerHTML = `
+    // 3. Clear empty state early if nothing matches
+    if (filtered.length === 0) {
+        content.innerHTML = `
         <div class="empty-state">
-        No manual information found
+            No manual information found matching "${searchQuery}".
         </div>
         `;
-
         return;
     }
 
-
-
-    Object.keys(grouped).forEach(category => {
-
-
-        html += `
-
-        <section class="manual-section">
-
-            <h3 class="manual-section-title">
-                ${category}
-            </h3>
-
-
-            <div class="manual-card">
-
-        `;
-
-
-        grouped[category].forEach(item=>{
-
-
-            html += `
-
-            <div class="manual-row">
-
-<div>
-    <div class="manual-spec">
-        ${safeHighlight(item["Specification"])}
-    </div>
-</div>
-
-
-<div class="manual-value">
-    ${safeHighlight(item["Value"])}
-</div>
-
-</div>
-
-            `;
-
-
-        });
-
-
-
-        html += `
-
-            </div>
-
-        </section>
-
-        `;
-
-
+    // 4. Group data by Category
+    const grouped = {};
+    filtered.forEach(item => {
+        const category = item["Category"] || "General Specifications";
+        if (!grouped[category]) {
+            grouped[category] = [];
+        }
+        grouped[category].push(item);
     });
 
+    // ==========================================
+    // 5. COMPACT SPECIFICATIONS RENDERER
+    // ==========================================
+    content.innerHTML = Object.keys(grouped).map(category => {
+        return `
+        <section class="manual-section">
+            <h3 class="manual-section-title">${category}</h3>
+            <div class="manual-card">
+                ${grouped[category].map(item => {
+                    const specText = item["Specification"] || "Parameter";
+                    const valText = item["Value"] || "—";
+                    const notesText = item["Notes"] || "";
 
+                    return `
+                    <div class="manual-row">
+                        <div class="manual-spec-col">
+                            <div class="manual-spec">
+                                ${typeof safeHighlight === 'function' ? safeHighlight(specText) : specText}
+                            </div>
+                            ${notesText ? `
+                            <div class="manual-spec-notes">
+                                ${typeof safeHighlight === 'function' ? safeHighlight(notesText) : notesText}
+                            </div>
+                            ` : ''}
+                        </div>
+                        <div class="manual-value">
+                            ${typeof safeHighlight === 'function' ? safeHighlight(valText) : valText}
+                        </div>
+                    </div>
+                    `;
+                }).join("")}
+            </div>
+        </section>
+        `;
+    }).join("");
 
-    document.getElementById("manualContent").innerHTML = html;
-
-    updateTabUI();
-
+    if (typeof updateTabUI === 'function') {
+        updateTabUI();
+    }
 }
 
 function updateSearchPlaceholder(){
@@ -323,11 +353,21 @@ function updateSearchPlaceholder(){
 
     if(currentTab === "troubleshoot"){
 
-        search.placeholder =
-        "Search issues (e.g. vibration, won't start)...";
+    search.placeholder =
+    "Search issues (e.g. vibration, won't start)...";
+
+    return;
 
     }
 
+    if(currentTab === "diagnostics"){
+
+    search.placeholder =
+    "Search EFI codes, sensors or diagnostics...";
+
+    return;
+
+    }
 }
 
 function toggleCard(id) {
@@ -338,12 +378,19 @@ function toggleCard(id) {
 }
 
 function updateTabUI() {
+
     document.querySelectorAll(".seg").forEach(btn => {
         btn.classList.remove("active");
     });
 
-    const activeBtn = document.querySelector(`[data-tab="${currentTab}"]`);
-    if (activeBtn) activeBtn.classList.add("active");
+    const activeBtn = document.querySelector(
+        `[data-tab="${currentTab}"]`
+    );
+
+    if (activeBtn) {
+        activeBtn.classList.add("active");
+    }
+
 }
 
 function switchTab(tab) {
@@ -351,27 +398,39 @@ function switchTab(tab) {
     currentTab = tab;
     currentCategory = "All";
 
+    searchQuery = "";
+
+    const search = document.getElementById("search");
+    if (search) {
+    search.value = "";
+    }
+
     container.classList.remove("manual-mode");
 
+    if (tab === "manual") {
 
-    if(tab === "manual"){
-
+        currentManualSection = "specs";
         renderManualChips();
 
-    }
-    else{
+    } else {
 
         renderChips();
 
     }
 
-
     render();
 
+    if (tab === "manual") {
+
+        openManualSection("specs");
+
+    }
+    
     updateSearchPlaceholder();
 
-    setTimeout(updateChipArrow,100);
-    
+    updateTabUI();
+
+    setTimeout(updateChipArrow, 100);
 
 }
 
@@ -387,10 +446,27 @@ function resetFilters() {
     manualSearch = "";
     currentCategory = "All";
 
-    document.getElementById("search").value = "";
+    const search = document.getElementById("search");
+
+    if (search) {
+        search.value = "";
+    }
+
+    if (currentTab === "manual") {
+
+        currentManualSection = "specs";
+
+        renderManualChips();
+
+        render();
+
+        openManualSection("specs");
+
+        return;
+    }
 
     renderChips();
+
     render();
 
 }
-
