@@ -13,6 +13,27 @@ let currentViewerMode = "";
 let currentComponentIndex = 0;
 let currentDashboardIndex = 0;
 
+let cvtData = [];
+
+let cvtUser = {
+
+    weight:80,
+
+    riding:"Daily"
+
+};
+
+
+let selectedCVT = {
+
+    roller:"14g",
+
+    center:"1500 RPM",
+
+    clutch:"1000 RPM"
+
+};
+
 let currentManualSection = "specs";
 
 let currentEFIProblem = null;

@@ -1,15 +1,10 @@
-/**
- * Motorstar ER175 Support Hub - Wiring Manual Logic
- * Driven dynamically via Spreadsheet data
- */
-
 function renderWiring() {
 
 
     const content = document.getElementById("manualContent") || document.getElementById("products");
     if (!content) return;
 
-    // Pull directly from the global window state we populated above
+
     const dataset = window.manualWiring;
 
     if (!dataset || !dataset.length) {
@@ -22,15 +17,13 @@ function renderWiring() {
     }
 
     const filtered = dataset.filter(item => {
-        // Match column names EXACTLY as they appear in your Google Sheet header row
+        
         const rawCode = (item["Wire Code"] || "").toString().trim().toLowerCase();
         
-        // Hide empty or explicitly unused rows
         if (!rawCode || rawCode === "" || rawCode === "-" || rawCode === "unused" || rawCode === "no code listed") {
             return false;
         }
 
-        // Apply active global text search strings across fields
         if (typeof searchQuery !== 'undefined' && searchQuery) {
             const system = (item["System"] || "");
             const color = (item["Wire Color"] || "");
@@ -65,7 +58,6 @@ function renderWiring() {
         const func = item["Component / Function"] || "No Description";
         const notes = item["Notes"] || "";
 
-        // Hex Code translation engine for clean UI generation
         const colorHex = {
             'Black': '#1a1a1a', 'White': '#f0f0f0', 'Red': '#ff4d4d', 
             'Yellow': '#ffcc00', 'Green': '#2ecc71', 'Brown': '#8b5a2b', 

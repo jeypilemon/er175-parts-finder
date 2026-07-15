@@ -247,6 +247,36 @@ function loadManualSearchIndex(url){
 
 }
 
+function loadCVT(url){
+
+    Papa.parse(url,{
+
+        download:true,
+
+        header:true,
+
+        complete:res=>{
+
+            cvtData =
+            res.data.filter(
+                r=>r.ID
+            );
+
+
+            console.log(
+                "CVT Loaded:",
+                cvtData.length
+            );
+
+
+        }
+
+    });
+
+}
+
+
+
 function checkReady() {
 
 

@@ -35,7 +35,24 @@ function render() {
 
     if (currentTab === "diagnostics") {
         return renderDiagnostics();
-    }   
+    }
+    
+    if(currentTab==="cvt"){
+
+    if(cvtData.length === 0){
+
+        loadCVT();
+
+    }
+    else{
+
+        renderCVT();
+
+    }
+
+    return;
+
+}
 
     const data = currentTab === "aftermarket"
         ? aftermarketParts

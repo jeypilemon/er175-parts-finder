@@ -25,6 +25,9 @@ window.openEFIDiagnosis = openEFIDiagnosis;
 window.nextEFIStep = nextEFIStep;
 window.previousEFIStep = previousEFIStep;
 
+window.previousComponent = previousComponent;
+window.openNextComponent = openNextComponent;
+
 window.addEventListener("resize",()=>{
 
 updateChipArrow();

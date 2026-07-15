@@ -84,15 +84,19 @@
         </button>
 
         <button class="seg" data-tab="troubleshoot" onclick="switchTab('troubleshoot')">
-            Repair Guides
+            Repair Guide
         </button>
 
         <button class="seg" data-tab="diagnostics" onclick="switchTab('diagnostics')">
             Diagnostics
         </button>
 
+        <button class="seg" data-tab="cvt" onclick="switchTab('cvt')">
+            CVT Tuner
+        </button>
+
         <button class="seg" data-tab="aftermarket" onclick="switchTab('aftermarket')">
-            Parts
+            Aftermarket Parts
         </button>
 
         <button class="seg" data-tab="oem" onclick="switchTab('oem')">
@@ -127,6 +131,7 @@
 
     <!-- MAIN CONTENT -->
     <div id="products"></div>
+    
 
     <!-- SEARCH SUGGESTIONS -->
     <div id="suggestions"></div>
@@ -243,7 +248,9 @@ class="component-viewer-zoom">
 <script src="manual/wiring.js"></script>
 <script src="manual/precautions.js"></script>
 <script src="manual/mistakes.js"></script>
-
+<script src="cvt_engine.js"></script>
+<script src="cvt_compare.js"></script>
+<script src="cvt.js"></script>
 
 <!-- MAIN -->
 <script src="app.js"></script>
