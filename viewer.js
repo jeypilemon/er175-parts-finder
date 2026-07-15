@@ -65,3 +65,142 @@ function closeComponentViewer(){
     currentViewerMode = "";
 
 }
+
+function previousComponent(){
+
+
+    if(!manualComponents || manualComponents.length === 0)
+        return;
+
+
+
+    currentViewerIndex--;
+
+
+
+    if(currentViewerIndex < 0){
+
+        currentViewerIndex =
+        manualComponents.length - 1;
+
+    }
+
+
+
+    openComponentViewer(
+        manualComponents[currentViewerIndex]["ID"]
+    );
+
+
+}
+
+
+
+
+
+function openNextComponent(){
+
+
+    if(!manualComponents || manualComponents.length === 0)
+        return;
+
+
+
+    currentViewerIndex++;
+
+
+
+    if(currentViewerIndex >= manualComponents.length){
+
+        currentViewerIndex = 0;
+
+    }
+
+
+
+    openComponentViewer(
+        manualComponents[currentViewerIndex]["ID"]
+    );
+
+
+}
+
+
+function openComponentViewer(id){
+
+    console.log("Opening component:", id);
+
+
+    const item = manualComponents.find(
+        x => x["ID"] == id
+    );
+
+
+    if(!item){
+
+        console.log("Component missing:", id);
+        return;
+
+    }
+
+
+    currentViewerComponent = item;
+
+
+    currentViewerIndex =
+    manualComponents.findIndex(
+        x => x["ID"] == id
+    );
+
+
+
+    const modal =
+    document.getElementById("componentModal");
+
+
+    const title =
+    document.getElementById("componentViewerTitle");
+
+
+    const location =
+    document.getElementById("componentViewerLocation");
+
+
+    const notes =
+    document.getElementById("componentViewerNotes");
+
+
+
+    if(title){
+
+        title.innerHTML =
+        item["Component"] || "";
+
+    }
+
+
+    if(location){
+
+        location.innerHTML =
+        item["Location"] || "";
+
+    }
+
+
+    if(notes){
+
+        notes.innerHTML =
+        item["Access / Notes"] || "";
+
+    }
+
+
+
+    if(modal){
+
+        modal.classList.add("show");
+
+    }
+
+
+}

@@ -243,77 +243,44 @@ title="${item["Component"]}"
 
 }
 
-
 function selectComponent(id){
 
+selectedComponentID = id;
 
-selectedComponentID=id;
-
-
-
-const item =
-manualComponents.find(
-x=>x.ID==id
+const item = manualComponents.find(
+x => x.ID == id
 );
 
-
-
 if(!item) return;
-
 
 
 const info =
 document.getElementById("componentInfo");
 
 
-
 info.innerHTML = `
 
-
-<h3>
-${item["Component"]}
-</h3>
-
+<h3>${item["Component"]}</h3>
 
 <span class="component-category-label">
-
 ${item["Category"]}
-
 </span>
 
-
-
 <p>
-
 <b>Location:</b><br>
-
 ${item["Location"]}
-
 </p>
-
 
 
 <p>
-
 <b>Access / Notes:</b><br>
-
 ${item["Access / Notes"]}
-
 </p>
-
 
 `;
 
-document
-.getElementById("componentInfo")
-.scrollIntoView({
-behavior:"smooth",
-block:"center"
-});
-
 
 renderComponentMarkers();
-
 
 }
 
@@ -345,5 +312,86 @@ function searchComponent(value){
 componentSearch=value;
 
 renderComponentMarkers();
+
+}
+
+
+let currentTroubleshootIndex = 0;
+
+
+function openTroubleshootModal(index){
+
+    currentTroubleshootIndex = index;
+
+    const item =
+    troubleshootData[index];
+
+
+    document.getElementById(
+        "componentViewerTitle"
+    ).innerHTML =
+    item["Known Issue"];
+
+
+    document.getElementById(
+        "componentViewerLocation"
+    ).innerHTML =
+    "Troubleshooting";
+
+
+    document.getElementById(
+        "componentViewerNotes"
+    ).innerHTML =
+    linkifySolution(
+        item["Possible Solution"]
+    );
+
+
+    document
+    .getElementById("componentModal")
+    .classList.add("show");
+
+}
+
+function nextTroubleshoot(){
+
+
+    currentTroubleshootIndex++;
+
+
+    if(currentTroubleshootIndex >= troubleshootData.length){
+
+        currentTroubleshootIndex = 0;
+
+    }
+
+
+    openTroubleshootModal(
+        currentTroubleshootIndex
+    );
+
+}
+
+
+
+
+function previousTroubleshoot(){
+
+
+    currentTroubleshootIndex--;
+
+
+    if(currentTroubleshootIndex < 0){
+
+        currentTroubleshootIndex =
+        troubleshootData.length - 1;
+
+    }
+
+
+    openTroubleshootModal(
+        currentTroubleshootIndex
+    );
+
 
 }

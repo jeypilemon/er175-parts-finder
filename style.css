@@ -692,28 +692,11 @@ input#search:focus {
 .saas-right a {
     font-size: 10px;
     padding: 6px 8px;
+    margin-left: 2px;
     border-radius: 8px;
     text-decoration: none;
     color: white;
-    background: rgba(237, 0, 0, 0.674);
-}
-
-.saas-right b{
-    font-size: 10px;
-    padding: 6px 8px;
-    border-radius: 8px;
-    text-decoration: none;
-    color: rgb(255, 255, 255);
-    background: rgba(0, 0, 0, 0.674);
-}
-
-.saas-right c{
-    font-size: 10px;
-    padding: 6px 8px;
-    border-radius: 8px;
-    text-decoration: none;
-    color: white;
-    background: rgba(0, 128, 255, 0.674);
+    background: rgba(182, 0, 0, 0.674);
 }
 
 .saas-right a:hover, b:hover, c:hover {
@@ -1153,26 +1136,6 @@ border-radius:15px;
 
 }
 
-
-.viewer-marker{
-
-    position:absolute;
-
-    width:25px;
-    height:25px;
-
-    border-radius:50%;
-
-    background:#ff6a00;
-
-    border:3px solid white;
-
-    transform:translate(-50%,-50%);
-
-    z-index:5;
-
-}
-
 .component-view-image{
 
     
@@ -1193,203 +1156,6 @@ border-radius:15px;
     transition:transform .5s ease;
 
     transform-origin:center;
-
-}
-
-
-
-.viewer-marker{
-
-    position:absolute;
-
-    width:28px;
-
-    height:28px;
-
-    background:#ff6a00;
-
-    border:3px solid white;
-
-    border-radius:50%;
-
-    transform:translate(-50%,-50%);
-
-    z-index:10;
-
-    display:none;
-
-    box-shadow:0 0 10px rgba(0,0,0,.5);
-
-}
-
-
-.viewer-marker{
-
-    animation:none;
-
-}
-
-
-.viewer-marker.active{
-
-    animation:pulseMarker 1s infinite;
-
-}
-
-
-
-@keyframes pulseMarker{
-
-    0%{
-        box-shadow:0 0 0 0 rgba(255,106,0,.8);
-    }
-
-
-    70%{
-        box-shadow:0 0 0 15px rgba(255,106,0,0);
-    }
-
-
-    100%{
-        box-shadow:0 0 0 0 rgba(255,106,0,0);
-    }
-
-}
-
-@keyframes pulseMarkerChip{
-
-    0%{
-        box-shadow:0 0 0 0 #4da3ff;
-    }
-
-
-    70%{
-        box-shadow:0 0 0 15px rgba(255,106,0,0);
-    }
-
-
-    100%{
-        box-shadow:0 0 0 0 rgba(255,106,0,0);
-    }
-
-}
-
-
-.viewer-controls{
-
-display:flex;
-
-justify-content:center;
-
-gap:10px;
-
-margin-bottom:12px;
-
-}
-
-
-.viewer-controls button{
-
-border:none;
-
-background:var(--surface);
-
-color:white;
-
-padding:8px 14px;
-
-border-radius:8px;
-
-cursor:pointer;
-
-}
-
-
-
-.viewer-stage{
-
-    
-margin-bottom:12px;
-border-radius:10px;
-position:relative;
-
-overflow:hidden;
-
-}
-
-
-
-.viewer-stage img{
-
-width:100%;
-
-display:block;
-
-transition:
-transform .5s ease;
-
-}
-
-
-
-.viewer-marker{
-
-position:absolute;
-
-width:28px;
-
-height:28px;
-
-border-radius:50%;
-
-background:#ff6a00;
-
-border:3px solid white;
-
-transform:translate(-50%,-50%);
-
-z-index:10;
-
-animation:pulseMarker 1.5s infinite;
-
-}
-
-
-
-@keyframes pulseMarker{
-
-0%{
-
-box-shadow:
-0 0 0 0 rgba(255,106,0,.7);
-
-}
-
-
-70%{
-
-box-shadow:
-0 0 0 15px rgba(255,106,0,0);
-
-}
-
-
-100%{
-
-box-shadow:
-0 0 0 0 rgba(255,106,0,0);
-
-}
-
-}
-
-.manual-note{
-
-    margin-top:6px;
-
-    font-size:12px;
-
-    color:#777;
 
 }
 
@@ -2565,13 +2331,12 @@ opacity:.65;
 .maintenance-interval-badge {
     font-size: 0.65rem;
     font-weight: 700;
-    color: var(--muted);
+    color: var(--text);
     white-space: nowrap;
     background: var(--bg);
     border: 1px solid var(--border);
     padding: 2px 6px;
     border-radius: 4px;
-    font-family: ui-monospace, SFMono-Regular, monospace;
 }
 
 /* Card Body Typography */
@@ -2624,7 +2389,7 @@ opacity:.65;
 .maintenance-category {
     display: inline-flex;
     align-items: center;
-    font-family: ui-monospace, SFMono-Regular, monospace;
+
     font-size: 0.65rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -2646,6 +2411,15 @@ opacity:.65;
 }
 
 /* 2. Engine Maintenance (Pastel Cyber Pink Accent) */
+.maintenance-category[data-cat="Air System"],
+.maintenance-category[data-cat="Engine"] {
+
+background: rgba(207, 87, 1, 0.1);
+    border: 1px solid rgba(161, 161, 170, 0.25);
+    color: #f1743a;
+}
+
+/* 2. Engine Maintenance (Pastel Cyber Pink Accent) */
 .maintenance-category[data-cat="Engine Maintenance"],
 .maintenance-category[data-cat="Engine"] {
     background: rgba(244, 63, 94, 0.12);
@@ -2661,8 +2435,18 @@ opacity:.65;
     color: #7dd3fc;
 }
 
+
 /* 4. Electrical / Electronics (Matrix Emerald Green Accent) */
-.maintenance-category[data-cat="Electrical"],
+.maintenance-category[data-cat="CVT Maintenance"],
+.maintenance-category[data-cat="Electronics"] {
+    background: rgba(28, 227, 181, 0.12);
+    border: 1px solid rgba(189, 197, 34, 0.3);
+    color: #2fecd6;
+}
+
+
+/* 4. Electrical / Electronics (Matrix Emerald Green Accent) */
+.maintenance-category[data-cat="Electrical System"],
 .maintenance-category[data-cat="Electronics"] {
     background: rgba(34, 197, 94, 0.12);
     border: 1px solid rgba(34, 197, 94, 0.3);
@@ -3095,84 +2879,6 @@ line-height:1.6;
 
 }
 
-
-/* ==========================================================================
-   EFI TROUBLESHOOTING NAVIGATION
-   ========================================================================== */
-
-.efi-nav{
-    display:flex;
-    gap:12px;
-    margin-top:18px;
-}
-
-.efi-nav-btn{
-    flex:1;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    height:44px;
-
-    background:var(--card);
-    color:var(--text);
-
-    border:1px solid var(--border);
-    border-radius:10px;
-
-    font-size:.875rem;
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:
-        background .18s ease,
-        border-color .18s ease,
-        color .18s ease,
-        transform .15s ease,
-        box-shadow .18s ease;
-}
-
-/* Hover */
-
-.efi-nav-btn:hover:not(:disabled){
-
-    background:var(--surface);
-    border-color:var(--accent);
-    color:var(--accent);
-
-    transform:translateY(-1px);
-
-    box-shadow:0 0 0 3px rgba(77,163,255,.12);
-
-}
-
-/* Press */
-
-.efi-nav-btn:active:not(:disabled){
-
-    transform:translateY(0);
-
-}
-
-/* Disabled */
-
-.efi-nav-btn:disabled{
-
-    opacity:.4;
-    cursor:not-allowed;
-
-    background:var(--surface);
-    color:var(--muted);
-    border-color:var(--border);
-
-    box-shadow:none;
-    transform:none;
-
-}
-
-/*back to top button*/
 /* =====================================
    BACK TO TOP BUTTON
 ===================================== */
@@ -3508,59 +3214,6 @@ line-height:1.6;
 
 
 
-#componentMarkers{
-
-    position:absolute;
-
-    inset:0;
-
-}
-
-
-
-
-.component-marker{
-
-
-position:absolute;
-
-
-transform:translate(-50%,-50%);
-
-
-width:18px;
-
-height:18px;
-
-
-border-radius:50%;
-
-
-background:var(--accent);
-
-
-border:3px solid white;
-
-
-cursor:pointer;
-
-
-transition:.15s;
-
-
-}
-
-
-.component-marker:hover,
-.component-marker.active{
-
-
-scale:1.3;
-
-box-shadow:0 0 15px var(--accent);
-
-
-}
 
 
 
@@ -3753,4 +3406,304 @@ box-shadow:
 
     cursor:pointer;
 
+}
+
+
+/* =========================
+   TROUBLESHOOT CARDS
+========================= */
+
+
+.troubleshoot-card {
+
+    background:
+    rgba(255,255,255,0.05);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    border-radius:18px;
+
+    margin-bottom:16px;
+
+    overflow:hidden;
+
+    backdrop-filter:blur(10px);
+
+    transition:.25s ease;
+
+}
+
+
+.troubleshoot-card:hover{
+
+    transform:translateY(-2px);
+
+    border-color:
+    rgba(255,255,255,.3);
+
+}
+
+
+
+
+.troubleshoot-top {
+
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:18px;
+
+    cursor:pointer;
+
+}
+
+.trouble-title-area{
+
+    flex:1;
+
+}
+
+
+.trouble-title-area h3{
+
+
+    margin:0;
+
+    font-size:16px;
+
+    line-height:1.4;
+
+}
+
+
+
+.trouble-tag{
+
+
+    display:inline-block;
+
+    margin-top:8px;
+
+    padding:4px 10px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    background:
+    rgba(0,140,255,.15);
+
+    color:#7ec8ff;
+
+}
+
+
+
+.trouble-arrow{
+
+
+    font-size:18px;
+
+    transition:.3s;
+
+}
+
+
+
+
+/* BODY */
+
+
+.troubleshoot-content{
+
+
+    max-height:0;
+
+    overflow:hidden;
+
+    transition:
+    max-height .35s ease,
+    padding .35s ease;
+
+
+    padding:0 18px;
+
+
+}
+
+
+
+.troubleshoot-content.active{
+
+
+    max-height:500px;
+
+    padding:
+    0 18px 18px;
+
+
+}
+
+
+
+
+
+.solution-box{
+
+
+    background:
+    rgba(40, 40, 40, 0.25);
+
+
+    border-radius:14px;
+
+
+    padding:16px;
+
+
+}
+
+
+
+.solution-title{
+
+
+    font-weight:700;
+
+    margin-bottom:10px;
+
+
+}
+
+
+
+.solution-text{
+
+
+    line-height:1.6;
+
+    font-size:14px;
+
+}
+
+
+
+
+
+
+.component-info-panel {
+    background: var(--card);
+    /* Softened the border and added a premium ambient shadow for depth */
+    border: 1px solid rgba(255, 255, 255, 0.03); 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 12px; /* Marginally increased for a friendlier, modern radius */
+    padding: 20px; /* More breathing room */
+}
+
+.component-info-panel h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: var(--text); /* Modern UX keeps headers readable; accent is used for highlights */
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.component-category-label {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--muted);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: .65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em; /* Cleaner tracking for all-caps text */
+}
+
+.component-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertically centered elements look cleaner */
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.component-search input {
+    background: rgba(255, 255, 255, 0.03); /* Slightly darker/transparent fill looks premium */
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 14px; /* Enhanced touch target */
+    border-radius: 8px;
+    width: 240px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+/* Crucial Modern UX Detail: Active interactive state */
+.component-search input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--card);
+    box-shadow: 0 0 0 3px rgba(77, 163, 255, 0.15); 
+}
+
+.component-side-switch {
+    display: flex;
+    background: rgba(0, 0, 0, 0.2); /* Creates a cohesive segmented control track */
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.component-side-switch button {
+    background: transparent; /* Seamless blending inside the track */
+    border: none;
+    color: var(--muted);
+    padding: 6px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.component-side-switch button:hover {
+    color: var(--text);
+}
+
+.component-side-switch button.active {
+    background: var(--accent);
+    color: #000;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(77, 163, 255, 0.3); /* Gives the active switch elevation */
+}
+
+.component-marker {
+    animation: none;
+    transition: transform 0.2s ease;
+}
+
+/* Smoother, modern pulsing ring animation */
+.component-marker.active {
+    animation: pulseMarker 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulseMarker {
+    0% {
+        box-shadow: 0 0 0 0 rgba(77, 163, 255, 0.7);
+        transform: scale(0.98);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(77, 163, 255, 0);
+        transform: scale(1);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(77, 163, 255, 0);
+        transform: scale(0.98);
+    }
 }

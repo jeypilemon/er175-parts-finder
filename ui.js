@@ -130,19 +130,28 @@ function renderTroubleshootCards() {
             &&
 
             (
-                currentCategory === "All" ||
-                tags.includes(currentCategory.toLowerCase())
+                (
+ currentCategory === "All" ||
+ item["Tags"]
+    .toLowerCase()
+    .split(",")
+    .map(t=>t.trim())
+    .includes(
+        currentCategory.toLowerCase().trim()
+    )
+)
             )
 
         );
 
     });
 
+
     if (!filtered.length) {
 
         container.innerHTML = `
             <div class="empty-state">
-                No results found
+                🔎 No troubleshooting guide found
             </div>
         `;
 
@@ -150,35 +159,114 @@ function renderTroubleshootCards() {
 
     }
 
-    container.innerHTML = filtered.map((item, i) => `
 
-<div class="help-card">
 
-    <div
-        class="help-header"
-        onclick="toggleCard('card-${i}')">
+    container.innerHTML = filtered.map((item,i)=>{
 
-        ⚠️ ${item["Known Issue"]}
 
-    </div>
+        const id = `trouble-${i}`;
 
-    <div
-        class="help-body"
-        id="card-${i}">
 
-        <div class="help-solution">
+        return `
 
-            ${linkifySolution(item["Possible Solution"])}
+<div class="troubleshoot-card">
+
+
+    <div class="troubleshoot-top"
+        onclick="toggleCard('${id}')">
+
+        <div class="trouble-title-area">
+
+
+            <h3>
+                ${item["Known Issue"]}
+            </h3>
+
+
+            <span class="trouble-tag">
+
+                ${item["Tags"] || "General"}
+
+            </span>
+
 
         </div>
 
+
+        <div class="trouble-arrow">
+            ▼
+        </div>
+
+
     </div>
+
+
+
+    <div 
+    class="troubleshoot-content"
+    id="${id}">
+
+
+        <div class="solution-box">
+
+
+            <div class="solution-title">
+
+                🔧 Possible Solution
+
+            </div>
+
+
+            <div class="solution-text">
+
+                ${linkifySolution(
+                    item["Possible Solution"]
+                )}
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
 
 </div>
 
-`).join("");
+
+`;
+
+    }).join("");
+
 
     updateTabUI();
+
+}
+
+function copyTroubleshoot(index){
+
+    const item = troubleshootData[index];
+
+
+    const text = 
+`
+Problem:
+${item["Known Issue"]}
+
+
+Possible Solution:
+${item["Possible Solution"]}
+
+
+Motorstar ER175 Support Hub
+`;
+
+
+    navigator.clipboard.writeText(text);
+
+
+    alert("Guide copied!");
 
 }
 
@@ -371,11 +459,18 @@ function updateSearchPlaceholder(){
     }
 }
 
-function toggleCard(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
+function toggleCard(id){
 
-    el.classList.toggle("open");
+    const card =
+    document.getElementById(id);
+
+
+    if(!card) return;
+
+
+    card.classList.toggle("active");
+
+
 }
 
 function updateTabUI() {
