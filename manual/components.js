@@ -1,3 +1,8 @@
+let selectedComponentID = null;
+let activeComponentCategory = "All";
+let activeComponentSide = "Left";
+let componentSearch = "";
+
 function renderManualComponents(){
 
 const content = document.getElementById("manualContent");
@@ -17,100 +22,328 @@ if(!manualComponents || manualComponents.length === 0){
 
 
 
-const grouped = manualComponents.reduce((groups,item)=>{
-
-    const category = item["Category"] || "Other";
-
-    if(!groups[category]){
-        groups[category] = [];
-    }
-
-    groups[category].push(item);
-
-    return groups;
-
-},{});
+const categories = [
+    "All",
+    ...new Set(
+        manualComponents.map(
+            x=>x["Category"]
+        )
+    )
+];
 
 
 
 content.innerHTML = `
 
 
-<div class="component-preview">
+<div class="component-guide">
 
-    <div class="component-preview-title">
-        ER175 Component Location Guide
-    </div>
 
-    <div class="component-preview-image">
+<div class="component-toolbar">
 
-        <img src="assets/images/er175-sideview-left.png">
 
-    </div>
+<div class="component-search">
 
-    <p>
-        Select a component below to view location and access information.
-    </p>
+<input 
+placeholder="Search component..."
+value="${componentSearch}"
+oninput="searchComponent(this.value)"
+>
 
 </div>
 
 
 
-<div class="component-grid">
+<div class="component-side-switch">
 
 
-${Object.entries(grouped)
-.map(([category,items])=>`
+<button 
+class="${activeComponentSide==="Left"?"active":""}"
+onclick="changeComponentSide('Left')">
+
+Left
+
+</button>
 
 
-<section class="component-section">
+<button 
+class="${activeComponentSide==="Right"?"active":""}"
+onclick="changeComponentSide('Right')">
+
+Right
+
+</button>
 
 
-<h3 class="component-category-title">
-${category}
-</h3>
+</div>
 
 
-<div class="component-cards">
+</div>
 
 
-${items.map(item=>`
 
 
-<div 
-class="component-card"
-onclick="openComponentViewer('${item["ID"]}')"
+
+<div class="component-filters">
+
+
+${categories.map(cat=>`
+
+<button
+
+class="${cat===activeComponentCategory?"active":""}"
+
+onclick="filterComponentCategory('${cat}')">
+
+${cat}
+
+</button>
+
+
+`).join("")}
+
+
+</div>
+
+
+
+
+
+<div class="component-bike-area">
+
+
+<div class="bike-image-wrapper">
+
+
+<img 
+id="componentBikeImage"
+src="assets/images/er175-sideview-${activeComponentSide.toLowerCase()}.png"
+class="bike-image"
 >
 
 
-<h4>
-${item["Component"]}
-</h4>
 
-
-<span>
-${item["Location"]}
-</span>
+<div id="componentMarkers"></div>
 
 
 </div>
 
 
-`).join("")}
-
-
 </div>
 
 
-</section>
 
 
-`).join("")}
+<div id="componentInfo"
+class="component-info-panel">
+
+
+Select a component marker.
+
+
+</div>
 
 
 </div>
 
 
 `;
+
+
+
+renderComponentMarkers();
+
+}
+
+
+function renderComponentMarkers(){
+
+
+const container =
+document.getElementById("componentMarkers");
+
+
+if(!container) return;
+
+
+
+let data =
+manualComponents.filter(item=>{
+
+
+let categoryMatch =
+activeComponentCategory==="All" ||
+item["Category"]===activeComponentCategory;
+
+
+
+let sideMatch =
+(item["Image Side"]||"").toLowerCase()
+===
+activeComponentSide.toLowerCase();
+
+
+
+let searchMatch =
+(
+item["Component"]+
+item["Category"]+
+item["Location"]
+)
+.toLowerCase()
+.includes(
+componentSearch.toLowerCase()
+);
+
+
+
+return categoryMatch &&
+sideMatch &&
+searchMatch;
+
+
+});
+
+
+
+
+container.innerHTML = data.map(item=>`
+
+
+<button
+
+class="
+component-marker
+${selectedComponentID==item.ID?"active":""}
+"
+
+
+style="
+
+left:${item["X Position"]}%;
+
+top:${item["Y Position"]}%;
+
+"
+
+
+onclick="selectComponent('${item.ID}')"
+
+
+title="${item["Component"]}"
+
+>
+
+</button>
+
+
+`).join("");
+
+
+
+}
+
+
+function selectComponent(id){
+
+
+selectedComponentID=id;
+
+
+
+const item =
+manualComponents.find(
+x=>x.ID==id
+);
+
+
+
+if(!item) return;
+
+
+
+const info =
+document.getElementById("componentInfo");
+
+
+
+info.innerHTML = `
+
+
+<h3>
+${item["Component"]}
+</h3>
+
+
+<span class="component-category-label">
+
+${item["Category"]}
+
+</span>
+
+
+
+<p>
+
+<b>Location:</b><br>
+
+${item["Location"]}
+
+</p>
+
+
+
+<p>
+
+<b>Access / Notes:</b><br>
+
+${item["Access / Notes"]}
+
+</p>
+
+
+`;
+
+document
+.getElementById("componentInfo")
+.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
+
+renderComponentMarkers();
+
+
+}
+
+
+function filterComponentCategory(category){
+
+
+activeComponentCategory = category;
+
+
+renderManualComponents();
+
+
+}
+
+
+function changeComponentSide(side){
+
+activeComponentSide = side;
+
+renderManualComponents();
+
+}
+
+
+
+function searchComponent(value){
+
+componentSearch=value;
+
+renderComponentMarkers();
 
 }

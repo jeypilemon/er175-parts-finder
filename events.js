@@ -16,9 +16,6 @@ document.getElementById("chips").addEventListener("pointerdown",()=>{
 window.closeModal = closeModal;
 window.openModal = openModal;
 
-window.openComponentViewer = openComponentViewer;
-window.closeComponentViewer = closeComponentViewer;
-
 window.openManualSection = openManualSection;
 window.switchTab = switchTab;
 window.setCategory = setCategory;
@@ -27,9 +24,6 @@ window.resetFilters = resetFilters;
 window.openEFIDiagnosis = openEFIDiagnosis;
 window.nextEFIStep = nextEFIStep;
 window.previousEFIStep = previousEFIStep;
-
-window.previousComponent = previousComponent;
-window.openNextComponent = openNextComponent;
 
 window.addEventListener("resize",()=>{
 

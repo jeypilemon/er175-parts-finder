@@ -147,60 +147,60 @@
         </div>
 
     </div>
+<!-- UNIVERSAL VIEWER MODAL -->
 
-    <!-- COMPONENT VIEWER -->
-    <div id="componentModal" class="component-modal">
+<div id="componentModal" class="component-modal">
 
-        <div class="component-modal-box">
+<div class="component-modal-box"
+onclick="event.stopPropagation()">
 
-            <button class="component-close" onclick="closeComponentViewer()">
-                ×
-            </button>
+<button class="component-close"
+onclick="closeComponentViewer()">
+×
+</button>
 
-            <div class="component-view-image">
 
-                <div class="viewer-stage">
+<div class="component-info">
 
-                    <img id="componentViewerImage">
+<h3 id="componentViewerTitle"></h3>
 
-                    <div id="componentViewerMarker"
-                        class="viewer-marker">
-                    </div>
 
-                </div>
+<img 
+id="componentViewerZoom"
+class="component-viewer-zoom">
 
-            </div>
+
+<p id="componentViewerLocation"></p>
+
+
+<p id="componentViewerNotes"></p>
+
+
+
+<!-- NAVIGATION -->
 <div class="viewer-controls">
 
-    <button
-        id="viewerPrev"
-        onclick="previousComponent()">
-        ← Previous Part
-    </button>
+<button id="viewerPrev"
+onclick="previousComponent()">
+← Previous
+</button>
 
-    <button
-        id="viewerNext"
-        onclick="openNextComponent()">
-        Next Part →
-    </button>
+<button id="viewerNext"
+onclick="openNextComponent()">
+Next →
+</button>
 
 </div>
-            <div class="component-info">
 
-                <h3 id="componentViewerTitle"></h3>
 
-                <img id="componentViewerZoom"
-                    class="component-viewer-zoom">
+</div>
 
-                <p id="componentViewerLocation"></p>
 
-                <p id="componentViewerNotes"></p>
+</div>
 
-            </div>
+</div>
 
-        </div>
-
-    </div>
+</div>
 
     <!-- FOOTER -->
     <footer class="footer">

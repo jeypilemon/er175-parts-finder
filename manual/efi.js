@@ -131,10 +131,7 @@ function renderEFIModal() {
 
     const zoomImg = (activeProblem["Zoom Image"] || "").trim();
     const image = document.getElementById("componentViewerImage");
-    const marker = document.getElementById("componentViewerMarker");
     const zoom = document.getElementById("componentViewerZoom");
-
-    if (marker) marker.style.display = "none";
 
     if (zoomImg) {
         if (image) image.style.display = "none";
@@ -194,89 +191,6 @@ function openEFIDiagnosis(id){
     currentEFIStepIndex = 0;
 
     renderEFIModal();
-
-}
-
-function renderEFIModal(){
-
-    currentViewerMode = "efi";
-    setViewerMode("efi");
-
-    const modal = document.getElementById("componentModal");
-
-    document.getElementById("componentViewerTitle").innerHTML =
-        currentEFIProblem["Error / Symptom"];
-
-    document.getElementById("componentViewerLocation").innerHTML =
-        currentEFIProblem["Component / System"];
-
-    document.getElementById("componentViewerNotes").innerHTML = `
-
-<div class="efi-progress">
-
-Step ${currentEFIStepIndex+1}
-of
-${currentEFISteps.length}
-
-</div>
-
-<div class="efi-step-box">
-
-${currentEFISteps[currentEFIStepIndex]}
-
-</div>
-
-<div class="efi-nav">
-
-<button
-onclick="previousEFIStep()"
-${currentEFIStepIndex==0?"disabled":""}>
-
-◀ Previous
-
-</button>
-
-<button
-onclick="nextEFIStep()"
-${currentEFIStepIndex==currentEFISteps.length-1?"disabled":""}>
-
-Next ▶
-
-</button>
-
-</div>
-
-`;
-const zoomImg = currentEFIProblem["Zoom Image"]?.trim();
-
-const image = document.getElementById("componentViewerImage");
-const marker = document.getElementById("componentViewerMarker");
-const zoom = document.getElementById("componentViewerZoom");
-
-// Hide marker (EFI doesn't use map markers)
-marker.style.display = "none";
-
-if (zoomImg) {
-
-    image.style.display = "none";
-
-    zoom.src = zoomImg;
-    zoom.style.display = "block";
-
-    zoom.onclick = () => {
-        window.open(zoomImg, "_blank");
-    };
-
-} else {
-
-    zoom.src = "";
-    zoom.style.display = "none";
-
-    image.style.display = "none";
-
-}
-
-    modal.classList.add("show");
 
 }
 

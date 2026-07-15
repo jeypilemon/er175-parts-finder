@@ -59,6 +59,7 @@ onclick="openDashboardInfo('${item["ID"]}')">
 
 
 </div>
+</div>
 
 `;
 
@@ -66,134 +67,148 @@ onclick="openDashboardInfo('${item["ID"]}')">
 
 function openDashboardInfo(id){
 
-currentViewerMode = "dashboard";
+    currentViewerMode = "dashboard";
 
-
-const item =
-manualDashboard.find(
-    x => x["ID"] == id
-);
-
-
-if(!item){
-    console.log("Missing dashboard item:", id);
-    return;
-}
-
-
-currentDashboardIndex =
-manualDashboard.findIndex(
-    x => x["ID"] == id
-);
-
-
-
-const modal =
-document.getElementById("componentModal");
-
-
-const image =
-document.getElementById("componentViewerImage");
-
-
-const zoomImage =
-document.getElementById("componentViewerZoom");
-
-
-const marker =
-document.getElementById("componentViewerMarker");
-
-
-const title =
-document.getElementById("componentViewerTitle");
-
-
-const location =
-document.getElementById("componentViewerLocation");
-
-
-const notes =
-document.getElementById("componentViewerNotes");
-
-
-// HIDE COMPONENT IMAGE
-
-if(image){
-
-    image.src="";
-    image.style.display="none";
-
-}
-
-
-// HIDE COMPONENT MARKER
-
-if(marker){
-
-    marker.style.display="none";
-
-}
-
-
-// TITLE
-
-if(title){
-
-    title.innerHTML =
-    item["Component"] || "";
-
-}
-
-
-// MEANING
-
-if(location){
-
-    location.innerHTML =
-    item["Meaning"] || "";
-
-}
-
-
-// NOTES
-
-if(notes){
-
-    notes.innerHTML =
-    item["Notes"] || "";
-
-}
-
-
-// DASHBOARD ZOOM IMAGE
-
-if(zoomImage){
-
-    if(item["Zoom Image"]){
-
-        zoomImage.src =
-        item["Zoom Image"];
-
-        zoomImage.style.display="block";
-
+    if(typeof setViewerMode === "function"){
+        setViewerMode("dashboard");
     }
-    else{
 
-        zoomImage.src="";
-        zoomImage.style.display="none";
+
+    const item = manualDashboard.find(
+        x => x["ID"] == id
+    );
+
+
+    if(!item){
+
+        console.log(
+            "Missing dashboard item:",
+            id
+        );
+
+        return;
+    }
+
+
+
+    const modal =
+    document.getElementById("componentModal");
+
+
+    const image =
+    document.getElementById("componentViewerImage");
+
+
+    const zoomImage =
+    document.getElementById("componentViewerZoom");
+
+
+    const marker =
+    document.getElementById("componentViewerMarker");
+
+
+    const title =
+    document.getElementById("componentViewerTitle");
+
+
+    const location =
+    document.getElementById("componentViewerLocation");
+
+
+    const notes =
+    document.getElementById("componentViewerNotes");
+
+
+
+    // hide component image
+
+    if(image){
+
+        image.src="";
+        image.style.display="none";
 
     }
 
-}
 
 
-// OPEN MODAL
+    // hide marker
 
-if(modal){
+    if(marker){
 
-    modal.classList.add("show");
+        marker.style.display="none";
 
-}
+    }
 
+
+
+    // title
+
+    if(title){
+
+        title.innerHTML =
+        item["Component"] || "";
+
+    }
+
+
+
+    // description
+
+    if(location){
+
+        location.innerHTML =
+        item["Meaning"] || "";
+
+    }
+
+
+
+    // notes
+
+    if(notes){
+
+        notes.innerHTML =
+        item["Notes"] || "";
+
+    }
+
+
+
+    // zoom image
+
+    if(zoomImage){
+
+        if(item["Zoom Image"]){
+
+            zoomImage.src =
+            item["Zoom Image"];
+
+            zoomImage.style.display="block";
+
+        }
+        else{
+
+            zoomImage.src="";
+            zoomImage.style.display="none";
+
+        }
+
+    }
+
+
+
+    // open modal
+
+    if(modal){
+
+        console.log("Opening dashboard modal");
+
+        modal.classList.add("show");
+
+        console.log(
+            modal.className
+        );
+
+    }
 
 }
