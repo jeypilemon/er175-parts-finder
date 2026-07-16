@@ -2991,6 +2991,233 @@ line-height:1.6;
 }
 
 
+/* =====================================
+   ER175 COMPONENT GUIDE
+===================================== */
+
+
+.component-preview {
+
+    background:#111827;
+    border:1px solid #263244;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+    margin-bottom:24px;
+
+}
+
+
+.component-preview-title{
+
+    font-size:1.2rem;
+    font-weight:700;
+    color:white;
+    margin-bottom:15px;
+
+}
+
+
+.component-preview-image img{
+
+    max-width:500px;
+    width:100%;
+    height:auto;
+
+}
+
+
+
+.component-preview p{
+
+    color:#94a3b8;
+    font-size:.85rem;
+
+}
+
+
+
+
+.component-section{
+
+    margin-bottom:25px;
+
+}
+
+
+
+.component-category-title{
+
+    color:#94a3b8;
+    font-size:.8rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    margin-bottom:12px;
+
+}
+
+
+
+.component-cards{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fill,minmax(230px,1fr));
+
+    gap:12px;
+
+}
+
+
+
+.component-card{
+
+    background:#121a26;
+
+    border:1px solid #263244;
+
+    border-radius:10px;
+
+    padding:14px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+
+
+.component-card:hover{
+
+    border-color:var(--accent);
+
+    transform:translateY(-2px);
+
+}
+
+
+
+.component-card h4{
+
+    margin:0 0 8px;
+
+    color:#f8fafc;
+
+    font-size:.95rem;
+
+}
+
+
+
+.component-card span{
+
+    color:#94a3b8;
+
+    font-size:.75rem;
+
+}
+
+/* =====================================
+   COMPONENT GUIDE
+===================================== */
+
+
+.component-guide{
+
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+
+}
+
+
+
+.component-filters{
+
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+
+}
+
+
+
+.component-filters button{
+
+
+    background:var(--card);
+    border:1px solid var(--border);
+
+    color:var(--text);
+
+    padding:6px 14px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:.75rem;
+
+}
+
+
+
+.component-filters button.active{
+
+    background:var(--accent);
+
+    color:#000;
+
+    border-color:var(--accent);
+
+}
+
+.component-filters button:hover {
+
+    background: rgba(var(--accent-rgb), 0.30);
+
+}
+
+
+
+
+.component-bike-area{
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:15px;
+
+}
+
+
+
+.bike-image-wrapper{
+
+    position:relative;
+
+    max-width:700px;
+
+    margin:auto;
+
+}
+
+
+
+.bike-image{
+
+    width:100%;
+
+    display:block;
+
+}
+
+
 /* =========================
    TROUBLESHOOT CARDS
 ========================= */
@@ -3172,6 +3399,137 @@ line-height:1.6;
 
 }
 
+
+
+
+
+
+.component-info-panel {
+    background: var(--card);
+    /* Softened the border and added a premium ambient shadow for depth */
+    border: 1px solid rgba(255, 255, 255, 0.03); 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 12px; /* Marginally increased for a friendlier, modern radius */
+    padding: 20px; /* More breathing room */
+}
+
+.component-info-panel h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: var(--text); /* Modern UX keeps headers readable; accent is used for highlights */
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.component-category-label {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--muted);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: .65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em; /* Cleaner tracking for all-caps text */
+}
+
+.component-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertically centered elements look cleaner */
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.component-search input {
+    background: rgba(255, 255, 255, 0.03); /* Slightly darker/transparent fill looks premium */
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 14px; /* Enhanced touch target */
+    border-radius: 8px;
+    width: 240px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+/* Crucial Modern UX Detail: Active interactive state */
+.component-search input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--card);
+    box-shadow: 0 0 0 3px rgba(77, 163, 255, 0.15); 
+}
+
+.component-side-switch {
+    display: flex;
+    background: rgba(0, 0, 0, 0.2); /* Creates a cohesive segmented control track */
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.component-side-switch button {
+    background: transparent; /* Seamless blending inside the track */
+    border: none;
+    color: var(--muted);
+    padding: 6px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+}
+
+.component-side-switch button:hover {
+    color: var(--text);
+}
+
+.component-side-switch button.active {
+    background: var(--accent);
+    color: #000;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(77, 163, 255, 0.3); /* Gives the active switch elevation */
+}
+
+.component-marker {
+    animation: none;
+    transition: transform 0.2s ease;
+}
+
+/* Smoother, modern pulsing ring animation */
+.component-marker.active {
+    animation: pulseMarker 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulseMarker {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 212, 38, 0.7);
+        transform: scale(0.98);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(77, 163, 255, 0);
+        transform: scale(1);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(77, 163, 255, 0);
+        transform: scale(0.98);
+    }
+}
+
+:root {
+  --bg-panel: #1e1e24;
+  --bg-card: #2a2b36;
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  --accent-rgb: 0, 100, 200;
+  --success: #2ed573;
+  --border-color: #3f4050;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --font-stack: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
 
 
 :root {

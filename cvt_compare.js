@@ -156,7 +156,7 @@ function renderCVTCompare(result){
 
         <div class="cvt-notes">
 
-        <strong>📝Notes: </strong>
+        <strong>🔧Setup Notes: </strong>
         <p>
         ${result.notes || "No additional notes available.:"}
         </p>
