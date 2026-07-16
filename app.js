@@ -1,3 +1,14 @@
+window.addEventListener(
+"unhandledrejection",
+function(event){
+
+console.error(
+"Unhandled Error:",
+event.reason
+);
+
+});
+
 renderSkeleton();
 
 loadAftermarket("https://docs.google.com/spreadsheets/d/e/2PACX-1vQuOxI5JH-mWFfHd2VecpdsOXdT6UsnqDaedyEjofuMK3qofOnLJkK4tPPiX0qJqg5Wp9G0PaXSTysz/pub?gid=0&single=true&output=csv");

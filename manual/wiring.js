@@ -48,7 +48,7 @@ function renderWiring() {
 
     content.innerHTML = `
     <div class="manual-tip">
-        💡 Tap any wire card to quickly identify the circuit.
+        💡 Wire Code that are found in the manual, Double check for safety.
     </div>
     <div class="wiring-grid">
     ${filtered.map(item => {

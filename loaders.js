@@ -6,7 +6,14 @@ function loadAftermarket(url) {
             aftermarketParts = res.data.filter(p => p["Parts Name"]);
             loaded.aftermarket = true;
             checkReady();
-        }
+        },
+
+        error(error){
+        console.error(error);
+        showError(
+          "Unable to load database. Please check your connection."
+        );
+    }
     });
 }
 
@@ -18,7 +25,14 @@ function loadOEM(url) {
             oemParts = res.data.filter(p => p["Parts Name"]);
             loaded.oem = true;
             checkReady();
-        }
+        },
+
+        error(error){
+        console.error(error);
+        showError(
+          "Unable to load database. Please check your connection."
+        );
+    }
     });
 }
 
@@ -30,7 +44,14 @@ function loadTroubleshoot(url) {
             troubleshootData = res.data.filter(p => p["Known Issue"]);
             loaded.troubleshoot = true;
             checkReady();
-        }
+        },
+        
+        error(error){
+        console.error(error);
+        showError(
+          "Unable to load database. Please check your connection."
+        );
+    }
     });
 }
 
@@ -44,7 +65,14 @@ function loadManual(url) {
             manualData = res.data.filter(x => x["Category"]);
             loaded.manual = true;
             checkReady();
-        }
+        },
+        
+        error(error){
+        console.error(error);
+        showError(
+          "Unable to load database. Please check your connection."
+        );
+    }
     });
 }
 
@@ -71,7 +99,14 @@ function loadManualComponents(url) {
 
     checkReady();
 
-}
+    },
+
+        error(error){
+        console.error(error);
+        showError(
+          "Unable to load database. Please check your connection."
+        );
+    }
 
     });
 
@@ -96,7 +131,14 @@ function loadManualDashboard(url){
                 manualDashboard.length
             );
 
-        }
+        },
+
+        error(error){
+        console.error(error);
+        showError(
+          "Unable to load database. Please check your connection."
+        );
+    }
 
     });
 
@@ -124,7 +166,14 @@ function loadManualMaintenance(url){
             );
 
 
-        }
+        },
+
+        error(error){
+        console.error(error);
+        showError(
+          "Unable to load database. Please check your connection."
+        );
+    }
 
     });
 
@@ -142,7 +191,14 @@ function loadEFI(url) {
                 "EFI loaded:",
                 efiData.length
             );
-        }
+        },
+
+        error(error){
+        console.error(error);
+        showError(
+          "Unable to load database. Please check your connection."
+        );
+    }
     });
 }
 
@@ -169,7 +225,14 @@ function loadWiring(url) {
 
             checkReady();
 
-        }
+        },
+
+        error(error){
+        console.error(error);
+        showError(
+          "Unable to load database. Please check your connection."
+        );
+    }
 
     });
 
@@ -193,7 +256,14 @@ function loadPrecautions(url){
                 manualPrecautions.length
             );
 
-        }
+        },
+
+           error(error){
+        console.error(error);
+        showError(
+          "Unable to load database. Please check your connection."
+        );
+    }
 
     });
 
@@ -217,7 +287,14 @@ function loadMistakes(url){
                 manualMistakes.length
             );
 
-        }
+        },
+
+           error(error){
+        console.error(error);
+        showError(
+          "Unable to load database. Please check your connection."
+        );
+    }
 
     });
 
@@ -241,7 +318,14 @@ function loadManualSearchIndex(url){
                 manualSearchIndex.length
             );
 
-        }
+        },
+
+           error(error){
+        console.error(error);
+        showError(
+          "Unable to load database. Please check your connection."
+        );
+    }
 
     });
 
@@ -269,7 +353,14 @@ function loadCVT(url){
             );
 
 
-        }
+        },
+
+           error(error){
+        console.error(error);
+        showError(
+          "Unable to load database. Please check your connection."
+        );
+    }
 
     });
 
@@ -305,4 +396,22 @@ function checkReady() {
 
     }
 
+}
+
+
+
+function showError(message) {
+    const container = document.getElementById("app");
+
+    if (container) {
+        container.innerHTML = `
+            <div class="error-card">
+                <h3>⚠️ Something went wrong</h3>
+                <p>${message}</p>
+                <button onclick="location.reload()">
+                    Reload Page
+                </button>
+            </div>
+        `;
+    }
 }
