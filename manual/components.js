@@ -38,21 +38,7 @@ content.innerHTML = `
 
 <div class="component-guide">
 
-
 <div class="component-toolbar">
-
-
-<div class="component-search">
-
-<input 
-placeholder="Search component..."
-value="${componentSearch}"
-oninput="searchComponent(this.value)"
->
-
-</div>
-
-
 
 <div class="component-side-switch">
 
@@ -79,35 +65,6 @@ Right
 
 
 </div>
-
-
-
-
-
-<div class="component-filters">
-
-
-${categories.map(cat=>`
-
-<button
-
-class="${cat===activeComponentCategory?"active":""}"
-
-onclick="filterComponentCategory('${cat}')">
-
-${cat}
-
-</button>
-
-
-`).join("")}
-
-
-</div>
-
-
-
-
 
 <div class="component-bike-area">
 
