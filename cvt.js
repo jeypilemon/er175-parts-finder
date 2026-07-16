@@ -164,20 +164,16 @@ function updateCVT(){
         tags.innerHTML = `
             <span>🔧CVT Setup for  ${result.type}</span>
             <span>${getStressIcon(result.stress)} ${result.stress}</span>
+            <span>🏍️Estimated Top-Speed ${result.topSpeed}</span>
             <span>📈${result.rpm}</span>
             <span>${getLaunchIcon(result.launch)} ${result.launch}</span>
             <span>🏋️Best for ${result.weight}</span>
         `;
     }
 
-    // COMPARE & ADDITIONAL INFO
-    let compareDiv = document.getElementById("cvtCompare");
-    if(compareDiv) {
-        compareDiv.innerHTML = `
-            <strong>Character:</strong> ${result.character || 'Balanced setup'} <br/>
-            <strong>Best For:</strong> ${result.riding || 'Daily Commute'}
-        `;
-    }
+    // COMPARE AGAINST STOCK
+    renderCVTCompare(result);
+    
 }
 
 function getStressIcon(value){
@@ -192,12 +188,12 @@ function getStressIcon(value){
 
 function getLaunchIcon(value){
     value = value || "";
-    if(value.includes("Smooth")) return "😎Launch Feel";
-    if(value.includes("Strong")) return "💪Launch Feel";
-    if(value.includes("Very Aggressive")) return "👹";
-    if(value.includes("Aggressive")) return "😡Launch Feel";
-    if(value.includes("Snappy")) return "🫰Launch Feel";
-    if(value.includes("Quick")) return "👌Launch Feel";
-    if(value.includes("Normal")) return "💚Launch Feel";
+    if(value.includes("Smooth")) return "😎Launch Feel - ";
+    if(value.includes("Strong")) return "💪Launch Feel - ";
+    if(value.includes("Very Aggressive")) return "👹 Launch Feel - ";
+    if(value.includes("Aggressive")) return "😡Launch Feel - ";
+    if(value.includes("Snappy")) return "🫰Launch Feel - ";
+    if(value.includes("Quick")) return "👌Launch Feel - ";
+    if(value.includes("Normal")) return "💚Launch Feel - ";
     return "🚀 Launch Feel: ";
 }

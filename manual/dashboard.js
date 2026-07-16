@@ -79,18 +79,6 @@ function openDashboardInfo(id){
     );
 
 
-    if(!item){
-
-        console.log(
-            "Missing dashboard item:",
-            id
-        );
-
-        return;
-    }
-
-
-
     const modal =
     document.getElementById("componentModal");
 
@@ -201,13 +189,7 @@ function openDashboardInfo(id){
 
     if(modal){
 
-        console.log("Opening dashboard modal");
-
         modal.classList.add("show");
-
-        console.log(
-            modal.className
-        );
 
     }
 

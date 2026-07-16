@@ -1,8 +1,3 @@
-// ======================================
-// ER175A CVT COMPARISON SYSTEM
-// ======================================
-
-
 // STOCK REFERENCE
 
 const stockCVT = {
@@ -38,9 +33,6 @@ const stockCVT = {
 };
 
 
-
-
-
 // ======================================
 // COMPARE CURRENT VS STOCK
 // ======================================
@@ -73,110 +65,106 @@ function compareCVT(current){
 
 }
 
-
-
-
-
-
 // ======================================
 // RENDER COMPARISON CARD
 // ======================================
 
-
 function renderCVTCompare(result){
 
-
-    let box =
-    document.getElementById(
-        "cvtCompare"
-    );
-
+    let box = document.getElementById("cvtCompare");
 
     if(!box)
-    return;
+        return;
 
 
-
-    let compare =
-    compareCVT(result);
-
-
+    let compare = compareCVT(result);
 
 
     box.innerHTML = `
 
-
-    <h3>
-    ⚖️ Compared To Stock ER175A
-    </h3>
-
-
-    <p class="compare-sub">
-
-    Stock:
-    14g Roller |
-    1500 RPM Center |
-    1000 RPM Clutch
-
-    </p>
+        <h3>
+        🔧 vs Stock ER175A
+        </h3>
 
 
+        <p class="compare-sub">
+        Stock: ${stockCVT.roller} Roller |
+        ${stockCVT.center} Center |
+        ${stockCVT.clutch} Clutch
+        </p>
 
-    <div class="compare-grid">
+
+        <div class="compare-grid">
 
 
-        ${createCompareCard(
-            "🏍️",
-            "Acceleration",
-            stockCVT.accel,
-            result.accel,
-            compare.accelDiff
-        )}
+            ${createCompareCard(
+                "🏍️",
+                "Acceleration",
+                stockCVT.accel,
+                result.accel,
+                compare.accelDiff
+            )}
 
 
 
-        ${createCompareCard(
-            "🔝",
-            "Top Speed",
-            stockCVT.speed,
-            result.speed,
-            compare.speedDiff
-        )}
+            ${createCompareCard(
+                "🔝",
+                "Top Speed",
+                stockCVT.speed,
+                result.speed,
+                compare.speedDiff
+            )}
 
 
 
-        ${createCompareCard(
-            "⛽",
-            "Fuel Economy",
-            stockCVT.fuel,
-            result.fuel,
-            compare.fuelDiff
-        )}
+            ${createCompareCard(
+                "⛽",
+                "Fuel Economy",
+                stockCVT.fuel,
+                result.fuel,
+                compare.fuelDiff
+            )}
 
 
 
-        ${createCompareCard(
-            "⛰️",
-            "Uphill",
-            stockCVT.uphill,
-            result.uphill,
-            compare.uphillDiff
-        )}
+            ${createCompareCard(
+                "⛰️",
+                "Uphill",
+                stockCVT.uphill,
+                result.uphill,
+                compare.uphillDiff
+            )}
 
 
 
-    </div>
+
+        </div>
+
+        
+        <div class="cvt-character">
+
+        <strong>🎯 Character:</strong>
+        ${result.character || "Balanced setup"}
+
+        <br>
+
+        <strong>🏍️ Best For:</strong>
+        ${result.riding || "Daily Commute"}
+
+        </div>
 
 
+        <div class="cvt-notes">
 
+        <strong>📝Notes: </strong>
+        <p>
+        ${result.notes || "No additional notes available.:"}
+        </p>
+
+        </div>
     `;
 
-
 }
-
-
-
-
 
 // ======================================
 // COMPARISON CARD
@@ -267,6 +255,8 @@ function createCompareCard(
 
 
         </div>
+
+        
 
 
 

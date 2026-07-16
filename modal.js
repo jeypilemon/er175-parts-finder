@@ -8,14 +8,14 @@ function openModal(url) {
 
     // YouTube → in-app
     if (ytId) {
-        frame.src = `https://www.youtube.com/embed/${ytId}?autoplay=1`;
+        frame.src = `https://www.youtube.com/embed/${ytId}?rel=0`;
         modal.classList.add("show");
         return;
     }
 
     // TikTok → force app intent (best effort)
     if (url.includes("tiktok.com")) {
-        window.location.href = url; // mobile opens app if installed
+        window.location.href = url; 
         return;
     }
 
@@ -46,8 +46,11 @@ function closeModal() {
     const modal = document.getElementById("linkModal");
     const frame = document.getElementById("modalFrame");
 
-    frame.src = "";
     modal.classList.remove("show");
+
+    setTimeout(() => {
+        frame.src = "";
+    }, 300);
 }
 
 function getYouTubeId(url) {
@@ -87,7 +90,10 @@ function linkifySolution(text) {
 
             return `
                 <div style="margin:6px 0;">
-                    <a class="${className}" href="javascript:void(0)" onclick="openModal('${href}')">
+                    <a 
+                    class="${className}" 
+                    href="javascript:void(0)" 
+                    onclick='openModal(${JSON.stringify(href)})'">
                         ${label}
                     </a>
                 </div>

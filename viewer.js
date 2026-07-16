@@ -1,24 +1,38 @@
 function openImageModal(image){
 
     const modal = document.getElementById("imageModal");
-
     const img = document.getElementById("imageModalImg");
-
     const download = document.getElementById("imageDownload");
+
+    if(!modal || !img) return;
+
+    img.onerror = () => {
+        img.src = "assets/images/image-error.png";
+    };
 
     img.src = image;
 
-    download.href = image;
+    if(download){
+        download.href = image;
+    }
 
     modal.classList.add("show");
 
 }
 
+
 function closeImageModal(){
 
-    document
-        .getElementById("imageModal")
-        .classList.remove("show");
+    const modal = document.getElementById("imageModal");
+    const img = document.getElementById("imageModalImg");
+
+    if(modal){
+        modal.classList.remove("show");
+    }
+
+    if(img){
+        img.src = "";
+    }
 
 }
 
@@ -128,21 +142,14 @@ function openNextComponent(){
 
 function openComponentViewer(id){
 
-    console.log("Opening component:", id);
-
-
     const item = manualComponents.find(
-        x => x["ID"] == id
+    x => x["ID"] == id
     );
 
-
     if(!item){
-
-        console.log("Component missing:", id);
-        return;
-
+    console.error("Component not found:", id);
+    return;
     }
-
 
     currentViewerComponent = item;
 

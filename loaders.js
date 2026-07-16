@@ -125,12 +125,6 @@ function loadManualDashboard(url){
                 x=>x["Component"]
             );
 
-
-            console.log(
-                "Dashboard loaded:",
-                manualDashboard.length
-            );
-
         },
 
         error(error){
@@ -159,13 +153,6 @@ function loadManualMaintenance(url){
                 x => x["Item"]
             );
 
-
-            console.log(
-                "Maintenance loaded:",
-                manualMaintenance.length
-            );
-
-
         },
 
         error(error){
@@ -186,11 +173,7 @@ function loadEFI(url) {
         complete: res => {
 
             efiData = res.data.filter(r => r.ID);
-            
-            console.log(
-                "EFI loaded:",
-                efiData.length
-            );
+           
         },
 
         error(error){
@@ -214,11 +197,6 @@ function loadWiring(url) {
 
             window.manualWiring = res.data.filter(r => r.ID);
 
-
-            console.log(
-                "Wiring loaded:",
-                window.manualWiring.length
-            );
 
 
             loaded.wiring = true;
@@ -251,10 +229,6 @@ function loadPrecautions(url){
             manualPrecautions =
                 res.data.filter(r=>r.ID);
 
-            console.log(
-                "Precautions loaded:",
-                manualPrecautions.length
-            );
 
         },
 
@@ -282,11 +256,6 @@ function loadMistakes(url){
             manualMistakes =
                 res.data.filter(r=>r.ID);
 
-            console.log(
-                "Mistakes loaded:",
-                manualMistakes.length
-            );
-
         },
 
            error(error){
@@ -312,11 +281,6 @@ function loadManualSearchIndex(url){
 
             manualSearchIndex =
                 res.data.filter(r=>r.ID);
-
-            console.log(
-                "Manual Search Index loaded:",
-                manualSearchIndex.length
-            );
 
         },
 
@@ -345,13 +309,6 @@ function loadCVT(url){
             res.data.filter(
                 r=>r.ID
             );
-
-
-            console.log(
-                "CVT Loaded:",
-                cvtData.length
-            );
-
 
         },
 
