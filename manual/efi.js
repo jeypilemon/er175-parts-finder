@@ -125,7 +125,7 @@ return `
 
 
 <span>
-🩺 ${steps.length} Diagnostic Steps
+🗒️ ${steps.length} Diagnostic Steps
 </span>
 
 
