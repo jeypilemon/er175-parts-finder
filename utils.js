@@ -74,8 +74,10 @@ function getAllSearchTerms(){
 
             fields = [
 
-                item["Parts Name"],
-                item["Parts Category"]
+    item["Parts Name"],
+    item["Parts Category"],
+    item["Brand"],
+    item["Compatibility"],
 
             ];
 
@@ -171,60 +173,21 @@ function levenshtein(a,b){
 
 function findAutoSuggestion(query){
 
-
     const q = normalizeText(query);
 
-
-    const terms = getAllSearchTerms().map(x=>({
-    raw:x,
-    normalized:normalizeText(x)
-    }));
+    const terms = getAllSearchTerms();
 
 
-    // 1. Partial phrase match first
+    for(let term of terms){
 
-    let partial =
-terms.find(item =>
-    item.normalized.includes(q)
-);
+        const clean = normalizeText(term);
 
 
-if(partial){
+        if(clean.includes(q)){
 
-    return partial.raw;
+            return term;
 
-}
-
-
-
-    // 2. fuzzy typo correction
-
-    let best="";
-    let score=99;
-
-
-    terms.forEach(item=>{
-
-
-    const distance =
-    levenshtein(q,item.normalized);
-
-
-    if(distance < score){
-
-        score=distance;
-        best=item.raw;
-
-    }
-
-
-});
-
-
-
-    if(score <= 2){
-
-        return best;
+        }
 
     }
 
@@ -243,15 +206,19 @@ function getSuggestion(query) {
 
 function renderSuggestion(){
 
+   
+
     const suggestionBox =
     document.getElementById("suggestions");
+
+  
 
 
     if(!suggestionBox)
         return;
 
 
-    if(searchQuery.length < 3){
+    if(searchQuery.length < 2){
 
         suggestionBox.innerHTML="";
         return;
@@ -267,11 +234,10 @@ function renderSuggestion(){
 
     if(!suggestion){
 
-        suggestion =
-        findAutoSuggestion(searchQuery);
+    suggestion =
+    findAutoSuggestion(searchQuery);
 
-    }
-
+}
 
 
     if(!suggestion){

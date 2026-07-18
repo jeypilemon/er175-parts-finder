@@ -66,9 +66,6 @@ function renderChips() {
     let cats = [];
 
 
-    console.log("CURRENT TAB:", currentTab);
-
-
 
     if(currentTab === "aftermarket"){
 
@@ -97,9 +94,6 @@ function renderChips() {
     }
 
 
-    console.log("RAW CATEGORIES:", cats);
-
-
 
     cats = [
         ...new Set(
@@ -109,10 +103,6 @@ function renderChips() {
         )
     ]
     .sort((a,b)=>a.localeCompare(b));
-
-
-
-    console.log("SORTED CATEGORIES:", cats);
 
 
 

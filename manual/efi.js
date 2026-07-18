@@ -1,4 +1,4 @@
-console.log("EFI.JS LOADED");
+
 
 function renderEFI(){
 
@@ -14,14 +14,6 @@ return;
 
 const dataset =
 window.efiData || [];
-
-
-
-console.log(
-"RENDER EFI DATA:",
-dataset
-);
-
 
 
 if(!dataset.length){
@@ -364,7 +356,6 @@ function parseTroubleshootingSteps(text){
 
 window.openEFIDiagnosis = function(id){
 
-    console.log("OPEN EFI:", id);
 
 
     window.currentEFIProblem =

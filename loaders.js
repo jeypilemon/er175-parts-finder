@@ -177,27 +177,12 @@ function loadEFI(url) {
         complete: res => {
 
 
-            console.log("RAW EFI CSV:", res.data);
-
-
             efiData = res.data.filter(
                 r => r.ID
             );
 
 
             window.efiData = efiData;
-
-
-            console.log(
-                "EFI LOADED:",
-                efiData.length
-            );
-
-
-            console.log(
-                "EFI HEADERS:",
-                Object.keys(efiData[0] || {})
-            );
 
 
             loaded.efi = true;
