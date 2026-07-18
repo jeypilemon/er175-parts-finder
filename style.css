@@ -2896,94 +2896,6 @@ line-height:1.6;
 
 }
 
-/* =====================================
-   BACK TO TOP BUTTON
-===================================== */
-
-#backToTop {
-
-    position: fixed;
-
-    right: 20px;
-    bottom: 20px;
-
-    width: 42px;
-    height: 42px;
-
-    border-radius: 50%;
-
-    border: 1px solid var(--border);
-
-    background: var(--card);
-
-    color: var(--text);
-
-    font-size: 20px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transform:translateY(20px);
-
-    transition:
-        opacity .25s ease,
-        transform .25s ease,
-        background .2s ease;
-
-    box-shadow:
-        0 6px 18px rgba(0,0,0,.35);
-
-    z-index:999;
-}
-
-
-#backToTop:hover {
-
-    background:var(--accent);
-
-    color:#000;
-
-}
-
-
-#backToTop.show {
-
-    opacity:1;
-
-    pointer-events:auto;
-
-    transform:translateY(0);
-
-}
-
-
-/* mobile */
-
-@media(max-width:600px){
-
-    #backToTop{
-
-        right:15px;
-
-        bottom:15px;
-
-        width:38px;
-
-        height:38px;
-
-    }
-
-}
-
 /* ==========================================
    COMPONENT VIEWER IMAGE STAGE
    ========================================== */
@@ -5073,37 +4985,6 @@ font-size:26px;
 }
 
 
-/* Mobile */
-
-@media(max-width:600px){
-
-
-.legal-container{
-
-    padding:22px;
-
-    border-radius:15px;
-
-}
-
-
-.legal-header h1{
-
-    font-size:25px;
-
-}
-
-
-.legal-section h2{
-
-    font-size:18px;
-
-}
-
-
-}
-
-
 .search-box{
     position:relative;
     width:100%;
@@ -5173,6 +5054,7 @@ input#search{
         transform .2s,
         box-shadow .25s;
 
+
 }
 
 .footer-links a:hover{
@@ -5232,5 +5114,80 @@ input#search{
     color:#c7d2da;
 
     text-decoration:underline;
+
+}
+
+#backToTop{
+
+    position:fixed;
+
+    right:20px;
+
+    bottom:20px;
+
+    width:48px;
+    height:48px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#1e293b;
+
+    color:#fff;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transform:translateY(20px);
+
+    transition:.25s;
+
+    z-index:999999;
+
+}
+
+#backToTop.show{
+
+    opacity:1;
+
+    visibility:visible;
+
+    transform:translateY(0);
+
+}
+
+#backToTop:hover{
+
+    background:#2563eb;
+
+}
+
+@media(max-width:768px){
+
+    #backToTop{
+
+        right:16px;
+        bottom:16px;
+
+        width:44px;
+        height:44px;
+
+        font-size:18px;
+
+    }
 
 }
