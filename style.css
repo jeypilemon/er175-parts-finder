@@ -4635,12 +4635,7 @@ margin:50px auto;
 
 padding:45px;
 
-background:
-linear-gradient(
-145deg,
-rgba(255,255,255,.08),
-rgba(255,255,255,.03)
-);
+background: var(--bg);
 
 border:
 
@@ -4800,7 +4795,7 @@ font-size:26px;
 
 .legal-container {
 
-    background: var(--card-bg, #ffffff);
+    background: var(--card, #ffffff);
 
     border-radius: 20px;
 
