@@ -673,3 +673,68 @@ backToTop.addEventListener("click",()=>{
     });
 
 });
+
+
+
+function updateSiteStats(){
+
+    const set = (id,value)=>{
+
+        const el = document.getElementById(id);
+
+        if(el){
+
+            el.textContent = value;
+
+        }
+
+    };
+
+    set("partsCount", aftermarketParts.length);
+
+    set("manualCount",
+        manualData.length +
+        manualComponents.length +
+        manualDashboard.length +
+        manualMaintenance.length +
+        manualPrecautions.length +
+        manualMistakes.length +
+        manualSearchIndex.length
+    );
+
+    set("repairCount", troubleshootData.length);
+
+    set("cvtCount", cvtData.length);
+
+}
+
+
+/*share site*/
+
+const shareBtn = document.getElementById("shareSite");
+
+shareBtn.addEventListener("click", async () => {
+
+    const shareData = {
+        title: document.title,
+        text: "Motorstar ER175A FI Support Hub",
+        url: window.location.href
+    };
+
+    if (navigator.share) {
+
+        try{
+
+            await navigator.share(shareData);
+
+        }catch(e){}
+
+    }else{
+
+        navigator.clipboard.writeText(window.location.href);
+
+        alert("Link copied!");
+
+    }
+
+});

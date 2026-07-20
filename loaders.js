@@ -6,6 +6,8 @@ function loadAftermarket(url) {
             aftermarketParts = res.data.filter(p => p["Parts Name"]);
             loaded.aftermarket = true;
             checkReady();
+            updateSiteStats();
+        
         },
 
         error(error){
@@ -25,6 +27,7 @@ function loadTroubleshoot(url) {
             troubleshootData = res.data.filter(p => p["Known Issue"]);
             loaded.troubleshoot = true;
             checkReady();
+            updateSiteStats();
         },
         
         error(error){
@@ -46,6 +49,7 @@ function loadManual(url) {
             manualData = res.data.filter(x => x["Category"]);
             loaded.manual = true;
             checkReady();
+            updateSiteStats();
         },
         
         error(error){
@@ -79,6 +83,7 @@ function loadManualComponents(url) {
     loaded.components = true;
 
     checkReady();
+    updateSiteStats();
 
     },
 
@@ -105,6 +110,7 @@ function loadManualDashboard(url){
             res.data.filter(
                 x=>x["Component"]
             );
+            updateSiteStats();
 
         },
 
@@ -133,6 +139,7 @@ function loadManualMaintenance(url){
             res.data.filter(
                 x => x["Item"]
             );
+            updateSiteStats();
 
         },
 
@@ -170,6 +177,7 @@ function loadEFI(url) {
 
 
             checkReady();
+            updateSiteStats();
 
 
 
@@ -217,6 +225,7 @@ function loadWiring(url) {
             loaded.wiring = true;
 
             checkReady();
+            updateSiteStats();
 
         },
 
@@ -243,6 +252,7 @@ function loadPrecautions(url){
 
             manualPrecautions =
                 res.data.filter(r=>r.ID);
+                updateSiteStats();
 
 
         },
@@ -270,6 +280,7 @@ function loadMistakes(url){
 
             manualMistakes =
                 res.data.filter(r=>r.ID);
+                updateSiteStats();
 
         },
 
@@ -296,6 +307,7 @@ function loadManualSearchIndex(url){
 
             manualSearchIndex =
                 res.data.filter(r=>r.ID);
+                
 
         },
 
@@ -324,6 +336,7 @@ function loadCVT(url){
             res.data.filter(
                 r=>r.ID
             );
+            updateSiteStats();
 
         },
 
@@ -345,28 +358,27 @@ function checkReady() {
 
     if(appStarted) return;
 
+if (
+    loaded.aftermarket &&
+    loaded.troubleshoot &&
+    loaded.manual &&
+    loaded.components &&
+    loaded.efi
+) {
 
-    if (
-        loaded.aftermarket &&
-        loaded.troubleshoot &&
-        loaded.manual &&
-        loaded.components &&
-        loaded.efi
-    ) {
+    appStarted = true;
 
+    isLoading = false;
 
-        appStarted = true;
+    currentTab = "aftermarket";
 
-        isLoading = false;
+    currentCategory = "All";
 
+    updateSiteStats();
 
-        currentTab = "aftermarket";
-        currentCategory = "All";
+    switchTab("aftermarket");
 
-
-        switchTab("aftermarket");
-
-    }
+}
 
 }
 
