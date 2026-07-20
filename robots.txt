@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://er175-hub.vercel.app/sitemap.xml

@@ -54,14 +54,12 @@ let manualMistakes = [];
 let efiData = [];
 
 let aftermarketParts = [];
-let oemParts = [];
 let troubleshootData = [];
 
 let isLoading = true;
 
 const loaded = {
     aftermarket: false,
-    oem: false,
     troubleshoot: false,
     manual: false,
     components: false
