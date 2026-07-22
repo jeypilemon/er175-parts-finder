@@ -301,3 +301,35 @@ const suggestionMap = {
     sparkpluggs: "spark plug",
     clutchshoe: "clutch shoe"
 };
+
+/*Toast and copylink*/
+
+async function copyAffiliateLink(link){
+
+    try{
+
+        await navigator.clipboard.writeText(link);
+
+        showToast("Link Copied!");
+
+    }catch(error){
+
+        // Older browsers fallback
+
+        const input = document.createElement("input");
+
+        input.value = link;
+
+        document.body.appendChild(input);
+
+        input.select();
+
+        document.execCommand("copy");
+
+        document.body.removeChild(input);
+
+        showToast("Link Copied!");
+
+    }
+
+}

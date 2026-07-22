@@ -111,13 +111,29 @@ ${
     ""
 }
 
-        </div>
+        <div class="card-actions">
 
-        <a class="button" href="${part["Shopee"]}" target="_blank">
-            View Product
-        </a>
+    <a
+        class="button"
+        href="${part["Shopee"]}"
+        target="_blank"
+        rel="noopener noreferrer">
 
-    </div>
+        View Product
+
+    </a>
+
+    <button
+        class="copy-btn"
+        onclick="copyAffiliateLink('${part["Shopee"]}')">
+
+        🔗 Copy link
+
+    </button>
+
+</div>
+</div>
+</div>
 `).join("");
 
     updateTabUI();
@@ -738,3 +754,24 @@ shareBtn.addEventListener("click", async () => {
     }
 
 });
+
+
+function showToast(message){
+
+    const toast = document.getElementById("toast");
+
+    if(!toast) return;
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toast.timer);
+
+    toast.timer = setTimeout(()=>{
+
+        toast.classList.remove("show");
+
+    },1800);
+
+}
