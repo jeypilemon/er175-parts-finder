@@ -55,8 +55,121 @@ EFI Diagnostic Center
 
 </div>
 
+<div class="efi-guide-section">
+
+    <div class="efi-guide-header">
+
+        <h2>📘 EFI Quick Reference Guides</h2>
+
+        <p>
+            Learn how to manually clear Check Engine (MIL) errors
+            and read flashing error codes before starting diagnosis.
+        </p>
+
+    </div>
+
+    <div class="efi-guide-grid">
+
+        <!-- GUIDE 1 -->
+
+        <div class="efi-guide-card">
+
+            <img
+                src="assets/images/manual-clearing-guide.png"
+                onclick="openGuideImage(
+                    'Manual Clearing / Reading Error Codes',
+                    'assets/images/manual-clearing-guide.png'
+                )"
+            >
+
+            <div class="guide-content">
+
+                <h3>Manual Clearing / Reading Error Codes</h3>
+
+                <p>
+                    Step-by-step guide for clearing MIL without an OBD scanner.
+                </p>
+
+                <div class="guide-buttons">
+
+                    <button
+                        class="efi-btn"
+                        onclick="openGuideImage(
+                        'Manual Clearing / Reading Error Codes',
+                        'assets/images/manual-clearing-guide.png'
+                    )">
+
+                        👁 View Full
+
+                    </button>
+
+                    <a
+                        class="efi-download"
+                        href="assets/images/manual-clearing-guide.png"
+                        download>
+
+                        ⬇ Download
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
 
 
+        <!-- GUIDE 2 -->
+
+        <div class="efi-guide-card">
+
+            <img
+                src="assets/images/mil-reading-guide.png"
+                onclick="openGuideImage(
+                    'How to Read MIL Flash Codes',
+                    'assets/images/mil-reading-guide.png'
+                )"
+            >
+
+            <div class="guide-content">
+
+                <h3>Reading Check Engine (MIL) Flash Codes</h3>
+
+                <p>
+                    Understand long flashes, short flashes and how to identify the correct error code.
+                </p>
+
+                <div class="guide-buttons">
+
+                    <button
+                        class="efi-btn"
+                        onclick="openGuideImage(
+                        'How to Read MIL Flash Codes',
+                        'assets/images/mil-reading-guide.png'
+                    )">
+
+                        👁 View Full
+
+                    </button>
+
+                    <a
+                        class="efi-download"
+                        href="assets/images/mil-reading-guide.png"
+                        download>
+
+                        ⬇ Download
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 
 <div class="efi-grid">
@@ -229,16 +342,29 @@ function openGuideImage(title, image){
 
     document.getElementById("componentViewerLocation").innerHTML = "";
 
-    document.getElementById("componentViewerNotes").innerHTML = "";
-
-    document.getElementById("componentViewerMarker").style.display = "none";
-
-    document.getElementById("componentViewerImage").style.display = "none";
+    document.getElementById("componentViewerNotes").innerHTML = `
+        <div class="guide-download">
+            <a
+                class="efi-download"
+                href="${image}"
+                download>
+                ⬇ Download PNG
+            </a>
+        </div>
+    `;
 
     const zoom = document.getElementById("componentViewerZoom");
 
     zoom.src = image;
     zoom.style.display = "block";
+
+    zoom.onclick = () => {
+
+    closeComponentViewer();
+
+    openImageModal(image);
+
+};
 
     modal.classList.add("show");
 

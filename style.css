@@ -5405,3 +5405,155 @@ input#search{
     color:var(--accent);
 
 }
+
+
+/* ---------- EFI Guides ---------- */
+
+.efi-guide-section{
+
+    margin:30px 0;
+
+}
+
+.efi-guide-header{
+
+    margin-bottom:18px;
+
+}
+
+.efi-guide-header h2{
+
+    margin-bottom:6px;
+
+}
+
+.efi-guide-header p{
+
+    color:#9aa4b2;
+
+    font-size:14px;
+
+}
+
+.efi-guide-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+
+    gap:20px;
+
+}
+
+.efi-guide-card{
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    transition:.25s;
+
+}
+
+.efi-guide-card:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.efi-guide-card img{
+
+    width:100%;
+
+    height:220px;
+
+    object-fit:cover;
+
+    cursor:pointer;
+
+    display:block;
+
+}
+
+.guide-content{
+
+    padding:18px;
+
+}
+
+.guide-content h3{
+
+    margin-bottom:8px;
+
+}
+
+.guide-content p{
+
+    color:#9aa4b2;
+
+    margin-bottom:18px;
+
+    line-height:1.5;
+
+}
+
+.guide-buttons{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+.guide-buttons>*{
+
+    flex:1;
+
+}
+
+.efi-download{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-decoration:none;
+
+    background:#232d3f;
+
+    color:white;
+
+    border-radius:8px;
+
+    padding:10px;
+
+}
+
+.efi-download:hover{
+
+    background:#30415e;
+
+}
+
+
+.guide-download{
+
+    margin-top:20px;
+
+    display:flex;
+
+    justify-content:center;
+
+}
+
+.guide-download a{
+
+    width:220px;
+
+}
